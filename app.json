@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "pages/index/service/service",
+    "pages/index/all/all",
+    "pages/index/over/over",
+    "pages/index/assess/assess",
+    "pages/alldetails/alldetails",
+    "pages/me/me",
+    "pages/details/details",
+    "pages/manual/manual",
+    "pages/evaluate/evaluate",
+    "pages/danger/danger",
+    "pages/logs/logs",
+    "pages/index/config/config"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#eee",
+    "navigationBarTitleText": "这就办维修平台",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#fff"
+  }
+}

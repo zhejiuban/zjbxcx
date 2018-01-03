@@ -1,0 +1,41 @@
+/* pages/details/details.wxss */
+
+.list {
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 10rpx 30rpx;
+  color: #666;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.list-bewrite {
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 15rpx 30rpx;
+  color: #666;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.list-bewrite .bewrite {
+  border: 1rpx solid #eee;
+  padding: 10rpx;
+  border-radius: 10rpx;
+  height: 200rpx;
+  width: 500rpx;
+}
+
+.list_label {
+  line-height: 70rpx;
+}
+
+.list_value {
+  line-height: 70rpx;
+}
+
+.list image {
+  width: 100rpx;
+  height: 70rpx;
+  padding: 0 10rpx;
+}

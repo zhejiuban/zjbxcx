@@ -1,0 +1,25 @@
+<import src="/pages/index/config/config.wxml" />
+<view class='top_title ' >
+  <template is="navTop" data="{{currentTab}}" />
+  
+  <swiper class="tab-content" current="0" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx">
+    <swiper-item>
+      <scroll-view scroll-y="true" bindscrolltolower="searchScrollLower" class="scoll-h">
+        <block wx:for="{{items}}">
+          <view class="item-ans" bindtap='clickDetail'>
+            <view class="avatar">
+              <image class="img" src="{{item['0']['0']}}" catchtap='prev_img' data-url="{{item['0']}}"></image>
+            </view>
+            <view class="expertInfo">
+              <view class="name">报修项目：{{item['1']}}</view>
+              <view class="tag wait_tag ">保修场地：{{item['2']}}</view>
+              <button class='evaluate_btn' catchtap='to_evaluate' data-id="{{item['3']}}">评价</button>
+            </view>
+          </view>
+        </block>
+      </scroll-view>
+    </swiper-item>
+  </swiper>
+</view>
+
+<template is="tabBar" />

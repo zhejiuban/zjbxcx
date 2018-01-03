@@ -1,0 +1,22 @@
+<!--pages/evaluate/evaluate.wxml-->
+<view class='title'>用户评价</view>
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <view class='section'>
+    <view class='section_title'>满意度:</view>
+    <view class='stars'>
+      <block wx:for="{{stars}}">
+        <image class="star-image" mode='aspectFit' style="left: {{item*100}}rpx" src="{{key > item ?(key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
+          <view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap="selectLeft"></view>
+          <view class="item" style="left:75rpx" data-key="{{item+1}}" bindtap="selectRight"></view>
+        </image>
+      </block>
+    </view>
+  </view>
+  <view class='section_remarks'>
+    <view class='section_title'>评论内容：</view>
+    <textarea class='remraks' name="appraisal" placeholder='留下您宝贵的意见或建议'></textarea>
+  </view>
+  <view class="btn-area">
+    <button class='submitBtn' bindtap='clickMe' formType="submit">提交</button>
+  </view>
+</form>
