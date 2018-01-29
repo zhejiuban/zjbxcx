@@ -1,75 +1,53 @@
 // pages/details/details.js
+let app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-      imgs: [
-        'http://pic3.16pic.com/00/10/26/16pic_1026230_b.jpg',
-        'http://scimg.jb51.net/allimg/151124/14-151124163140421.jpg',
-        'http://pic32.nipic.com/20130817/9745430_101836881000_2.jpg'
-      ]
+      asset_name:'',
+      asset_id:'',
+      asset_field:'',
+      remarks:'',
+      img_url:[] 
   },
   imgShow: function (e) {
-    console.log(e);
     var that = this;
-    var current_src = e.currentTarget.dataset.src;
-    console.log(e.currentTarget.dataset.src);
+    var current_url = e.currentTarget.dataset.url;
     wx.previewImage({
-      current: current_src, // 当前显示图片的http链接
-      urls: that.data.imgs // 需要预览的图片http链接列表
+      current: current_url, // 当前显示图片的http链接
+      urls: that.data.img_url // 需要预览的图片http链接列表
     })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    let that = this;
+    wx.request({
+      url: 'https://wx.zhejiuban.com/repair/repair_info',
+      method:"POST",
+      data: {
+        openId: app.globalData.openId,
+        repair_id: options.repair_id,
+        status: options.status
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function (res) {
+        let data = res.data;
+        that.setData({
+          asset_name: data.asset_name,
+          asset_id: data.asset_id,
+          asset_field: data.field_path,
+          remarks: data.remarks,
+          img_url: [data.img_url]
+        });
+      }
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
   /**
    * 用户点击右上角分享
    */

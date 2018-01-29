@@ -5,47 +5,11 @@ Page({
     currentTab: 3, //预设当前项的值
     searchLoading: false, //"上拉加载"的变量，默认false，隐藏  
     searchLoadingComplete: false,  //“没有数据”的变量，默认false，隐藏  
-    count: 1,   //分页
-    items: [
-      [
-        [
-          'http://img3.imgtn.bdimg.com/it/u=2314859093,2968863833&fm=214&gp=0.jpg',
-          'http://ookzqad11.bkt.clouddn.com/avatar.png'
-        ],
-        '计算机1',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ],
-      [
-        ['http://ookzqad11.bkt.clouddn.com/avatar.png'],
-        '计算机2',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ],
-      [
-        ['http://ookzqad11.bkt.clouddn.com/avatar.png'],
-        '计算机3',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ],
-      [
-        ['http://ookzqad11.bkt.clouddn.com/avatar.png'],
-        '计算机4',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ],
-      [
-        ['http://ookzqad11.bkt.clouddn.com/avatar.png'],
-        '计算机5',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ],
-      [
-        ['http://ookzqad11.bkt.clouddn.com/avatar.png'],
-        '计算机6',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ],
-      [
-        ['http://ookzqad11.bkt.clouddn.com/avatar.png'],
-        '计算机7',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ]
-    ]
+    page: 1,   //分页
+    items: [],
+    status: '',
+    content: '1',    //判断上拉是否还有数据
+    itemsLength: ''  //获取有无数据
   },
   swichNav1: function () {
     app.swichNav('/pages/index/service/service');
@@ -79,16 +43,17 @@ Page({
   },
 
   // 查看详情
-  clickDetail: function () {
+  clickDetail: function (e) {
     wx.navigateTo({
       url: '/pages/details/details',
     })
   },
 
   // 查看详情包括评论
-  clickAllDetail: function () {
+  clickAllDetail: function (e) {
+    let repair_id = e.currentTarget.dataset.id;
     wx.navigateTo({
-      url: '/pages/alldetails/alldetails',
+      url: '/pages/alldetails/alldetails?repair_id='+repair_id,
     })
   },
 
@@ -141,7 +106,6 @@ Page({
 
   // 点击跳转到评价页面
   to_evaluate: function (e) {
-    // console.log(e.currentTarget.dataset.id);
     let that = this;
     let id = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -151,9 +115,8 @@ Page({
 
   // 图片预览
   prev_img: function (e) {
-    console.log(e);
-    let url = e.currentTarget.dataset.url['0'];
-    let urls = e.currentTarget.dataset.url;
+    let url = e.currentTarget.dataset.url['0']['0'];
+    let urls = e.currentTarget.dataset.url['0'];
     wx.previewImage({
       current: url, // 当前显示图片的http链接
       urls: urls // 需要预览的图片http链接列表
@@ -162,79 +125,85 @@ Page({
 
   //下拉刷新
   onPullDownRefresh: function () {
+    let that = this;
     wx.showNavigationBarLoading() //在标题栏中显示加载
-    console.log("下拉");
-    //模拟加载
-    setTimeout(function () {
-      // complete
-      wx.hideNavigationBarLoading() //完成停止加载
-      wx.stopPullDownRefresh() //停止下拉刷新
-    }, 1500);
+
+    wx.request({
+      url: 'https://wx.zhejiuban.com/repair/repair_list', //仅为示例，并非真实的接口地址
+      method: "POST",
+      data: {
+        status: that.data.status,
+        openId: app.globalData.openId,
+        page: 1
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function (res) {
+        wx.hideNavigationBarLoading() //完成停止加载
+        wx.stopPullDownRefresh() //停止下拉刷新
+        if (res.data.length != '0') {
+          let arr = [];
+          let data = res.data;
+          for (var i = 0; i < data.length; i++) {
+            arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id];
+          }
+          that.setData({
+            items: arr,
+            page: 1
+          })
+        } else {
+          that.setData({
+            // itemsLength: '0',
+            page: 1
+          })
+        }
+      }
+    })
   },
 
+  //上拉加载更多 
   //滚动到底部触发事件  
   searchScrollLower: function () {
-    console.log("上拉加载");
-    wx.showLoading();
-    let counts = this.data.count + 1;
-    let arr = [
-      [
-        [
-          'http://img3.imgtn.bdimg.com/it/u=2314859093,2968863833&fm=214&gp=0.jpg',
-          'http://ookzqad11.bkt.clouddn.com/avatar.png'
-        ],
-        '计算机8',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ],
-      [
-        [
-          'http://img3.imgtn.bdimg.com/it/u=2314859093,2968863833&fm=214&gp=0.jpg',
-          'http://ookzqad11.bkt.clouddn.com/avatar.png'
-        ],
-        '计算机9',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ],
-      [
-        [
-          'http://img3.imgtn.bdimg.com/it/u=2314859093,2968863833&fm=214&gp=0.jpg',
-          'http://ookzqad11.bkt.clouddn.com/avatar.png'
-        ],
-        '计算机10',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ],
-      [
-        [
-          'http://img3.imgtn.bdimg.com/it/u=2314859093,2968863833&fm=214&gp=0.jpg',
-          'http://ookzqad11.bkt.clouddn.com/avatar.png'
-        ],
-        '计算机11',
-        '芜湖职业技术学院/南校区/创业孵化园'
-      ],
-    ];
-    let arr1 = this.data.items;
-    let arrs = arr1.concat(arr);
-    // var arrs = this.data.items1.concat(arr);
-    this.setData({
-      count: counts,
-      items: arrs
-    });
-    console.log(arrs);
-    wx.hideLoading();
-    // let that = this;
-    // var count = this.data.count+1;
-
-    // wx.request({
-    //   url: 'test.php', 
-    //   data: {
-    //     count: count
-    //   },
-    //   header: {
-    //     'content-type': 'application/json'
-    //   },
-    //   success: function (res) {
-    //     console.log(res.data)
-    //   }
-    // })
+    let that = this;
+    if (that.data.content != '0') {
+      wx.showLoading();
+      wx.request({
+        url: 'https://wx.zhejiuban.com/repair/repair_list',
+        method: "POST",
+        data: {
+          status: that.data.status,
+          openId: app.globalData.openId,
+          page: that.data.page + 1
+        },
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        success: function (res) {
+          if (res.data.length > 0) {
+            let arr = [];
+            let data = res.data;
+            for (var i = 0; i < data.length; i++) {
+              arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id];
+            }
+            let arr1 = that.data.items;
+            let arrs = arr1.concat(arr);
+            that.setData({
+              items: arrs,
+              page: that.data.page + 1
+            });
+          }
+          if (res.data.length < 10){
+            that.setData({
+              content: '0'
+            })
+          }
+        },
+        complete: function () {
+          wx.hideLoading();
+        }
+      })
+    }
   },
 
   onLoad: function () {
@@ -246,12 +215,41 @@ Page({
           clientWidth = res.windowWidth,
           rpxR = 750 / clientWidth;
         let calc = clientHeight * rpxR - 180;
-        // console.log(calc)
         that.setData({
           winHeight: calc
         });
       }
     });
+
+    wx.request({
+      url: 'https://wx.zhejiuban.com/repair/repair_list', //仅为示例，并非真实的接口地址
+      method: "POST",
+      data: {
+        status: that.data.status,
+        openId: app.globalData.openId,
+        page: 1
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function (res) {
+        if (res.data.length != '0') {
+          let arr = [];
+          let data = res.data;
+          for (var i = 0; i < data.length; i++) {
+            arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id];
+          }
+          that.setData({
+            items: arr,
+            itemsLength: '1'
+          })
+        }else{
+          that.setData({
+            itemsLength: '0'
+          })
+        }
+      }
+    })
   },
   footerTap: app.footerTap
 })

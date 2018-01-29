@@ -1,4 +1,5 @@
 // pages/details/details.js
+let app = getApp();
 Page({
 
   /**
@@ -9,70 +10,73 @@ Page({
     normalSrc: '../../images/normal.png',
     selectedSrc: '../../images/selected.png',
     halfSrc: '../../images/half.png',
-    key: 4,
-    imgs: [
-      'http://pic3.16pic.com/00/10/26/16pic_1026230_b.jpg',
-      'http://scimg.jb51.net/allimg/151124/14-151124163140421.jpg',
-      'http://pic32.nipic.com/20130817/9745430_101836881000_2.jpg'
-    ]
+
+    //工单详情
+    asset_name: '',
+    field_path: '',
+    remarks: '',
+    img_url: [],
+    stars_key: '',
+    appraisal: '',
+    complain: '',
+    repair_status: '',    //工单状态
+    service_status: '',  //维修状态
+    service_worker: '',
+    suggest: '',
+    service_img_url: []
   },
   imgShow: function (e) {
-    console.log(e);
     var that = this;
-    var current_src = e.currentTarget.dataset.src;
-    console.log(e.currentTarget.dataset.src);
+    var current_url = e.currentTarget.dataset.url;
     wx.previewImage({
-      current: current_src, // 当前显示图片的http链接
-      urls: that.data.imgs // 需要预览的图片http链接列表
+      current: current_url, // 当前显示图片的http链接
+      urls: that.data.img_url // 需要预览的图片http链接列表
     })
   },
+
+  serviceImgShow: function (e) {
+    var that = this;
+    var current_url = e.currentTarget.dataset.url;
+    wx.previewImage({
+      current: current_url, // 当前显示图片的http链接
+      urls: that.data.service_img_url // 需要预览的图片http链接列表
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
+    let repair_id = options.repair_id;
+    let that = this;
+    wx.request({
+      url: 'https://wx.zhejiuban.com/wx/repair/repair_all_info',
+      method: "POST",
+      data: {
+        repair_id: repair_id,
+        openId: app.globalData.openId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        console.log(res);
+        that.setData({
+          asset_name: res.data.asset_name,
+          field_path: res.data.field_path,
+          remarks: res.data.remarks,
+          img_url: res.data.img_url,
+          stars_key: res.data.stars_key,
+          appraisal: res.data.appraisal,
+          complain: res.data.complain,
+          service_status: res.data.service_status,
+          service_worker: res.data.service_worker,
+          suggest: res.data.suggest,
+          service_img_url: res.data.service_img_url,
+          repair_status: res.data.repair_status
+        });
+      }
+    })
   },
 
   /**

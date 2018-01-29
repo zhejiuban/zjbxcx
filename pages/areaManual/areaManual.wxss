@@ -47,8 +47,8 @@
   width: 90%;
 }
 .section .uploader_imgs{
-  max-width:100rpx;
-  max-height:100rpx;
+  width:100rpx;
+  height:70rpx;
   padding: 0 10rpx;  
 }
 

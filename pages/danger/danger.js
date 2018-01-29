@@ -1,4 +1,5 @@
 // pages/dange/danger.js
+let app = getApp();
 Page({
 
   /**

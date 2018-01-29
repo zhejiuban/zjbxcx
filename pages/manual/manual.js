@@ -1,3 +1,4 @@
+let app = getApp();
 // pages/manual/manual.js
 Page({
 
@@ -5,158 +6,333 @@ Page({
    * 页面的初始数据
    */
   data: {
-    multiArray: [['北校区', '南校区'], ['信息工程学院', '电气工程学院', '人文旅游学院', '汽车工程学院', '机械工程学院'], ['001班gagfdfahf', '002班']],
-    multiIndex: [0, 0, 0],
-    index: 0,
-    img: "",
-    uuid: "",
-    uploaderImg:"/images/upload.png"
-  },
-  bindMultiPickerChange: function (e) {
-    console.log('picker发送选择改变，携带值为', e.detail.value)
-    this.setData({
-      multiIndex: e.detail.value
-    })
-  },
-  bindMultiPickerColumnChange: function (e) {
-    console.log('修改的列为', e.detail.column, '，值为', e.detail.value);
-    var data = {
-      multiArray: this.data.multiArray,
-      multiIndex: this.data.multiIndex
-    };
-    data.multiIndex[e.detail.column] = e.detail.value;
-    switch (e.detail.column) {
-      case 0:
-        switch (data.multiIndex[0]) {
-          case 0:
-            data.multiArray[1] = ['信息工程学院', '电气工程学院', '人文旅游学院', '汽车工程学院', '机械工程学院'];
-            data.multiArray[2] = ['0011班gdagdfag', '003班', '004班', '005班', '006班', '007班'];
-            break;
-          case 1:
-            data.multiArray[1] = ['生物工程学院', '网络工程学院'];
-            data.multiArray[2] = ['生物班', '网络班'];
-            break;
-        }
-        data.multiIndex[1] = 0;
-        data.multiIndex[2] = 0;
-        break;
-      case 1:
-        switch (data.multiIndex[0]) {
-          case 0:
-            switch (data.multiIndex[1]) {
-              case 0:
-                data.multiArray[2] = ['0011班gdagdfag', 'test2'];
-                break;
-              case 1:
-                data.multiArray[2] = ['test3'];
-                break;
-              case 2:
-                data.multiArray[2] = ['test4', 'test5'];
-                break;
-              case 3:
-                data.multiArray[2] = ['test6', 'test7', 'test8'];
-                break;
-              case 4:
-                data.multiArray[2] = ['test9', 'test10', 'test11', 'test12'];
-                break;
-            }
-            break;
-          case 1:
-            switch (data.multiIndex[1]) {
-              case 0:
-                data.multiArray[2] = ['test13', 'test14'];
-                break;
-              case 1:
-                data.multiArray[2] = ['test15', 'test16'];
-                break;
-              case 2:
-                data.multiArray[2] = ['test17', 'test18', 'test19'];
-                break;
-            }
-            break;
-        }
-        data.multiIndex[2] = 0;
-        console.log(data.multiIndex);
-        break;
-    }
-    this.setData(data);
+    imgs: [],             //上传图片的url路径
+    img_ids: [],          //上传图片的id
+    asset_uuid: "",
+    asset_id:'',
+    asset_name:'',
+    uploaderImg:"/images/upload.png",
+    category:'',
+    img_count: 3,         //目前可以上传图片的数量
+    isSubmit: true,       // 是否可以点击提交
+    //长按事件
+    touchStartTime: 0,    // 触摸开始时间
+    touchEndTime: 0,      // 触摸结束时间
+    field: "",            // 场地
+    org_id: null
   },
 
-  click_scan:function(){
-    // 允许从相机和相册扫码
-    var that = this;
-    wx.scanCode({
-      success: (res) => {
-        console.log(res.result);
-        var result = res.result;
-        if (true) {
-          that.setData({
-            uuid:result
+  onLoad: function (options) {
+    let that = this;
+    //微信扫描二维码链接携带的参数
+    
+    // 微信扫小程序获取的参数
+    if(app.globalData.uuid){
+      wx.showLoading({
+        mask: true,
+        title: '加载中',
+      });
+      that.setData({
+        asset_uuid: app.globalData.uuid
+      });
+      that.getAssetInfo(that.data.asset_uuid);
+    }
+
+    //小程序里面扫描二维码
+    if (options.uuid){
+      wx.showLoading({
+        mask: true,
+        title: '加载中',
+      });
+      let asset_uuid = options.uuid;
+      that.getAssetInfo(asset_uuid);
+      that.setData({
+        asset_uuid: asset_uuid
+      });
+      wx.hideLoading();
+    }
+  },
+
+  //获取资产信息
+  getAssetInfo: function(asset_uuid){
+    let that = this;
+    wx.request({
+      url: 'https://wx.zhejiuban.com/wx/asset_find',
+      method: "POST",
+      data: {
+        openId: app.globalData.openId,
+        asset_uuid: asset_uuid
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function (res) {
+        console.log(res);
+        if(res.data.code==1){
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false
           })
+        }else{
+          that.setData({
+            asset_name: res.data.name,
+            category: res.data.category,
+            field: res.data.field,
+            asset_id: res.data.id,
+            asset_uuid: res.data.asset_uid,
+            org_id: res.data.org_id,
+            isSubmit: false
+          });
         }
+        wx.hideLoading();
       }
     });
   },
 
-  bindPickerChange: function (e) {
-    console.log('picker发送选择改变，携带值为', e.detail.value)
-    this.setData({
-      index: e.detail.value
-    })
-  },
-  selectImg: function () {
-    var that = this;
-    wx.chooseImage({
-      count: 1, // 默认9
-      sizeType: ['original', 'compressed'],
-      sourceType: ['album', 'camera'],
-      success: function (res) {
-        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-        var tempFilePaths = res.tempFilePaths;
-        console.log(tempFilePaths);
 
-        wx.uploadFile({
-          url: 'https://wx.zhejiuban.com/uploader/imgfile',
-          filePath: tempFilePaths[0],
-          name: 'img',
-          formData: {
-          },
-          success: function (res) {
-            console.log(res)
+  input_uuid: function (e) {
+    let that = this;
+    if(e.detail.cursor==36){
+      let asset_uuid = e.detail.value;
+      wx.request({
+        url: 'https://wx.zhejiuban.com/asset/find',
+        method: "POST",
+        data: {
+          openId: app.globalData.openId,
+          asset_uuid: asset_uuid
+        },
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        success: function (res) {
+          that.setData({
+            asset_name: res.data.name,
+            category: res.data.category,
+            field: res.data.field,
+            asset_id: res.data.id,
+            asset_uuid: asset_uuid,
+            org_id: res.data.org_id,
+            isSubmit: false
+          });
+          if (that.data.asset_id) {
+            that.setData({
+              disabled: false
+            });
+          } else {
+            that.setData({
+              disabled: true
+            });
           }
-        })
+        }
+      })
+    }else{
+      that.setData({
+        asset_name: '',
+        category: '',
+        field: '',
+        asset_id: ''
+      });
+    }
+  },
 
-        that.setData({
-          img: tempFilePaths,
-          uploaderImg: tempFilePaths
-        });
+  click_scan:function(){
+    // 允许从相机和相册扫码
+    let that = this;
+    wx.scanCode({
+      success: (res) => {
+        let str = decodeURIComponent(res.result);
+        let url = res.result;
+        let asset_uuid = app.getUrlParam(url, app.globalData.asset_uuid);
+        that.getAssetInfo(asset_uuid);
       }
-    })
+    });
   },
-  imgShow: function (e) {
-    console.log(e);
-    var that = this;
-    var current_src = e.currentTarget.dataset.src;
-    wx.previewImage({
-      current: current_src, // 当前显示图片的http链接
-      urls: [current_src] // 需要预览的图片http链接列表
-    })
+
+  selectImg: function () {
+    let that = this;
+    if(!that.data.asset_uuid){
+      wx.showModal({
+        title: '提示',
+        content: '请先选择报修的资产',
+        showCancel: false
+      })
+    }else{
+      wx.chooseImage({
+        count: that.data.img_count, // 默认9
+        sizeType: ['original', 'compressed'],
+        sourceType: ['album', 'camera'],
+        success: function (res) {
+          var tempFilePaths = res.tempFilePaths;
+          for (var i = 0; i < tempFilePaths.length; i++) {
+            wx.uploadFile({
+              // url: 'https://wx.zhejiuban.com/uploader/imgfile',
+              url: 'https://wx.zhejiuban.com/file/img_file',
+              filePath: tempFilePaths[i],
+              method: "POST",
+              name: 'img',
+              formData: {
+                openId: app.globalData.openId,
+                org_id: that.data.org_id
+              },
+              header: {
+                'content-type': 'multipart/form-data' // 默认值
+              },
+              success: function (res) {
+                console.log(res);
+                let arrs1 = that.data.img_ids.concat(res.data);
+                that.setData({
+                  img_ids: arrs1
+                })
+              }
+            })
+          }
+          let old_imgs = that.data.imgs.concat(tempFilePaths);
+          let count = that.data.img_count - tempFilePaths.length;
+          that.setData({
+            imgs: old_imgs,
+            img_count: count
+          });
+        }
+      })
+    }
+    
   },
-  formSubmit: function (e) {
-    e.detail.value['img'] = this.data.img;
-    console.log('form发生了submit事件，携带数据为：', e.detail.value);
+
+  // 按钮触摸开始触发的事件
+  touchStart: function (e) {
+    this.touchStartTime = e.timeStamp
+  },
+
+  // 按钮触摸结束触发的事件
+  touchEnd: function (e) {
+    this.touchEndTime = e.timeStamp
+  },
+
+  // 长按
+  longTap: function (e) {
+    let that = this;
     wx.showModal({
       title: '提示',
-      content: '维修人员正在赶来的路上，请耐心等待',
-      showCancel: false,
+      content: '确定要删除？',
       success: function (res) {
         if (res.confirm) {
-          wx.redirectTo({
-            url: '/pages/index/service/service'
-          })
+          let imgs = that.data.imgs;
+          let img_ids = that.data.img_ids;
+          //数组下标
+          let index = e.currentTarget.dataset.index;
+
+          wx.request({
+            // url: 'https://wx.zhejiuban.com/uploader/delete_file',
+            url: 'https://wx.zhejiuban.com/file/delete_img_file',
+            method: "POST",
+            data: {
+              id: img_ids[index]
+            },
+            header: {
+              'content-type': 'application/json'
+            },
+            success: function (res) {
+              // console.log(res)
+            }
+          });
+
+          imgs.splice(index, 1);
+          img_ids.splice(index, 1);
+          that.setData({
+            imgs: imgs,
+            img_ids: img_ids
+          });
+        } else if (res.cancel) {
+          // console.log('用户点击取消')
         }
       }
     })
+  },
+
+  //图片预览  单击事件
+  imgShow: function (e) {
+    let that = this;
+    if (that.touchEndTime - that.touchStartTime < 350) {
+      let current_src = e.currentTarget.dataset.src;
+      wx.previewImage({
+        current: current_src, // 当前显示图片的http链接
+        urls: that.data.imgs // 需要预览的图片http链接列表
+      })
+    }
+  },
+
+
+
+  formSubmit: function (e) {
+    e.detail.value['img'] = this.data.img;
+    e.detail.value['category_id'] = this.data.category_id;
+    let asset_uuid = e.detail.value.asset_uuid;
+    let remarks = e.detail.value.remarks;
+    let img_id = this.data.img_ids.join(",");
+    let asset_id = this.data.asset_id;
+
+    if (e.detail.value.asset_uuid.length == 0){
+      wx.showModal({
+        title: '提示',
+        content: '请选择一个有效的资产',
+        showCancel: false,
+        success: function (res) {
+        }
+      })
+    } else if (e.detail.value.remarks.length == 0) {
+      wx.showModal({
+        title: '提示',
+        content: '问题描述不能为空',
+        showCancel: false,
+        success: function (res) {
+        }
+      })
+    }else{
+      wx.showLoading({
+        mask: true,
+        title: '正在提交中...',
+      })
+      wx.request({
+        url: 'https://wx.zhejiuban.com/wx/repair/add', 
+        method:"POST",
+        data: {
+          asset_uuid: asset_uuid,
+          asset_id: asset_id,
+          remarks: remarks,
+          img_id: img_id,
+          openId: app.globalData.openId
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        success: function (res) {
+          wx.hideLoading();
+          if(res.data.code == 1){
+            wx.showModal({
+              title: '提示',
+              content: '维修人员正在赶来的路上，请耐心等待',
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/index/service/service'
+                  })
+                }
+              }
+            })
+          }else{
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+              }
+            })
+          }
+        }
+      })
+    }
   },
 
   /**

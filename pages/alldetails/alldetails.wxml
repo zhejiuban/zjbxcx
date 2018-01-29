@@ -2,38 +2,83 @@
 <view>
   <view class='order_title' >工单详情</view>
   <view class='list'>
+    <text class='list_label'>工单状态：</text>
+    <text class='list_value'>{{repair_status}}</text>
+  </view>
+  <view class='list'>
     <text class='list_label'>报修资产：</text>
-    <text class='list_value'>计算机</text>
+    <text class='list_value'>{{asset_name}}</text>
   </view>
   <view class='list'>
     <text class='list_label'>所在场地：</text>
-    <text class='list_value'>芜湖职业技术学院/南校区/创业园</text>
+    <text class='list_value'>{{field_path}}</text>
   </view>
   <view class='list-bewrite'>
     <text>故障描述：</text>
-    <textarea class='bewrite' placeholder='例如：空调制热有问题'></textarea>
+    <textarea class='bewrite' disabled>{{remarks}}</textarea>
   </view>
   <view class='list'>
     <text class='list_label'>图片拍摄：</text>
-    <view wx:for="{{imgs}}">
-      <image src='{{item}}' bindtap='imgShow' mode='aspectFill'></image>
+    <block wx:if="{{img_url.length>0}}">
+      <view wx:for="{{img_url}}">
+        <image src='{{item}}' data-url='{{item}}' bindtap='imgShow' mode='aspectFill'></image>
+      </view>
+    </block>
+    <block wx:else>
+      <text style='line-height:70rpx;' >暂无图片</text>
+    </block>
+  </view>
+
+  <!--维修人员信息  -->
+  <view wx:if="{{service_worker}}">
+  <view class='order_title' >维修详情</view>
+    <view class='list'>
+      <text class='list_label'>维修人员：</text>
+      <text class='list_value'>{{service_worker}}({{service_status==0?'暂未接单':'正在维修'}})</text>
     </view>
   </view>
 
-  <view class='order_title' >评价详情</view>
-  <view class='section'>
-      <view class='section_title'>满意度:</view>
-      <view class='stars'>
-        <block wx:for="{{stars}}">
-          <image class="star-image" mode='aspectFit' style="left: {{item*100}}rpx" src="{{key > item ?(key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
-            <view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap="selectLeft"></view>
-            <view class="item" style="left:75rpx" data-key="{{item+1}}" bindtap="selectRight"></view>
-          </image>
-        </block>
+  <!--维修人员反馈信息  -->
+  <view wx:if="{{suggest}}" >
+    <view class='list-bewrite'>
+      <text>反馈信息：</text>
+      <textarea class='bewrite' disabled>{{suggest}}</textarea>
+    </view>
+    <view class='list'>
+      <text class='list_label'>反馈图片：</text>
+      <view wx:for="{{service_img_url}}">
+        <image src='{{item}}' data-url='{{item}}' bindtap='serviceImgShow' mode='aspectFill'></image>
       </view>
+    </view>
+  </view>
+
+  <!--评价详情  -->
+  <view wx:if="{{stars_key}}" >
+    <view class='order_title' >评价详情</view>
+    <view class='section'>
+        <view class='section_title'>满意度:</view>
+        <view class='stars'>
+          <block wx:for="{{stars}}">
+            <image class="star-image" mode='aspectFit' style="left: {{item*100}}rpx" src="{{stars_key > item ?(stars_key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
+              <view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap="selectLeft"></view>
+              <view class="item" style="left:75rpx" data-key="{{item+1}}" bindtap="selectRight"></view>
+            </image>
+          </block>
+        </view>
     </view>
     <view class='section_remarks'>
       <view class='section_title'>评论内容：</view>
-      <textarea class='remraks' name="appraisal" disabled >维修很及时，谢谢维修师傅</textarea>
+      <textarea class='remraks' name="appraisal" disabled >{{appraisal}}</textarea>
     </view>
+  </view>
+
+<!--投诉详情  -->
+  <view wx:if="{{complain}}" >
+    <view class='order_title' >投诉详情</view>
+    <view class='section_remarks'>
+      <view class='section_title'>投诉详情：</view>
+      <textarea class='remraks' disabled >{{complain}}</textarea>
+    </view>
+  </view>
+  
 </view>

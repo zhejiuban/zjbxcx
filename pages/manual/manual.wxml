@@ -1,34 +1,32 @@
 <form bindsubmit="formSubmit" bindreset="formReset">
   <view class="section">
-    <input type="text" name="uuid" value="{{uuid}}" placeholder="资产编号" />
-    <view catchtap='click_scan' class='scanBtn' ><image style='width:70rpx;height:70rpx;' src='/images/s.png' ></image></view>
+    <input type="text" name="asset_uuid" bindinput='input_uuid' value="{{asset_uuid}}" placeholder="物品编号" />
+    <view catchtap='click_scan' class='scanBtn'>
+      <image style='width:70rpx;height:70rpx;' src='/images/s.png'></image>
+    </view>
   </view>
   <view class="section">
-    <input type="text" name="name" value="" placeholder="资产名称" />
+    <input type="text" name="name" value="{{asset_name}}" placeholder="物品名称" />
   </view>
   <view class="section">
-    <input type="text" name="type" value="" placeholder="资产类别" />
+    <input type="text" name="category_id" value="{{category}}" placeholder='物品类别' />
   </view>
   <view class="section">
-    <picker class='mult' mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
-      <view class="picker">
-      {{multiArray[0][multiIndex[0]]}} / {{multiArray[1][multiIndex[1]]}} / {{multiArray[2][multiIndex[2]]}}
-      </view>
-    </picker>
+    <input type="text" name="field_id" value="{{field}}" placeholder='所在场地' />
   </view>
   <view class="textarea_view">
-    <textarea name="remarks" placeholder='问题描述' ></textarea>
+    <textarea name="remarks" placeholder='问题描述'></textarea>
   </view>
-  <view class='section' style='border-bottom:none;' >
+  <view class='section' style='border-bottom:none;'>
     <block wx:for="{{imgs}}">
-      <image src='{{item}}' class='uploader_imgs'  data-src="{{item}}" bindtap='imgShow'></image>
+      <image src='{{item}}' class='uploader_imgs' bindtap='imgShow' data-src="{{item}}" data-img-id="{{img_ids[index]}}" bindlongtap="longTap" bindtouchstart="touchStart" bindtouchend="touchEnd" data-index="{{index}}"></image>
     </block>
     <view class='uploaderBtn' bindtap='selectImg'>
-      <image src='{{uploaderImg}}'></image>
+      <image wx:if="{{imgs.length<3}}" src='{{uploaderImg}}'></image>
     </view>
-    <text class='prompt'>拍摄照片帮助\n我们更快解决问题</text>
+    <text class='prompt'>拍摄照片帮助我们\n更快解决问题(最多三张,长按删除)</text>
   </view>
   <view class="btn-area">
-     <button class='submitBtn' formType="submit">提交</button>
+    <button class='submitBtn' disabled="{{isSubmit}}" formType="submit">提交</button>
   </view>
 </form>

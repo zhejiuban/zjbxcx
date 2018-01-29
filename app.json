@@ -1,6 +1,9 @@
 {
   "pages": [
+    "pages/home/home",
+    "pages/phone/phone",
     "pages/index/service/service",
+    "pages/areaManual/areaManual",
     "pages/index/all/all",
     "pages/index/over/over",
     "pages/index/assess/assess",
@@ -9,6 +12,7 @@
     "pages/details/details",
     "pages/manual/manual",
     "pages/evaluate/evaluate",
+    "pages/complain/complain",
     "pages/danger/danger",
     "pages/logs/logs",
     "pages/index/config/config"
@@ -16,7 +20,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#eee",
-    "navigationBarTitleText": "这就办维修平台",
+    "navigationBarTitleText": "这就办智慧后勤",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#fff"
   }
