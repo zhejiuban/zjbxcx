@@ -233,11 +233,25 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
+        
         if (res.data.code == 0) {
           that.setData({
             itemsLength: '0'
           })
-        }else{
+        } else if (res.data.code == 403) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.navigateBack({
+                  url: "/pages/home/home"
+                })
+              }
+            }
+          })
+        } else{
           let arr = [];
           let data = res.data;
           for (var i = 0; i < data.length; i++) {

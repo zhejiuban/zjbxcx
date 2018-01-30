@@ -18,7 +18,10 @@ Page({
 
   // 输入工号和密码
   formSubmit: function (e) {
-    console.log(e);
+    wx.showLoading({
+      mask: true,
+      title: '登录中',
+    });
     let job_number = e.detail.value.number;
     let password = e.detail.value.password;
     wx.request({
@@ -35,6 +38,7 @@ Page({
       },
       success: function (res) {
         if (res.data.code == 1) {
+          app.globalData.login = true;
           wx.showModal({
             title: '提示',
             content: res.data.message,
@@ -63,6 +67,9 @@ Page({
             }
           })
         }
+      },
+      complete: function () {
+        wx.hideLoading();
       }
     })
   }

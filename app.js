@@ -1,8 +1,6 @@
 //app.js
 App({
   onLaunch: function (e) {
-    console.log("每次加载");
-    wx.clearStorage();
     let that = this;
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
@@ -32,6 +30,10 @@ App({
           success: res => {
             let code = res.code;
             // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+            wx.showLoading({
+              mask: true,
+              title: '登录中',
+            });
             wx.getUserInfo({
               success: res => {
                 that.globalData.userInfo = res.userInfo;
@@ -66,6 +68,7 @@ App({
                       },
                       success: function (res) {
                         console.log(res);
+                        wx.hideLoading();
                         if(res.data.code==0){
                           wx.redirectTo({
                             url: '/pages/login/login',
@@ -83,40 +86,6 @@ App({
                         }
                       }
                     })
-                      
-                      //查询手机号是否已经授权
-                      // wx.request({
-                      //   url: 'https://wx.zhejiuban.com/wx/phone_authorize',
-                      //   method: "POST",
-                      //   header: {
-                      //     'content-type': 'application/json' // 默认值
-                      //   },
-                      //   data: {
-                      //     role: 1,    //用户角色
-                      //     openId: that.globalData.openId
-                      //   },
-                      //   success: function (res) {
-                      //     console.log(res);
-                      //     if(res.data.code==0){
-                      //       //暂未授权
-                      //       wx.redirectTo({
-                      //         url: "/pages/phone/phone"
-                      //       });
-                      //     }else{
-                      //       //绑定手机号已授权
-                      //       if(that.globalData.uuid){
-                      //         wx.redirectTo({
-                      //           url: "/pages/manual/manual"
-                      //         });
-                      //       }else{
-                      //         wx.redirectTo({
-                      //           url: "/pages/index/service/service"
-                      //         })
-                      //       }
-                      //     }
-                      //   }
-                      // });
-                    // }
                   }
                 });
                 // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
@@ -224,7 +193,8 @@ App({
     btnShow: false,
     showLoad: false,
     firstLogin: 1,
-    uuid: null
+    uuid: null,
+    // login: null
   },
   swichNav: function (url) {
     wx.redirectTo({

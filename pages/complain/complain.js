@@ -36,36 +36,36 @@ Page({
         'content-type': 'application/json'
       },
       success: function (res) {
-        wx.showModal({
-          title: '提示',
-          content: '感谢您的反馈！我们会及时处理！',
-          showCancel: false,
-          success: function (res) {
-            if (res.confirm) {
-              wx.redirectTo({
-                url: '/pages/index/over/over'
-              })
+        if (res.data.code == 403) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.navigateBack({
+                  url: "/pages/home/home"
+                })
+              }
             }
-          }
-        })
+          })
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: '感谢您的反馈！我们会及时处理！',
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/index/over/over'
+                })
+              }
+            }
+          })
+        }
       }
     })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
   /**
    * 用户点击右上角分享
    */

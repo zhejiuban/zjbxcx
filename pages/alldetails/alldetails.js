@@ -60,21 +60,36 @@ Page({
         'content-type': 'application/json'
       },
       success: function (res) {
-        console.log(res);
-        that.setData({
-          asset_name: res.data.asset_name,
-          field_path: res.data.field_path,
-          remarks: res.data.remarks,
-          img_url: res.data.img_url,
-          stars_key: res.data.stars_key,
-          appraisal: res.data.appraisal,
-          complain: res.data.complain,
-          service_status: res.data.service_status,
-          service_worker: res.data.service_worker,
-          suggest: res.data.suggest,
-          service_img_url: res.data.service_img_url,
-          repair_status: res.data.repair_status
-        });
+        if(res.data.code==403){
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.navigateBack({
+                  url: "/pages/home/home"
+                })
+              }
+            }
+          })
+        }else{
+          that.setData({
+            asset_name: res.data.asset_name,
+            field_path: res.data.field_path,
+            remarks: res.data.remarks,
+            img_url: res.data.img_url,
+            stars_key: res.data.stars_key,
+            appraisal: res.data.appraisal,
+            complain: res.data.complain,
+            service_status: res.data.service_status,
+            service_worker: res.data.service_worker,
+            suggest: res.data.suggest,
+            service_img_url: res.data.service_img_url,
+            repair_status: res.data.repair_status
+          });
+        }
+        
       }
     })
   },

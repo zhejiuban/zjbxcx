@@ -37,14 +37,29 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        let data = res.data;
-        that.setData({
-          asset_name: data.asset_name,
-          asset_id: data.asset_id,
-          asset_field: data.field_path,
-          remarks: data.remarks,
-          img_url: [data.img_url]
-        });
+        if (res.data.code == 403) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.navigateBack({
+                  url: "/pages/home/home"
+                })
+              }
+            }
+          })
+        } else {
+          let data = res.data;
+          that.setData({
+            asset_name: data.asset_name,
+            asset_id: data.asset_id,
+            asset_field: data.field_path,
+            remarks: data.remarks,
+            img_url: [data.img_url]
+          });
+        }
       }
     })
   },

@@ -331,7 +331,20 @@ Page({
                 }
               }
             })
-          }else{
+          } else if (res.data.code == 403) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.navigateBack({
+                    url: "/pages/home/home"
+                  })
+                }
+              }
+            })
+          } else {
             wx.showModal({
               title: '提示',
               content: res.data.message,

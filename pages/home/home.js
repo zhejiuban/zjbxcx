@@ -14,6 +14,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    // console.log(app.globalData.login);
     console.log(options);
     let that = this;
     console.log("0.0.41");
@@ -24,16 +25,17 @@ Page({
       // });
       app.globalData.firstLogin=2;
     };
-  },
-
-  onShow: function () {
-    if(app.globalData.openId){
-      wx.showLoading({
-        // mask: true,
-        title: '登录中',
-      });
-      app.getUserInfo();
-    }
+    // if(app.globalData.openId){
+    //   if(app.globalData.login){
+    //     wx.redirectTo({
+    //       url: '/pages/index/service/service',
+    //     })
+    //   }else{
+    //     wx.redirectTo({
+    //       url: '/pages/login/login',
+    //     })
+    //   }
+    // }
   },
 
   /**
