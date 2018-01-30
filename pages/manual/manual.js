@@ -29,13 +29,16 @@ Page({
     // 微信扫小程序获取的参数
     if(app.globalData.uuid){
       wx.showLoading({
-        mask: true,
+        // mask: true,
         title: '加载中',
       });
       that.setData({
         asset_uuid: app.globalData.uuid
       });
-      that.getAssetInfo(that.data.asset_uuid);
+      if(app.globalData.openId){
+        that.getAssetInfo(that.data.asset_uuid);
+      }
+      
     }
 
     //小程序里面扫描二维码
@@ -50,6 +53,12 @@ Page({
         asset_uuid: asset_uuid
       });
       wx.hideLoading();
+    }
+  },
+
+  onShow: function(){
+    if(!app.globalData.openId){
+      app.getUserInfo();
     }
   },
 
@@ -289,6 +298,7 @@ Page({
         }
       })
     }else{
+      app.globalData.uuid = null;
       wx.showLoading({
         mask: true,
         title: '正在提交中...',

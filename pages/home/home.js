@@ -26,6 +26,16 @@ Page({
     };
   },
 
+  onShow: function () {
+    if(app.globalData.openId){
+      wx.showLoading({
+        // mask: true,
+        title: '登录中',
+      });
+      app.getUserInfo();
+    }
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

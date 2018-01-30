@@ -1,0 +1,56 @@
+/* pages/login/login.wxss */
+.logo-view{
+  text-align: center;
+}
+.logo{
+  width: 200rpx;
+  height: 200rpx;
+  margin-top: 100rpx;
+}
+
+#title {
+  display: block;
+  margin-bottom: 100rpx; 
+  font-size: 42rpx;
+  color: #333;
+  text-align: center;
+}
+
+.section{
+  border-bottom: 1rpx solid #ccc;
+  margin: 10rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  display: flex;
+  flex-grow: row no-wrap;
+  color: #333;
+}
+
+.lable {
+  padding: 0 10rpx;
+  width: 15%;
+}
+.section input{
+  height: 90rpx;
+  padding: 0 15rpx;
+  width: 80%;
+}
+
+.btn-area{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.btn-area>button {
+  color: #fff;
+  background-color: #4898fa;
+  height: 100rpx;
+  line-height: 100rpx;
+  border: none;
+  border-radius: 0;
+}
+button::after{
+  border: none;
+}

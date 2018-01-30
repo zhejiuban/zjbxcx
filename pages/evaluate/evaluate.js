@@ -48,31 +48,38 @@ Page({
     let appraisal = e.detail.value.appraisal;
     let repair_id = that.data.repair_id;
     wx.request({
-      url: 'https://wx.zhejiuban.com/repair/evaluate',
+      url: 'https://wx.zhejiuban.com/wx/repair/evaluate',
       method:"POST",
       data: {
         openId: app.globalData.openId,
         repair_id: repair_id,
         score: score,
         appraisal: appraisal,
-        status:'4'
       },
       header: {
         'content-type': 'application/json'
       },
       success: function (res) {
-        wx.showModal({
-          title: '提示',
-          content: '感谢您的评价！',
-          showCancel: false,
-          success: function (res) {
-            if (res.confirm) {
-              wx.redirectTo({
-                url: '/pages/index/all/all'
-              })
+        if(res.data.code == 1){
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/index/all/all'
+                })
+              }
             }
-          }
-        })
+          })
+        }else{
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+          })
+        }
       }
     })
   },

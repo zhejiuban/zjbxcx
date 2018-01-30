@@ -7,7 +7,7 @@ Page({
     searchLoadingComplete: false,  //“没有数据”的变量，默认false，隐藏  
     page: 1,   //分页
     items: [],
-    status:'4',
+    status: 20,
     content: '1',    //判断上拉是否还有数据
     itemsLength: '1'  //获取有无数据
   },
@@ -39,7 +39,7 @@ Page({
       }
     });
     wx.request({
-      url: 'https://wx.zhejiuban.com/repair/repair_list', //仅为示例，并非真实的接口地址
+      url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
       method: "POST",
       data: {
         status: that.data.status,
@@ -50,7 +50,12 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        if (res.data.length != '0') {
+
+        if (res.data.code == 0) {
+          that.setData({
+            itemsLength: '0'
+          })
+        } else {
           let arr = [];
           let data = res.data;
           for (var i = 0; i < data.length; i++) {
@@ -59,10 +64,6 @@ Page({
           that.setData({
             items: arr,
             itemsLength: '1'
-          })
-        }else{
-          that.setData({
-            itemsLength: '0'
           })
         }
       }
@@ -148,7 +149,7 @@ Page({
     let that = this;
     wx.showNavigationBarLoading() //在标题栏中显示加载
     wx.request({
-      url: 'https://wx.zhejiuban.com/repair/repair_list', //仅为示例，并非真实的接口地址
+      url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
       method: "POST",
       data: {
         status: that.data.status,
@@ -188,7 +189,7 @@ Page({
     if (that.data.content != '0') {
       wx.showLoading();
       wx.request({
-        url: 'https://wx.zhejiuban.com/repair/repair_list',
+        url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
         method: "POST",
         data: {
           status: that.data.status,

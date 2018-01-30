@@ -1,0 +1,19 @@
+<!--pages/login/login.wxml-->
+<view class='logo-view'>
+  <image class='logo' src='/images/logo.png' ></image>
+</view>
+
+<text id='title' >用户身份验证</text>
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <view class="section" >
+    <view class="lable">帐号</view>
+    <input name='number' placeholder='工号、学号' confirm-type='done' />
+  </view>
+  <view class="section">
+    <view class="lable">密码</view>
+    <input type='password' name='password' placeholder='密码' confirm-type='done' />
+  </view>
+  <view class="btn-area">
+    <button class='submitBtn' disabled="{{isSubmit}}" formType="submit">提交</button>
+  </view>
+</form>

@@ -81,7 +81,6 @@ Page({
       }
     });
     wx.request({
-      // url: 'https://wx.zhejiuban.com/repair/repair_list',
       url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
       method: "POST",
       data: {
@@ -93,27 +92,22 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        console.log(res);
-        if(res.data.code==1){
-          console.log("用户信息未获取到");
-        }else{
-          if (res.data.length != 0) {
-            let arr = [];
-            let data = res.data;
-            let page = that.data.page + 1;
-            for (var i = 0; i < data.length; i++) {
-              arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id];
-            }
-            that.setData({
-              items: arr,
-              page: page,
-              itemsLength: '1'
-            })
-          } else {
-            that.setData({
-              itemsLength: '0'
-            })
+        if (res.data.code == 0) {
+          that.setData({
+            itemsLength: '0'
+          })
+        } else {
+          let arr = [];
+          let data = res.data;
+          let page = that.data.page + 1;
+          for (var i = 0; i < data.length; i++) {
+            arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id];
           }
+          that.setData({
+            items: arr,
+            page: page,
+            itemsLength: '1'
+          })
         }
       }
     })
@@ -206,7 +200,7 @@ Page({
     wx.showNavigationBarLoading(); //在标题栏中显示加载
     let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/repair/repair_list', //仅为示例，并非真实的接口地址
+      url: 'https://wx.zhejiuban.com/wx/repair/repair_list', //仅为示例，并非真实的接口地址
       method: "POST",
       data: {
         status: that.data.status,
@@ -219,7 +213,11 @@ Page({
       success: function (res) {
         wx.hideNavigationBarLoading() //完成停止加载
         wx.stopPullDownRefresh() //停止下拉刷新
-        if (res.data.length != '0') {
+        if (res.data.code == 0) {
+          that.setData({
+            page: 1
+          })
+        } else {
           let arr = [];
           let data = res.data;
           for (var i = 0; i < data.length; i++) {
@@ -227,10 +225,6 @@ Page({
           }
           that.setData({
             items: arr,
-            page: 1
-          })
-        } else {
-          that.setData({
             page: 1
           })
         }
@@ -245,7 +239,7 @@ Page({
     if (that.data.content!='0'){
       wx.showLoading();
       wx.request({
-        url: 'https://wx.zhejiuban.com/repair/repair_list',
+        url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
         method: "POST",
         data: {
           status: that.data.status,
