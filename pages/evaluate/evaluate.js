@@ -11,8 +11,10 @@ Page({
     selectedSrc: '../../images/selected.png',
     halfSrc: '../../images/half.png',
     key: 0,//评分
+
     repair_id:''
   },
+
   //点击右边,半颗星
   selectLeft: function (e) {
     var key = e.currentTarget.dataset.key
@@ -23,7 +25,6 @@ Page({
     this.setData({
       key: key
     })
-
   },
   //点击左边,整颗星
   selectRight: function (e) {
@@ -44,6 +45,7 @@ Page({
   // form表单提交
   formSubmit: function (e){
     let that = this;
+
     let score = that.data.key;
     let appraisal = e.detail.value.appraisal;
     let repair_id = that.data.repair_id;
@@ -95,12 +97,5 @@ Page({
         }
       }
     })
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
   }
 })

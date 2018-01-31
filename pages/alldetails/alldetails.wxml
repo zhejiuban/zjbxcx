@@ -34,21 +34,26 @@
   <view class='order_title' >维修详情</view>
     <view class='list'>
       <text class='list_label'>维修人员：</text>
-      <text class='list_value'>{{service_worker}}({{service_status==0?'暂未接单':'正在维修'}})</text>
+      <text class='list_value'>{{service_worker}}({{repair_status}})</text>
     </view>
   </view>
 
   <!--维修人员反馈信息  -->
-  <view wx:if="{{suggest}}" >
+  <view wx:if="{{result}}" >
     <view class='list-bewrite'>
       <text>反馈信息：</text>
-      <textarea class='bewrite' disabled>{{suggest}}</textarea>
+      <textarea class='bewrite' disabled>{{result}}</textarea>
     </view>
     <view class='list'>
       <text class='list_label'>反馈图片：</text>
-      <view wx:for="{{service_img_url}}">
-        <image src='{{item}}' data-url='{{item}}' bindtap='serviceImgShow' mode='aspectFill'></image>
-      </view>
+      <block wx:if="{{service_img_url.length>0}}">
+        <view wx:for="{{service_img_url}}">
+          <image src='{{item}}' data-url='{{item}}' bindtap='serviceImgShow' mode='aspectFill'></image>
+        </view>
+      </block>
+      <block wx:else>
+        <text style='line-height:70rpx;' >暂无图片</text>
+      </block>
     </view>
   </view>
 
@@ -60,8 +65,8 @@
         <view class='stars'>
           <block wx:for="{{stars}}">
             <image class="star-image" mode='aspectFit' style="left: {{item*100}}rpx" src="{{stars_key > item ?(stars_key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
-              <view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap="selectLeft"></view>
-              <view class="item" style="left:75rpx" data-key="{{item+1}}" bindtap="selectRight"></view>
+              <view class="item" style="left:0rpx" data-key="{{item+0.5}}"></view>
+              <view class="item" style="left:75rpx" data-key="{{item+1}}" ></view>
             </image>
           </block>
         </view>
@@ -71,14 +76,4 @@
       <textarea class='remraks' name="appraisal" disabled >{{appraisal}}</textarea>
     </view>
   </view>
-
-<!--投诉详情  -->
-  <view wx:if="{{complain}}" >
-    <view class='order_title' >投诉详情</view>
-    <view class='section_remarks'>
-      <view class='section_title'>投诉详情：</view>
-      <textarea class='remraks' disabled >{{complain}}</textarea>
-    </view>
-  </view>
-  
 </view>

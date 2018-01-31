@@ -11,13 +11,11 @@
           <view class="item-ans" bindtap='clickAllDetail' data-id="{{item['3']}}">
             <view class="avatar">
               <image class="img" wx:if="{{item['0']['0']['0'].length>0}}" src="{{item['0']['0']['0']}}" catchtap='prev_img' data-url="{{item['0']}}"></image> 
-              
               <image class="img" wx:else src="/images/no_img.jpg" ></image> 
             </view>
             <view class="expertInfo">
               <view class="name">报修项目：{{item['1']}}</view>
               <view class="tag">保修场地：{{item['2']}}</view>
-              <view class="tag">{{item['3']}}</view>
             </view>
           </view>
         </block>

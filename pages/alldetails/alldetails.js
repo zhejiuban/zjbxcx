@@ -22,7 +22,7 @@ Page({
     repair_status: '',    //工单状态
     service_status: '',  //维修状态
     service_worker: '',
-    suggest: '',
+    result: '',
     service_img_url: []
   },
   imgShow: function (e) {
@@ -74,6 +74,7 @@ Page({
             }
           })
         }else{
+          console.log(res);
           that.setData({
             asset_name: res.data.asset_name,
             field_path: res.data.field_path,
@@ -84,7 +85,7 @@ Page({
             complain: res.data.complain,
             service_status: res.data.service_status,
             service_worker: res.data.service_worker,
-            suggest: res.data.suggest,
+            result: res.data.result,
             service_img_url: res.data.service_img_url,
             repair_status: res.data.repair_status
           });

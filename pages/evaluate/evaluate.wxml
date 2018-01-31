@@ -12,6 +12,7 @@
       </block>
     </view>
   </view>
+
   <view class='section_remarks'>
     <view class='section_title'>评论内容：</view>
     <textarea class='remarks' name="appraisal" placeholder='留下您宝贵的意见或建议'></textarea>

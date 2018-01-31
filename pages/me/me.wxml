@@ -18,11 +18,6 @@
     <view class='item_title' >联系我们</view>
     <image class='item_more' src='/images/more.png' ></image>
   </view>
-  <view class='list_item' >
-    <image class='item_icon' src='/images/kefu.png' ></image>
-    <view class='item_title' >我的投诉</view>
-    <image class='item_more' src='/images/more.png' ></image>
-  </view>
 </view>
 
 <!-- <button class='out_btn'>退出登录</button> -->

@@ -3,8 +3,9 @@
 .title {
   width: 100%;
   text-align: center;
-  padding: 20rpx;
-  font-size: 18px;
+  padding: 40rpx 0;
+  color: #333;
+  font-size: 28px;
 }
 
 .section {

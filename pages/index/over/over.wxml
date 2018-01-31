@@ -17,8 +17,6 @@
             <view class="expertInfo">
               <view class="name">报修项目：{{item['1']}}</view>
               <view class="tag wait_tag">保修场地：{{item['2']}}</view>
-              <button class='complain_btn evaluate_btn' wx:if="!{{item['4']}}" catchtap='to_complain' data-id="{{item['3']}}">投诉</button>
-              <button class='complain_btn evaluate_btn' wx:if="{{item['4']}}" disabled data-id="{{item['3']}}" style='font-size:18rpx;' >已投诉</button>
             </view>
           </view>
         </block>
