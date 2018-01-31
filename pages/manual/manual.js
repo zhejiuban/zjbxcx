@@ -160,7 +160,7 @@ Page({
 
   selectImg: function () {
     let that = this;
-    if(!that.data.asset_uuid){
+    if(!that.data.asset_id){
       wx.showModal({
         title: '提示',
         content: '请先选择报修的资产',
@@ -175,7 +175,6 @@ Page({
           var tempFilePaths = res.tempFilePaths;
           for (var i = 0; i < tempFilePaths.length; i++) {
             wx.uploadFile({
-              // url: 'https://wx.zhejiuban.com/uploader/imgfile',
               url: 'https://wx.zhejiuban.com/file/img_file',
               filePath: tempFilePaths[i],
               method: "POST",
@@ -353,6 +352,9 @@ Page({
               }
             })
           }
+        },
+        complete: function () {
+          wx.hideLoading();
         }
       })
     }

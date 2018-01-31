@@ -21,6 +21,12 @@ Page({
     });
   },
 
+  toArea: function (){
+    wx.redirectTo({
+      url: '/pages/areaManual/areaManual',
+    })
+  },
+
   /**
    * 用户点击右上角分享
    */

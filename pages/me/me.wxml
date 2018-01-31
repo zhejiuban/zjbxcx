@@ -18,6 +18,13 @@
     <view class='item_title' >联系我们</view>
     <image class='item_more' src='/images/more.png' ></image>
   </view>
+
+  <view class='list_item' catchtap='toArea'>
+    <image class='item_icon' src='/images/kefu.png' ></image>
+    <view class='item_title' >场地报修</view>
+    <image class='item_more' src='/images/more.png' ></image>
+  </view>
+
 </view>
 
 <!-- <button class='out_btn'>退出登录</button> -->

@@ -1,41 +1,42 @@
 <form bindsubmit="formSubmit" bindreset="formReset">
-  <!-- <view class="section">
-    <input type="text" name="asset_uuid" bindinput='input_uuid' value="{{asset_uuid}}" placeholder="物品编号" />
-    <view catchtap='click_scan' class='scanBtn' ><image style='width:70rpx;height:70rpx;' src='/images/s.png' ></image></view>
-  </view>
-  <view class="section">
-    <input type="text" name="name" value="{{asset_name}}" placeholder="物品名称" />
-  </view>
-  <view class="section">
-    <input type="text" name="category_id" value="{{category}}" placeholder='物品类别' />
-  </view> -->
 
   <view class="section">
-  <view class="section__title">普通选择器：</view>
-  <picker bindchange="bindPickerChange" value="{{index}}" range="{{fields1}}">
-    <view class="picker">
-      {{fields1[index]['1']}}
-    </view>
-  </picker>
-</view>
+    <view class="section_title">选择场地：</view>
+    <text wx:if="{{area_names}}" >{{area_names}}</text>
+    <picker bindchange="bindPickerChange" value="{{index}}" range="{{area}}" range-key="{{'name'}}">
+      <view class="picker">
+        {{area[index].name}}
+      </view>
+    </picker>
+
+    <view class='reset' catchtap='resetArea' >重置</view>
+
+  </view>
 
   <view class="section">
-    <input type="text" name="field_id" value="{{field}}" placeholder='所在场地' />
+    <view class="section_title">选择资产：</view>
+    <picker bindchange="bindAssetChange" value="{{asset_index}}" range="{{asset_list}}" range-key="{{'asset_name'}}">
+      <view class="picker">
+        {{asset_list[asset_index].asset_name}}
+      </view>
+    </picker>
   </view>
+
   <view class="textarea_view">
     <textarea name="remarks" placeholder='问题描述' ></textarea>
   </view>
-  <view class='section' style='border-bottom:none;' >
+
+    <view class='section' style='border-bottom:none;'>
     <block wx:for="{{imgs}}">
-      <image src='{{item}}' class='uploader_imgs'  data-src="{{item}}" bindtap='imgShow'></image>
+      <image src='{{item}}' class='uploader_imgs' bindtap='imgShow' data-src="{{item}}" data-img-id="{{img_ids[index]}}" bindlongtap="longTap" bindtouchstart="touchStart" bindtouchend="touchEnd" data-index="{{index}}"></image>
     </block>
     <view class='uploaderBtn' bindtap='selectImg'>
-      <image src='{{uploaderImg}}'></image>
+      <image wx:if="{{imgs.length<3}}" src='{{uploaderImg}}'></image>
     </view>
-    <text class='prompt'>拍摄照片帮助\n我们更快解决问题</text>
+    <text class='prompt'>拍摄照片帮助我们\n更快解决问题(最多三张,长按删除)</text>
   </view>
+
   <view class="btn-area">
-     <!-- <button class='submitBtn' disabled='{{disabled}}' formType="submit">提交</button> -->
      <button class='submitBtn' formType="submit">提交</button>
   </view>
 </form>

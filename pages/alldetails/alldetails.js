@@ -47,6 +47,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.showLoading({
+      mask: true,
+      title: '加载中',
+    });
     let repair_id = options.repair_id;
     let that = this;
     wx.request({
@@ -90,7 +94,9 @@ Page({
             repair_status: res.data.repair_status
           });
         }
-        
+      },
+      complete: function () {
+        wx.hideLoading();
       }
     })
   },

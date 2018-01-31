@@ -44,8 +44,11 @@ Page({
 
   // form表单提交
   formSubmit: function (e){
+    wx.showLoading({
+      mask: true,
+      title: '加载中',
+    });
     let that = this;
-
     let score = that.data.key;
     let appraisal = e.detail.value.appraisal;
     let repair_id = that.data.repair_id;
@@ -95,6 +98,9 @@ Page({
             showCancel: false,
           })
         }
+      },
+      complete: function () {
+        wx.hideLoading();
       }
     })
   }

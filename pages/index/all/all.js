@@ -207,6 +207,10 @@ Page({
   },
 
   onLoad: function () {
+    wx.showLoading({
+      mask: true,
+      title: '加载中',
+    });
     let that = this;
     //  高度自适应
     wx.getSystemInfo({
@@ -233,7 +237,6 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        
         if (res.data.code == 0) {
           that.setData({
             itemsLength: '0'
@@ -262,6 +265,9 @@ Page({
             itemsLength: '1'
           })
         }
+      },
+      complete: function () {
+        wx.hideLoading();
       }
     })
   },

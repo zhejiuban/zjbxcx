@@ -67,6 +67,10 @@ Page({
 
 
   onLoad: function (e) {
+    wx.showLoading({
+      mask: true,
+      title: '加载中',
+    });
     let that = this;
     //  高度自适应
     wx.getSystemInfo({
@@ -122,6 +126,9 @@ Page({
             itemsLength: '1'
           })
         }
+      },
+      complete: function () {
+        wx.hideLoading();
       }
     })
   },

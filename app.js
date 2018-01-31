@@ -80,6 +80,8 @@ App({
                             });
                           }else{
                             wx.redirectTo({
+                              // url: "/pages/areaManual/areaManual"
+                              // url: "/pages/me/me"
                               url: "/pages/index/service/service"
                             })
                           }

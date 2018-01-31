@@ -31,13 +31,18 @@
   height: 200rpx;
   padding: 10rpx;
 }
-
-/* .section_title {
-  font-size: 28rpx;
-  width: 150rpx;
-  line-height: 70rpx;
-  color: #a3a3a3;
-} */
+.reset{
+  position: absolute;
+  right: 10rpx;
+  top:20rpx;
+  font-size: 24rpx;
+  width: 80rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: center;
+  color: #09BB07;
+  border: 1rpx solid #ccc;
+}
 
 .section input {
   width: 600rpx;

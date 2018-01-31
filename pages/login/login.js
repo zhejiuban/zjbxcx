@@ -20,7 +20,7 @@ Page({
   formSubmit: function (e) {
     wx.showLoading({
       mask: true,
-      title: '登录中',
+      title: '加载中',
     });
     let job_number = e.detail.value.number;
     let password = e.detail.value.password;
