@@ -232,7 +232,12 @@ Page({
               page: that.data.page + 1
             });
           }
-          if (res.data.length == 10) {
+          if (res.data.length < 10) {
+            that.setData({
+              content: '0'
+            })
+          }
+          if (res.data.code == 0) {
             that.setData({
               content: '0'
             })

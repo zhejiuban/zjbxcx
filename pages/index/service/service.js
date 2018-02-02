@@ -270,6 +270,7 @@ Page({
           'content-type': 'application/json' // 默认值
         },
         success: function (res) {
+          console.log(res);
           if (res.data.length > 0) {
             let arr = [];
             let data = res.data;
@@ -284,6 +285,11 @@ Page({
             });
           }
           if (res.data.length < 10) {
+            that.setData({
+              content: '0'
+            })
+          }
+          if (res.data.code==0){
             that.setData({
               content: '0'
             })

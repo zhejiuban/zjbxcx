@@ -11,9 +11,9 @@ App({
       let url = decodeURIComponent(e.query.q);
       let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
       that.globalData.uuid = asset_uuid;
-      this.getUserInfo();
+      that.getUserInfo();
     }else{
-      this.getUserInfo();
+      that.getUserInfo();
     }
     console.log("onLaunch");
   },
@@ -55,7 +55,7 @@ App({
                   success: function (res) {
                     console.log(res);
                     that.globalData.openId = res.data.openId;
-                    //判断有没有验证身份
+                    //判断有没有验证身份(判断是否注册)
                     wx.request({
                       url: 'https://wx.zhejiuban.com/wx/authentication',
                       method: "POST",
@@ -68,47 +68,82 @@ App({
                       },
                       success: function (res) {
                         console.log(res);
-                        wx.hideLoading();
-
-                        /**
-                         * 首先判断是否有资产id
-                         * 有资产id存在的话，去后台判断是否需要LDAP
-                         * 如果没有资产存在的，直接登录
-                         * */
-                        if (that.globalData.uuid) {
-                          wx.request({
-                            url: 'https://wx.zhejiuban.com/wx/need_validation',
-                            method: "POST",
-                            data: {
-                              asset_uuid: that.globalData.uuid
-                            },
-                            header: {
-                              'content-type': 'application/json'
-                            },
-                            success: function (res) {
-                              if(res.data.code==1){
-                                //需要LDAP验证
-                                // 前去验证  暂未写
-                              }else{
-                                //不需要LDAP验证
-                                // if(that.globalData.uuid){
-                                  wx.redirectTo({
-                                    url: "/pages/manual/manual"
-                                  });
-                                // }else{
-                                //   wx.redirectTo({
-                                //     url: "/pages/index/service/service"
-                                //   })
-                                // }
-                              }
-                            }
-                          })
+                        if(res.data.code==1){
+                          //验证过了
+                          if (that.globalData.uuid) {
+                            wx.redirectTo({
+                              url: '/pages/manual/manual',
+                            });
+                          }else{
+                            wx.redirectTo({
+                              url: "/pages/index/service/service"
+                            });
+                          }
                         }else{
-                          wx.redirectTo({
-                            url: "/pages/index/service/service"
-                          })
+                          //未验证用户信息
+                          /**
+                           * 首先判断是否有资产uuid
+                           * 有资产id存在的话，去后台判断是否需要LDAP
+                           * 如果没有资产存在的，直接登录
+                           * */
+                          if (that.globalData.uuid) {
+                            wx.request({
+                              url: 'https://wx.zhejiuban.com/wx/need_validation',
+                              method: "POST",
+                              data: {
+                                asset_uuid: that.globalData.uuid
+                              },
+                              header: {
+                                'content-type': 'application/json'
+                              },
+                              success: function (res) {
+                                wx.hideLoading();
+                                if(res.data.code==1){
+                                  // 前去验证  暂未写
+                                  //需要LDAP验证
+                                  wx.showModal({
+                                    title: '提示',
+                                    content: '需要LDAP用户验证',
+                                    success: function (res) {
+                                      if (res.confirm) {
+                                        wx.redirectTo({
+                                          url: '/pages/login/login',
+                                        });
+                                      } else if (res.cancel) {
+                                        wx.redirectTo({
+                                          url: '/pages/index/service/service',
+                                        });
+                                      }
+                                    }
+                                  });
+                                }else{
+                                  //不需要LDAP验证
+                                  wx.request({
+                                    url: 'https://wx.zhejiuban.com/wx/add_user',
+                                    method: "POST",
+                                    data: {
+                                      openId: that.globalData.openId,
+                                      asset_uuid: that.globalData.uuid
+                                    },
+                                    header: {
+                                      'content-type': 'application/json'
+                                    },
+                                    success: function (res) {
+                                      wx.hideLoading();
+                                      wx.redirectTo({
+                                        url: "/pages/manual/manual"
+                                      });
+                                    }
+                                  })
+                                }
+                              }
+                            })
+                          }else{
+                            wx.redirectTo({
+                              url: "/pages/index/service/service"
+                            });
+                          }
                         }
-
                         // if(res.data.code==0){
                         //   wx.redirectTo({
                         //     url: '/pages/login/login',
@@ -254,7 +289,7 @@ App({
         let url = res.result;
         let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
         wx.navigateTo({
-          url: '/pages/manual/manual?uuid=' + asset_uuid,
+          url: '/pages/manual/manual?asset_uuid=' + asset_uuid,
         })
       }
     })

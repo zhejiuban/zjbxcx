@@ -42,12 +42,12 @@ Page({
     }
 
     //小程序里面扫描二维码
-    if (options.uuid){
+    if (options.asset_uuid){
       wx.showLoading({
         mask: true,
         title: '加载中',
       });
-      let asset_uuid = options.uuid;
+      let asset_uuid = options.asset_uuid;
       that.getAssetInfo(asset_uuid);
       that.setData({
         asset_uuid: asset_uuid
@@ -56,15 +56,17 @@ Page({
     }
   },
 
-  onShow: function(){
-    if(!app.globalData.openId){
-      app.getUserInfo();
-    }
-  },
+  // onShow: function(){
+  //   if(!app.globalData.openId){
+  //     app.getUserInfo();
+  //   }
+  // },
 
   //获取资产信息
   getAssetInfo: function(asset_uuid){
     let that = this;
+    app.globalData.uuid = asset_uuid;
+    app.getUserInfo();
     wx.request({
       url: 'https://wx.zhejiuban.com/wx/asset_find',
       method: "POST",
@@ -211,12 +213,10 @@ Page({
   touchStart: function (e) {
     this.touchStartTime = e.timeStamp
   },
-
   // 按钮触摸结束触发的事件
   touchEnd: function (e) {
     this.touchEndTime = e.timeStamp
   },
-
   // 长按
   longTap: function (e) {
     let that = this;
@@ -231,7 +231,6 @@ Page({
           let index = e.currentTarget.dataset.index;
 
           wx.request({
-            // url: 'https://wx.zhejiuban.com/uploader/delete_file',
             url: 'https://wx.zhejiuban.com/file/delete_img_file',
             method: "POST",
             data: {
@@ -241,7 +240,13 @@ Page({
               'content-type': 'application/json'
             },
             success: function (res) {
-              // console.log(res)
+              if(res.data.code==1){
+                wx.showToast({
+                  title: '成功',
+                  icon: 'success',
+                  duration: 2000
+                })
+              }
             }
           });
 
@@ -257,7 +262,6 @@ Page({
       }
     })
   },
-
   //图片预览  单击事件
   imgShow: function (e) {
     let that = this;
@@ -269,9 +273,6 @@ Page({
       })
     }
   },
-
-
-
   formSubmit: function (e) {
     let that = this;
     e.detail.value['img'] = that.data.img;
