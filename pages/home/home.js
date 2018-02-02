@@ -38,6 +38,20 @@ Page({
     // }
   },
 
+  onShow: function () {
+    if(app.globalData.openId){
+      if (app.globalData.asset_uuid){
+        wx.redirectTo({
+          url: '/pages/manual/manual',
+        })
+      }else{
+        wx.redirectTo({
+          url: '/pages/index/service/service',
+        })
+      }
+    }
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

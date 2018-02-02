@@ -273,21 +273,22 @@ Page({
 
 
   formSubmit: function (e) {
-    e.detail.value['img'] = this.data.img;
-    e.detail.value['category_id'] = this.data.category_id;
-    let asset_uuid = e.detail.value.asset_uuid;
+    let that = this;
+    e.detail.value['img'] = that.data.img;
+    e.detail.value['category_id'] = that.data.category_id;
+    let asset_uuid = that.data.asset_uuid;
     let remarks = e.detail.value.remarks;
-    let img_id = this.data.img_ids.join(",");
-    let asset_id = this.data.asset_id;
+    let img_id = that.data.img_ids.join(",");
+    let asset_id = that.data.asset_id;
 
-    if (e.detail.value.asset_uuid.length == 0){
+    if (!that.data.asset_id){
       wx.showModal({
         title: '提示',
         content: '请选择一个有效的资产',
         showCancel: false,
         success: function (res) {
         }
-      })
+      });
     } else if (e.detail.value.remarks.length == 0) {
       wx.showModal({
         title: '提示',
@@ -295,13 +296,13 @@ Page({
         showCancel: false,
         success: function (res) {
         }
-      })
+      });
     }else{
       app.globalData.uuid = null;
       wx.showLoading({
         mask: true,
         title: '正在提交中...',
-      })
+      });
       wx.request({
         url: 'https://wx.zhejiuban.com/wx/repair/add', 
         method:"POST",
@@ -326,7 +327,7 @@ Page({
                 if (res.confirm) {
                   wx.redirectTo({
                     url: '/pages/index/service/service'
-                  })
+                  });
                 }
               }
             })
@@ -339,7 +340,7 @@ Page({
                 if (res.confirm) {
                   wx.navigateBack({
                     url: "/pages/home/home"
-                  })
+                  });
                 }
               }
             })
@@ -358,12 +359,5 @@ Page({
         }
       })
     }
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
   }
 })

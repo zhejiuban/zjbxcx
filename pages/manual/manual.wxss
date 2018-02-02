@@ -5,7 +5,7 @@
 .section {
   display: flex;
   flex-grow: row no-wrap;
-  padding: 15rpx 40rpx;
+  padding: 15rpx 20rpx;
   height: 70rpx;
   line-height: 70rpx;
   font-size: 28rpx;
@@ -14,30 +14,46 @@
   border-bottom: 1rpx solid #eee;
 }
 
+.section_title{
+  /* border: 1px solid red; */
+  width: 25%;
+  text-align: center;
+}
+
 .textarea_view {
   border-bottom: 1rpx solid #eee;
   display: flex;
   flex-grow: row no-wrap;
-  padding: 15rpx 40rpx;
+  padding: 15rpx 20rpx;
   font-size: 14px;
   position: relative;
   color: #333;
 }
 
+.scanBtn{
+  position: absolute;
+  right: 20rpx; 
+}
+
+.textarea_view{
+  /* border: 1px solid red; */
+}
+
 .textarea_view textarea {
   border: 1px solid #eee;
   border-radius: 10rpx;
-  width: 700rpx;
-  height: 200rpx;
+  width: 600rpx;
+  height: 140rpx;
   padding: 10rpx;
 }
 
-/* .section_title {
-  font-size: 28rpx;
-  width: 150rpx;
-  line-height: 70rpx;
-  color: #a3a3a3;
-} */
+.textarea_title{
+  /* border: 1px solid red; */
+  width: 25%;
+  height: 140rpx;
+  line-height: 140rpx;
+  text-align: center;
+}
 
 .section input {
   width: 600rpx;

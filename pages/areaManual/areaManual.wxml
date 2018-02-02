@@ -8,9 +8,7 @@
         {{area[index].name}}
       </view>
     </picker>
-
     <view class='reset' catchtap='resetArea' >重置</view>
-
   </view>
 
   <view class="section">
@@ -33,7 +31,7 @@
     <view class='uploaderBtn' bindtap='selectImg'>
       <image wx:if="{{imgs.length<3}}" src='{{uploaderImg}}'></image>
     </view>
-    <text class='prompt'>拍摄照片帮助我们\n更快解决问题(最多三张,长按删除)</text>
+    <text class='prompt'>上传图片\n最多三张,长按删除</text>
   </view>
 
   <view class="btn-area">

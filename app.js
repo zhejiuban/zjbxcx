@@ -69,23 +69,61 @@ App({
                       success: function (res) {
                         console.log(res);
                         wx.hideLoading();
-                        if(res.data.code==0){
-                          wx.redirectTo({
-                            url: '/pages/login/login',
+
+                        /**
+                         * 首先判断是否有资产id
+                         * 有资产id存在的话，去后台判断是否需要LDAP
+                         * 如果没有资产存在的，直接登录
+                         * */
+                        if (that.globalData.uuid) {
+                          wx.request({
+                            url: 'https://wx.zhejiuban.com/wx/need_validation',
+                            method: "POST",
+                            data: {
+                              asset_uuid: that.globalData.uuid
+                            },
+                            header: {
+                              'content-type': 'application/json'
+                            },
+                            success: function (res) {
+                              if(res.data.code==1){
+                                //需要LDAP验证
+                                // 前去验证  暂未写
+                              }else{
+                                //不需要LDAP验证
+                                // if(that.globalData.uuid){
+                                  wx.redirectTo({
+                                    url: "/pages/manual/manual"
+                                  });
+                                // }else{
+                                //   wx.redirectTo({
+                                //     url: "/pages/index/service/service"
+                                //   })
+                                // }
+                              }
+                            }
                           })
                         }else{
-                          if(that.globalData.uuid){
-                            wx.redirectTo({
-                              url: "/pages/manual/manual"
-                            });
-                          }else{
-                            wx.redirectTo({
-                              // url: "/pages/areaManual/areaManual"
-                              // url: "/pages/me/me"
-                              url: "/pages/index/service/service"
-                            })
-                          }
+                          wx.redirectTo({
+                            url: "/pages/index/service/service"
+                          })
                         }
+
+                        // if(res.data.code==0){
+                        //   wx.redirectTo({
+                        //     url: '/pages/login/login',
+                        //   })
+                        // }else{
+                        //   if(that.globalData.uuid){
+                        //     wx.redirectTo({
+                        //       url: "/pages/manual/manual"
+                        //     });
+                        //   }else{
+                        //     wx.redirectTo({
+                        //       url: "/pages/index/service/service"
+                        //     })
+                        //   }
+                        // }
                       }
                     })
                   }
