@@ -57,6 +57,8 @@
     </view>
   </view>
 
+
+
   <!--评价详情  -->
   <view wx:if="{{stars_key}}" >
     <view class='order_title' >评价详情</view>
@@ -76,4 +78,12 @@
       <textarea class='remraks' name="appraisal" disabled >{{appraisal}}</textarea>
     </view>
   </view>
+
+  <block wx:if="{{stars_key==null && result!=null}}">
+    <view class="btn-area">
+      <button class='submitBtn' disabled="{{isSubmit}}" catchtap='to_evaluate' data-id="{{repair_id}}">前往评价</button>
+    </view>
+  </block>
+  
+
 </view>

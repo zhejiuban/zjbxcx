@@ -8,6 +8,7 @@ Page({
   data: {
       avatarUrl:'',         //用户头像
       nickName:'',          //用户名
+      num:50
   },
 
   /**

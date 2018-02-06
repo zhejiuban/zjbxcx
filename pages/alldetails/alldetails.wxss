@@ -123,3 +123,20 @@
   width: 75rpx;
   height: 150rpx;
 }
+
+.btn-area{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.btn-area>button {
+  color: #fff;
+  background-color: #4898fa;
+  height: 100rpx;
+  line-height: 100rpx;
+  border: none;
+  border-radius: 0;
+}
+button::after{
+  border: none;
+}

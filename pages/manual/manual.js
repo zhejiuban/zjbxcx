@@ -8,17 +8,18 @@ Page({
   data: {
     imgs: [],             //上传图片的url路径
     img_ids: [],          //上传图片的id
+    img_count: 3,         //目前可以上传图片的数量
     asset_uuid: "",
     asset_id:'',
     asset_name:'',
+    area_id: "",          // 场地
     uploaderImg:"/images/upload.png",
     category:'',
-    img_count: 3,         //目前可以上传图片的数量
+    
     isSubmit: true,       // 是否可以点击提交
     //长按事件
     touchStartTime: 0,    // 触摸开始时间
     touchEndTime: 0,      // 触摸结束时间
-    field: "",            // 场地
     org_id: null
   },
 
@@ -30,7 +31,7 @@ Page({
     if(app.globalData.uuid){
       wx.showLoading({
         // mask: true,
-        title: '加载中',
+        title: '加载中1',
       });
       that.setData({
         asset_uuid: app.globalData.uuid
@@ -38,14 +39,13 @@ Page({
       if(app.globalData.openId){
         that.getAssetInfo(that.data.asset_uuid);
       }
-      
     }
 
     //小程序里面扫描二维码
     if (options.asset_uuid){
       wx.showLoading({
         mask: true,
-        title: '加载中',
+        title: '加载中2',
       });
       let asset_uuid = options.asset_uuid;
       that.getAssetInfo(asset_uuid);
@@ -55,48 +55,97 @@ Page({
       wx.hideLoading();
     }
   },
-
-  // onShow: function(){
-  //   if(!app.globalData.openId){
-  //     app.getUserInfo();
-  //   }
-  // },
-
+  
   //获取资产信息
   getAssetInfo: function(asset_uuid){
     let that = this;
     app.globalData.uuid = asset_uuid;
-    app.getUserInfo();
+    // app.getUserInfo();
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/asset_find',
+      url: 'https://wx.zhejiuban.com/wx/need_validation',
       method: "POST",
       data: {
-        openId: app.globalData.openId,
-        asset_uuid: asset_uuid
+        asset_uuid: app.globalData.uuid
       },
       header: {
-        'content-type': 'application/json' // 默认值
+        'content-type': 'application/json'
       },
       success: function (res) {
         console.log(res);
-        if(res.data.code==1){
+        wx.hideLoading();
+        if (res.data.code == 1) {
+          // 前去验证  暂未写
+          //需要LDAP验证
+          wx.showModal({
+            title: '提示',
+            content: '需要LDAP用户验证',
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/login/login',
+                });
+              } else if (res.cancel) {
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                });
+              }
+            }
+          });
+        } else if (res.data.code == 403) {
           wx.showModal({
             title: '提示',
             content: res.data.message,
             showCancel: false
           })
-        }else{
-          that.setData({
-            asset_name: res.data.name,
-            category: res.data.category,
-            field: res.data.field,
-            asset_id: res.data.id,
-            asset_uuid: res.data.asset_uid,
-            org_id: res.data.org_id,
-            isSubmit: false
-          });
+        } else {
+          console.log("不需要LDAP验证");
+          wx.request({
+            url: 'https://wx.zhejiuban.com/wx/add_user',
+            method: "POST",
+            data: {
+              openId: app.globalData.openId,
+              asset_uuid: app.globalData.uuid
+            },
+            header: {
+              'content-type': 'application/json'
+            },
+            success: function (res) {
+              wx.request({
+                url: 'https://wx.zhejiuban.com/wx/asset_find',
+                method: "POST",
+                data: {
+                  openId: app.globalData.openId,
+                  asset_uuid: asset_uuid
+                },
+                header: {
+                  'content-type': 'application/json' // 默认值
+                },
+                success: function (res) {
+                  console.log(res);
+                  if (res.data.code == 1) {
+                    wx.showModal({
+                      title: '提示',
+                      content: res.data.message,
+                      showCancel: false
+                    })
+                  } else {
+                    that.setData({
+                      asset_name: res.data.name,
+                      category: res.data.category,
+                      field: res.data.field,
+                      asset_id: res.data.id,
+                      asset_uuid: res.data.asset_uid,
+                      org_id: res.data.org_id,
+                      area_id: res.data.area_id,
+                      isSubmit: false
+                    });
+                  }
+                  wx.hideLoading();
+                }
+              });
+            }
+          })
         }
-        wx.hideLoading();
       }
     });
   },
@@ -155,6 +204,7 @@ Page({
         let str = decodeURIComponent(res.result);
         let url = res.result;
         let asset_uuid = app.getUrlParam(url, app.globalData.asset_uuid);
+        console.log(asset_uuid);
         that.getAssetInfo(asset_uuid);
       }
     });
@@ -162,13 +212,13 @@ Page({
 
   selectImg: function () {
     let that = this;
-    if(!that.data.asset_id){
+    if (!that.data.asset_id) {
       wx.showModal({
         title: '提示',
         content: '请先选择报修的资产',
         showCancel: false
       })
-    }else{
+    } else {
       wx.chooseImage({
         count: that.data.img_count, // 默认9
         sizeType: ['original', 'compressed'],
@@ -189,7 +239,6 @@ Page({
                 'content-type': 'multipart/form-data' // 默认值
               },
               success: function (res) {
-                console.log(res);
                 let arrs1 = that.data.img_ids.concat(res.data);
                 that.setData({
                   img_ids: arrs1
@@ -206,7 +255,7 @@ Page({
         }
       })
     }
-    
+
   },
 
   // 按钮触摸开始触发的事件
@@ -281,7 +330,7 @@ Page({
     let remarks = e.detail.value.remarks;
     let img_id = that.data.img_ids.join(",");
     let asset_id = that.data.asset_id;
-
+    console.log(that.data.area_id);
     if (!that.data.asset_id){
       wx.showModal({
         title: '提示',
@@ -312,6 +361,7 @@ Page({
           asset_id: asset_id,
           remarks: remarks,
           img_id: img_id,
+          area_id: that.data.area_id,
           openId: app.globalData.openId
         },
         header: {
@@ -320,6 +370,7 @@ Page({
         success: function (res) {
           wx.hideLoading();
           if(res.data.code == 1){
+            app.globalData.uuid = null;
             wx.showModal({
               title: '提示',
               content: '维修人员正在赶来的路上，请耐心等待',

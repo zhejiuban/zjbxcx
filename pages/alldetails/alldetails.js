@@ -12,6 +12,7 @@ Page({
     halfSrc: '../../images/half.png',
 
     //工单详情
+    repair_id: null,
     asset_name: '',
     field_path: '',
     remarks: '',
@@ -22,7 +23,7 @@ Page({
     repair_status: '',    //工单状态
     service_status: '',  //维修状态
     service_worker: '',
-    result: '',
+    result: null,
     service_img_url: []
   },
   imgShow: function (e) {
@@ -42,17 +43,29 @@ Page({
       urls: that.data.service_img_url // 需要预览的图片http链接列表
     })
   },
+  // 点击跳转到评价页面
+  to_evaluate: function (e) {
+    let that = this;
+    let id = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: '/pages/evaluate/evaluate?id=' + id,
+    })
+  },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let that = this;
     wx.showLoading({
       mask: true,
       title: '加载中',
     });
+    
     let repair_id = options.repair_id;
-    let that = this;
+    that.setData({
+      repair_id: repair_id
+    });
     wx.request({
       url: 'https://wx.zhejiuban.com/wx/repair/repair_all_info',
       method: "POST",

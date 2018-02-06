@@ -6,31 +6,23 @@ Page({
    * 页面的初始数据
    */
   data: {
-    
     imgs: [],             //上传图片的url路径
     img_ids: [],          //上传图片的id
     img_count: 3,         //目前可以上传图片的数量
-    asset_uuid: "",
-    asset_id: '',
-    asset_name: '',
+    //报修项目
+    classify:[],
+    index: 0,
     uploaderImg: "/images/upload.png",
-    category: '',
+    classify_id: null,
+    org_id: null,
     isSubmit: true,       // 是否可以点击提交
     //长按事件
     touchStartTime: 0,    // 触摸开始时间
     touchEndTime: 0,      // 触摸结束时间
-    org_id: null,
 
     //场地
-    index: 0,
-    area: [],
-
-    //资产列表
-    asset_list: [],
-    asset_index: 0,
-
-    //固定场地值
-    area_names: '',
+    area_id: null,
+    area_name: '',
   },
 
   /**
@@ -39,8 +31,8 @@ Page({
   onLoad: function (options) {
     let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/area/find_area',
-      method: 'POST',
+      url: 'https://wx.zhejiuban.com/wx/area/get_classify',
+      method: 'GET',
       data: {
         openId: app.globalData.openId,
         pid: 0
@@ -49,141 +41,79 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        let arr = [];
+        console.log(res);
         let data = res.data;
-        let page = that.data.page + 1;
-        for (var i = 0; i < data.length; i++) {
+        let arr = [];
+        for (let i=0;i<data.length;i++) {
           arr[i] = {
-            area_id: data[i].area_id,
-            area_uuid: data[i].area_uuid,
+            id: data[i].id,
             name: data[i].name,
-            org_id: data[i].org_id,
-            pid: data[i].pid
+            org_id: data[i].org_id 
           };
         }
         that.setData({
-          area: arr,
-          org_id: data[0].org_id
-        })
+          classify: arr,
+          classify_id: arr[0].id
+        });
       }
     })
   },
 
-  bindPickerChange: function (e) {
+  click_scan: function () {
+    // 允许从相机和相册扫码
     let that = this;
-    let area_id = that.data.area[e.detail.value].area_id;
-
-    let area_names = that.data.area_names + that.data.area[e.detail.value].name+"/";
-    that.setData({
-      area_names: area_names
+    wx.scanCode({
+      success: (res) => {
+        let str = decodeURIComponent(res.result);
+        let url = res.result;
+        let uuid = app.getUrlParam(url, "uuid");
+        that.getAreaInfo(uuid);
+      }
     });
+  },
 
-    //获取当前场地下的所有资产
+  getAreaInfo: function (area_uuid) {
+    let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/area/find_asset',
-      method: "POST",
+      url: 'https://wx.zhejiuban.com/wx/area/find_area',
+      method: "post",
       header: {
         'content-type': 'application/json' // 默认值
       },
       data: {
-        openId: app.globalData.openId,
-        area_id: area_id
+        uuid: area_uuid,
+        openId: app.globalData.openId
       },
       success: function (res) {
         console.log(res);
-        if(res.data.length>0){
-          let arr = [];
-          let data = res.data;
-          let page = that.data.page + 1;
-          for (let i = 0; i < data.length; i++) {
-            arr[i] = {
-              asset_id: data[i].asset_id,
-              asset_name: data[i].asset_name,
-              asset_uuid: data[i].asset_uuid,
-              category: data[i].category
-            }
-          }
-          that.setData({
-            asset_list: arr,
-            asset_index: 0,
-            asset_id: arr[0].asset_id,
-            asset_uuid: arr[0].asset_uuid
-          });
-        }
-        
-      }
-    });
-
-    //获取当前场地下的子场地
-    wx.request({
-      url: 'https://wx.zhejiuban.com/wx/area/find_area',
-      method: "POST",
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      data: {
-        openId: app.globalData.openId,
-        pid: area_id
-      },
-      success: function (res) {
-        let arr = [];
-        let data = res.data;
-        let page = that.data.page + 1;
-        for (var i = 0; i < data.length; i++) {
-          arr[i] = {
-            area_id: data[i].area_id,
-            area_uuid: data[i].area_uuid,
-            name: data[i].name,
-            org_id: data[i].org_id,
-            pid: data[i].pid
-          };
-        }
         that.setData({
-          area: arr,
+          area_id: res.data.area_id,
+          area_name: res.data.area_name,
+          org_id: res.data.org_id
         })
       }
-    });
-  },
-
-  //重置
-  resetArea: function () {
-    let that = this;
-
-    that.setData({
-      //场地
-      area: [],
-      //资产列表
-      asset_list: [],
-      asset_index: 0,
-      //固定场地值
-      area_names: '',
-      asset_uuid: "",
-      asset_id: '',
-      asset_name: '',
-      category: '',
-    });
-    that.onLoad();
-  },
-
-  //选择资产
-  bindAssetChange: function (e) {
-    let that = this;
-    let asset_id = that.data.asset_list[e.detail.value].asset_id;
-    let asset_uuid = that.data.asset_list[e.detail.value].asset_uuid;
-    that.setData({
-      asset_index: e.detail.value,
-      asset_id: asset_id,
-      asset_uuid: asset_uuid
     })
   },
 
-  //上传图片
+  //选择资产
+  bindClassifyChange: function (e) {
+    console.log(e);
+    let that = this;
+    let classify_id = that.data.classify[e.detail.value].id;
+    let org_id = that.data.classify[e.detail.value].org_id;
+    that.setData({
+      classify_id: classify_id,
+      org_id: org_id,
+      index: e.detail.value
+    })
+  },
+
   selectImg: function () {
     let that = this;
-    if (!that.data.asset_id) {
+    if (!that.data.area_id) {
       wx.showModal({
         title: '提示',
-        content: '请先选择报修的资产',
+        content: '请先选择报修的场地',
         showCancel: false
       })
     } else {
@@ -223,6 +153,7 @@ Page({
         }
       })
     }
+
   },
 
   // 按钮触摸开始触发的事件
@@ -290,12 +221,11 @@ Page({
     e.detail.value['img'] = that.data.img;
     let remarks = e.detail.value.remarks;
     let img_id = that.data.img_ids.join(",");
-    console.log(img_id);
-    let asset_id = that.data.asset_id;
-    if (!asset_id) {
+
+    if (!that.data.area_id) {
       wx.showModal({
         title: '提示',
-        content: '请选择一个有效的资产',
+        content: '请选择一个有效的场地',
         showCancel: false,
         success: function (res) {
         }
@@ -315,10 +245,12 @@ Page({
         title: '正在提交中...',
       })
       wx.request({
-        url: 'https://wx.zhejiuban.com/wx/repair/add',
+        url: 'https://wx.zhejiuban.com/wx/repair/area_repair',
         method: "POST",
         data: {
-          asset_id: asset_id,
+          area_id: that.data.area_id,
+          classify_id: that.data.classify_id,
+          org_id: that.data.org_id,
           remarks: remarks,
           img_id: img_id,
           openId: app.globalData.openId

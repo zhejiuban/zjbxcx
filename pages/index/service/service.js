@@ -124,7 +124,7 @@ Page({
             items: arr,
             page: page,
             itemsLength: '1'
-          })
+          });
         }
       },
       complete: function () {

@@ -53,7 +53,6 @@ App({
                     encryptedData: encryptedData
                   },
                   success: function (res) {
-                    console.log(res);
                     that.globalData.openId = res.data.openId;
                     //判断有没有验证身份(判断是否注册)
                     wx.request({
@@ -67,7 +66,6 @@ App({
                         openId: that.globalData.openId
                       },
                       success: function (res) {
-                        console.log(res);
                         if(res.data.code==1){
                           //验证过了
                           if (that.globalData.uuid) {
@@ -76,7 +74,8 @@ App({
                             });
                           }else{
                             wx.redirectTo({
-                              url: "/pages/index/service/service"
+                              url: "/pages/manual/manual"
+                              // url: "/pages/index/service/service"
                             });
                           }
                         }else{
@@ -116,7 +115,13 @@ App({
                                       }
                                     }
                                   });
-                                }else{
+                                } else if (res.data.code == 403) {
+                                  wx.showModal({
+                                    title: '提示',
+                                    content: res.data.message,
+                                    showCancel: false
+                                  })
+                                } else{
                                   //不需要LDAP验证
                                   wx.request({
                                     url: 'https://wx.zhejiuban.com/wx/add_user',
@@ -252,6 +257,7 @@ App({
             asset_id: res.data.id,
             asset_uuid: res.data.asset_uid,
             org_id: res.data.org_id,
+            area_id: res.data.area_id,
             isSubmit: false
           });
         }
