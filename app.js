@@ -74,6 +74,7 @@ App({
                             });
                           }else{
                             wx.redirectTo({
+                              // url: "/pages/area/area"
                               url: "/pages/manual/manual"
                               // url: "/pages/index/service/service"
                             });

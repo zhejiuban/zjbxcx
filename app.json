@@ -16,6 +16,7 @@
     "pages/complain/complain",
     "pages/danger/danger",
     "pages/logs/logs",
+    "pages/area/area",
     "pages/index/config/config"
   ],
   "window": {
