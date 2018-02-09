@@ -24,7 +24,9 @@ Page({
     service_status: '',  //维修状态
     service_worker: '',
     result: null,
-    service_img_url: []
+    service_img_url: [],
+    create_time: null,
+    finish_time: null
   },
   imgShow: function (e) {
     var that = this;
@@ -104,7 +106,9 @@ Page({
             service_worker: res.data.service_worker,
             result: res.data.result,
             service_img_url: res.data.service_img_url,
-            repair_status: res.data.repair_status
+            repair_status: res.data.repair_status,
+            create_time: res.data.create_time,
+            finish_time: res.data.finish_time
           });
         }
       },

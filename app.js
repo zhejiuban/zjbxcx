@@ -36,6 +36,7 @@ App({
             });
             wx.getUserInfo({
               success: res => {
+                console.log(res.userInfo);
                 that.globalData.userInfo = res.userInfo;
                 let iv = res.iv;
                 let encryptedData = res.encryptedData;
@@ -53,7 +54,9 @@ App({
                     encryptedData: encryptedData
                   },
                   success: function (res) {
+                    console.log(res);
                     that.globalData.openId = res.data.openId;
+                    that.globalData.unionid = res.data.unionId;
                     //判断有没有验证身份(判断是否注册)
                     wx.request({
                       url: 'https://wx.zhejiuban.com/wx/authentication',
@@ -63,7 +66,8 @@ App({
                       },
                       data: {
                         role: 1,    //用户角色
-                        openId: that.globalData.openId
+                        openId: that.globalData.openId,
+                        unionid: that.globalData.unionid
                       },
                       success: function (res) {
                         if(res.data.code==1){
@@ -75,8 +79,9 @@ App({
                           }else{
                             wx.redirectTo({
                               // url: "/pages/area/area"
-                              url: "/pages/manual/manual"
-                              // url: "/pages/index/service/service"
+                              // url: "/pages/manual/manual"
+                              // url: "/pages/index/assess/assess"
+                              url: "/pages/index/service/service"
                             });
                           }
                         }else{
@@ -97,6 +102,7 @@ App({
                                 'content-type': 'application/json'
                               },
                               success: function (res) {
+                                console.log(res.data);
                                 wx.hideLoading();
                                 if(res.data.code==1){
                                   // 前去验证  暂未写
@@ -129,6 +135,8 @@ App({
                                     method: "POST",
                                     data: {
                                       openId: that.globalData.openId,
+                                      unionid: that.globalData.unionid,
+                                      name: that.globalData.userInfo.nickName,
                                       asset_uuid: that.globalData.uuid
                                     },
                                     header: {
@@ -270,6 +278,7 @@ App({
   globalData: {
     userInfo: null,
     openId: null,
+    unionid: null,
     //二维码资产参数key
     asset_uuid: 'id',
     btnShow: false,

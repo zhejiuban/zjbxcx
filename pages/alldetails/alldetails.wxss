@@ -1,5 +1,9 @@
 /* pages/details/details.wxss */
 
+.content{
+  padding-bottom: 100rpx;
+}
+
 .list {
   display: flex;
   flex-grow: row no-wrap;
@@ -88,7 +92,7 @@
   width: 70%;
 }
 
-.btn-area {
+/* .btn-area {
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -101,7 +105,7 @@
   line-height: 100rpx;
   border: none;
   border-radius: 0;
-}
+} */
 
 .stars {
   position: relative;
@@ -125,7 +129,7 @@
 }
 
 .btn-area{
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
 }

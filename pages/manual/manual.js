@@ -20,6 +20,7 @@ Page({
     touchStartTime: 0,    // 触摸开始时间
     touchEndTime: 0,      // 触摸结束时间
     org_id: null,
+    org_name: null,
 
     //场地
     index: 0,
@@ -58,20 +59,22 @@ Page({
       if(app.globalData.openId){
         that.getAssetInfo(that.data.asset_uuid);
       }
+      wx.hideLoading();
     } else if (options.asset_uuid){
       //小程序里面扫描二维码
       wx.showLoading({
         mask: true,
-        title: '加载中',
+        title: '加载中2',
       });
       let asset_uuid = options.asset_uuid;
       that.getAssetInfo(asset_uuid);
       that.setData({
         asset_uuid: asset_uuid
       });
-      wx.hideLoading();
+      // wx.hideLoading();
     } else {
       let that = this;
+      console.log(app.globalData.openId);
       wx.request({
         url: 'https://wx.zhejiuban.com/wx/area/get_org',
         method: 'POST',
@@ -84,17 +87,24 @@ Page({
         },
         success: function (res) {
           console.log(res);
-          let arr = [];
-          let data = res.data;
-          for (let i = 0; i < data.length; i++) {
-            arr[i] = {
-              id: data[i].id,
-              name: data[i].name,
+          console.log("11111");
+          if(res.data.length>0){
+            let arr = [];
+            arr[0] = {
+              id: 0,
+              name: '请选择单位'
             };
+            let data = res.data;
+            for (let i = 0; i < data.length; i++) {
+              arr[i+1] = {
+                id: data[i].id,
+                name: data[i].name,
+              };
+            }
+            that.setData({
+              org_arr: arr
+            });
           }
-          that.setData({
-            org_arr: arr
-          });
         }
       });
     }
@@ -104,45 +114,49 @@ Page({
   bindPickerChangeOrg: function (e) {
     let that = this;
     let org_id = that.data.org_arr[e.detail.value].id;
-    that.setData({
-      org_index: e.detail.value,
-      org_id: org_id,
-      inputShow: false,
-      pickerShow: true,
-    });
-    if(e.detail.value){
-      wx.request({
-        url: 'https://wx.zhejiuban.com/wx/area/get_area',
-        method: 'POST',
-        data: {
-          openId: app.globalData.openId,
-          pid: 0,
-          org_id: org_id
-        },
-        header: {
-          'content-type': 'application/json' // 默认值
-        },
-        success: function (res) {
-          console.log(res);
-          console.log("----");
-          let arr = [];
-          let data = res.data;
-          let page = that.data.page + 1;
-          for (var i = 0; i < data.length; i++) {
-            arr[i] = {
-              area_id: data[i].area_id,
-              area_uuid: data[i].area_uuid,
-              name: data[i].name,
-              org_id: data[i].org_id,
-              pid: data[i].pid
-            };
+    if(org_id!=0){
+      that.setData({
+        org_index: e.detail.value,
+        org_id: org_id,
+        inputShow: false,
+        pickerShow: true,
+      });
+      if (e.detail.value) {
+        wx.request({
+          url: 'https://wx.zhejiuban.com/wx/area/get_area',
+          method: 'POST',
+          data: {
+            openId: app.globalData.openId,
+            pid: 0,
+            org_id: org_id
+          },
+          header: {
+            'content-type': 'application/json' // 默认值
+          },
+          success: function (res) {
+            console.log(res);
+            console.log("----");
+            let arr = [];
+            let data = res.data;
+            let page = that.data.page + 1;
+            for (var i = 0; i < data.length; i++) {
+              arr[i] = {
+                area_id: data[i].area_id,
+                area_uuid: data[i].area_uuid,
+                name: data[i].name,
+                org_id: data[i].org_id,
+                pid: data[i].pid
+              };
+            }
+            that.setData({
+              area_names: '',
+              area: arr,
+            })
           }
-          that.setData({
-            area: arr,
-          })
-        }
-      })
+        })
+      }
     }
+    
   },
 
 
@@ -154,7 +168,6 @@ Page({
     that.setData({
       area_names: area_names,
       area_id: area_id,
-      
     });
 
     //获取当前场地下的所有资产
@@ -239,17 +252,17 @@ Page({
       asset_list: [],
       asset_index: 0,
       //固定场地值
-      area_names: null,
+      area_names: '',
       asset_uuid: null,
       asset_id: null,
-      asset_name: null,
+      asset_name: '',
       category: null,
 
       inputShow: true,
       pickerShow: false,
     });
     app.globalData.uuid = null;
-    that.onLoad();
+    // that.onLoad();
   },
 
   //选择资产
@@ -267,20 +280,18 @@ Page({
   //获取资产信息
   getAssetInfo: function(asset_uuid){
     let that = this;
-    app.globalData.uuid = asset_uuid;
-    // app.getUserInfo();
+    // app.globalData.uuid = asset_uuid;
+    
     wx.request({
       url: 'https://wx.zhejiuban.com/wx/need_validation',
       method: "POST",
       data: {
-        asset_uuid: app.globalData.uuid
+        asset_uuid: asset_uuid
       },
       header: {
         'content-type': 'application/json'
       },
       success: function (res) {
-        console.log(res);
-        wx.hideLoading();
         if (res.data.code == 1) {
           // 前去验证  暂未写
           //需要LDAP验证
@@ -312,7 +323,9 @@ Page({
             method: "POST",
             data: {
               openId: app.globalData.openId,
-              asset_uuid: app.globalData.uuid
+              unionid: app.globalData.unionid,
+              name: app.globalData.userInfo.nickName,
+              asset_uuid: asset_uuid
             },
             header: {
               'content-type': 'application/json'
@@ -468,7 +481,6 @@ Page({
         }
       })
     }
-
   },
 
   // 按钮触摸开始触发的事件
@@ -518,8 +530,6 @@ Page({
             imgs: imgs,
             img_ids: img_ids
           });
-        } else if (res.cancel) {
-          // console.log('用户点击取消')
         }
       }
     })
@@ -546,92 +556,87 @@ Page({
     let img_id = that.data.img_ids.join(",");
     let asset_id = that.data.asset_id;
 
-    console.log(asset_id);
-    console.log("----");
-    console.log(asset_uuid);
-    console.log("----");
-    console.log(that.data.area_id);
+    console.log(img_id);
 
-
-    // if (!that.data.asset_id){
-    //   wx.showModal({
-    //     title: '提示',
-    //     content: '请选择一个有效的资产',
-    //     showCancel: false,
-    //     success: function (res) {
-    //     }
-    //   });
-    // } else if (e.detail.value.remarks.length == 0) {
-    //   wx.showModal({
-    //     title: '提示',
-    //     content: '问题描述不能为空',
-    //     showCancel: false,
-    //     success: function (res) {
-    //     }
-    //   });
-    // }else{
-    //   app.globalData.uuid = null;
-    //   wx.showLoading({
-    //     mask: true,
-    //     title: '正在提交中...',
-    //   });
-    //   wx.request({
-    //     url: 'https://wx.zhejiuban.com/wx/repair/add', 
-    //     method:"POST",
-    //     data: {
-    //       asset_uuid: asset_uuid,
-    //       asset_id: asset_id,
-    //       remarks: remarks,
-    //       img_id: img_id,
-    //       area_id: that.data.area_id,
-    //       openId: app.globalData.openId
-    //     },
-    //     header: {
-    //       'content-type': 'application/json'
-    //     },
-    //     success: function (res) {
-    //       wx.hideLoading();
-    //       if(res.data.code == 1){
-    //         app.globalData.uuid = null;
-    //         wx.showModal({
-    //           title: '提示',
-    //           content: '维修人员正在赶来的路上，请耐心等待',
-    //           showCancel: false,
-    //           success: function (res) {
-    //             if (res.confirm) {
-    //               wx.redirectTo({
-    //                 url: '/pages/index/service/service'
-    //               });
-    //             }
-    //           }
-    //         })
-    //       } else if (res.data.code == 403) {
-    //         wx.showModal({
-    //           title: '提示',
-    //           content: res.data.message,
-    //           showCancel: false,
-    //           success: function (res) {
-    //             if (res.confirm) {
-    //               wx.navigateBack({
-    //                 url: "/pages/home/home"
-    //               });
-    //             }
-    //           }
-    //         })
-    //       } else {
-    //         wx.showModal({
-    //           title: '提示',
-    //           content: res.data.message,
-    //           showCancel: false,
-    //           success: function (res) {
-    //           }
-    //         })
-    //       }
-    //     },
-    //     complete: function () {
-    //       wx.hideLoading();
-    //     }
-    //   })
-    // }
+    if (!that.data.asset_id){
+      wx.showModal({
+        title: '提示',
+        content: '请选择一个有效的资产',
+        showCancel: false,
+        success: function (res) {
+        }
+      });
+    } else if (e.detail.value.remarks.length == 0) {
+      wx.showModal({
+        title: '提示',
+        content: '问题描述不能为空',
+        showCancel: false,
+        success: function (res) {
+        }
+      });
+    }else{
+      app.globalData.uuid = null;
+      wx.showLoading({
+        mask: true,
+        title: '正在提交中...',
+      });
+      wx.request({
+        url: 'https://wx.zhejiuban.com/wx/repair/add', 
+        method:"POST",
+        data: {
+          asset_uuid: asset_uuid,
+          asset_id: asset_id,
+          remarks: remarks,
+          img_id: img_id,
+          area_id: that.data.area_id,
+          openId: app.globalData.openId
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        success: function (res) {
+          wx.hideLoading();
+          if(res.data.code == 1){
+            app.globalData.uuid = null;
+            wx.showModal({
+              title: '提示',
+              content: '维修工单报修成功，等待维修',
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/index/service/service'
+                  });
+                }
+              }
+            })
+          } else if (res.data.code == 403) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.navigateBack({
+                    url: "/pages/home/home"
+                  });
+                }
+              }
+            })
+          } else {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+              }
+            })
+          }
+        },
+        complete: function () {
+          wx.hideLoading();
+        }
+      })
+    }
   }
 })
