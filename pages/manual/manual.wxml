@@ -1,7 +1,6 @@
 <form bindsubmit="formSubmit" bindreset="formReset">
   
   <view class='section'>
-  <!-- <text wx:if="{{inputShow}}" >{{org_name}}</text>  -->
     <picker bindchange="bindPickerChangeOrg" value="{{org_index}}" range="{{org_arr}}" range-key="{{'name'}}">
       <view class="picker">
         {{org_arr[org_index].name}}
