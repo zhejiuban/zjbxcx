@@ -1,34 +1,30 @@
 <form bindsubmit="formSubmit" bindreset="formReset">
-  
-  <view class='section'>
-    <picker bindchange="bindPickerChangeOrg" value="{{org_index}}" range="{{org_arr}}" range-key="{{'name'}}">
-      <view class="picker">
-        {{org_arr[org_index].name}}
-      </view>
-    </picker>
-  </view> 
 
-   <view class="section">
-        <input wx:if="{{inputShow}}" type="text" name="field_id" value="{{area_names}}" disabled='true' placeholder='所在场地' />  
-     <text wx:if="{{pickerShow}}" >{{area_names}}</text> 
-     <picker bindchange="bindPickerChange" value="{{index}}" range="{{area}}" range-key="{{'name'}}">
-      <view class="picker">
-        {{area[index].name}}
-      </view>
-    </picker>
-     <view class='reset' catchtap='resetArea' >重置</view>  
+  <view class="section">
+    <input type="text" value="{{area}}" disabled='true' placeholder="所在场地" />
   </view>
 
   <view class="section">
-    <input type="text" wx:if="{{inputShow}}" name="name" value="{{asset_name}}" disabled='true' placeholder="物品名称" /> 
-    <picker wx:if="{{pickerShow}}" bindchange="bindAssetChange" value="{{asset_index}}" range="{{asset_list}}" range-key="{{'asset_name'}}">
-      <view class="picker">
-        {{asset_list[asset_index].asset_name}}
-      </view>
-    </picker> 
+    <input type="text" name="name" value="{{asset_name}}" disabled='true' placeholder="物品名称" />
     <view catchtap='click_scan' class='scanBtn'>
       <image style='width:70rpx;height:70rpx;' src='/images/s.png'></image>
-    </view>
+    </view>  
+  </view>
+
+  <view class="section">
+    <input type="text" name="spec" value="{{spec}}" disabled='true' placeholder="规格型号" />
+  </view>
+
+    <view class="section">
+    <input type="text"  name="category" value="{{category}}" disabled='true' placeholder="所属分类" />
+  </view>
+
+  <view class="section">
+    <input type="text" name="org" value="{{org}}" disabled='true' placeholder="所属单位" />
+  </view>
+
+  <view class="section">
+    <input type="text" name="department" value="{{department}}" disabled='true' placeholder="所属部门" />
   </view>
 
   <view class="textarea_view">

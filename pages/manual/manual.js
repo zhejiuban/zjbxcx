@@ -8,38 +8,24 @@ Page({
     imgs: [],             //上传图片的url路径
     img_ids: [],          //上传图片的id
     img_count: 3,         //目前可以上传图片的数量
-    asset_uuid: "",
-    asset_id:'',
+    
+    asset_uuid: null,
+    asset_id: null,
     asset_name:'',
-    area_id: "",          // 场地
+    
+    spec: '',
+    org: '',
+    dempartment:'',
+    area: '',
+    category: '',
+
     uploaderImg:"/images/upload.png",
-    category:'',
     
     isSubmit: true,       // 是否可以点击提交
     //长按事件
     touchStartTime: 0,    // 触摸开始时间
     touchEndTime: 0,      // 触摸结束时间
-    org_id: null,
-    org_name: null,
-
-    //场地
-    index: 0,
-    area: [],
-
-    //场地列表
-    org_arr: [],
-    org_index: 0,
-
-    //资产列表
-    asset_list: [],
-    asset_index: 0,
-
-    //固定场地值
-    area_names: '',
-
-    inputShow: true,
-    pickerShow: false,
-
+    
   },
 
   onLoad: function (options) {
@@ -72,216 +58,13 @@ Page({
         asset_uuid: asset_uuid
       });
       // wx.hideLoading();
-    } else {
-      let that = this;
-      console.log(app.globalData.openId);
-      wx.request({
-        url: 'https://wx.zhejiuban.com/wx/area/get_org',
-        method: 'POST',
-        data: {
-          openId: app.globalData.openId,
-          pid: 0
-        },
-        header: {
-          'content-type': 'application/json' // 默认值
-        },
-        success: function (res) {
-          console.log(res);
-          console.log("11111");
-          if(res.data.length>0){
-            let arr = [];
-            arr[0] = {
-              id: 0,
-              name: '请选择单位'
-            };
-            let data = res.data;
-            for (let i = 0; i < data.length; i++) {
-              arr[i+1] = {
-                id: data[i].id,
-                name: data[i].name,
-              };
-            }
-            that.setData({
-              org_arr: arr
-            });
-          }
-        }
-      });
-    }
+    } 
   },
   
-  //选择单位 获取第一级场地
-  bindPickerChangeOrg: function (e) {
-    let that = this;
-    let org_id = that.data.org_arr[e.detail.value].id;
-    if(org_id!=0){
-      that.setData({
-        org_index: e.detail.value,
-        org_id: org_id,
-        inputShow: false,
-        pickerShow: true,
-      });
-      if (e.detail.value) {
-        wx.request({
-          url: 'https://wx.zhejiuban.com/wx/area/get_area',
-          method: 'POST',
-          data: {
-            openId: app.globalData.openId,
-            pid: 0,
-            org_id: org_id
-          },
-          header: {
-            'content-type': 'application/json' // 默认值
-          },
-          success: function (res) {
-            console.log(res);
-            console.log("----");
-            let arr = [];
-            let data = res.data;
-            let page = that.data.page + 1;
-            for (var i = 0; i < data.length; i++) {
-              arr[i] = {
-                area_id: data[i].area_id,
-                area_uuid: data[i].area_uuid,
-                name: data[i].name,
-                org_id: data[i].org_id,
-                pid: data[i].pid
-              };
-            }
-            that.setData({
-              area_names: '',
-              area: arr,
-            })
-          }
-        })
-      }
-    }
-    
-  },
-
-
-  bindPickerChange: function (e) {
-    let that = this;
-    console.log(e);
-    let area_id = that.data.area[e.detail.value].area_id;
-    let area_names = that.data.area_names + that.data.area[e.detail.value].name + "/";
-    that.setData({
-      area_names: area_names,
-      area_id: area_id,
-    });
-
-    //获取当前场地下的所有资产
-    wx.request({
-      url: 'https://wx.zhejiuban.com/wx/area/find_asset',
-      method: "POST",
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      data: {
-        openId: app.globalData.openId,
-        area_id: area_id,
-        org_id: that.data.org_id
-      },
-      success: function (res) {
-        console.log(res);
-        console.log("资产信息");
-        if (res.data.length > 0) {
-          let arr = [];
-          let data = res.data;
-          let page = that.data.page + 1;
-          for (let i = 0; i < data.length; i++) {
-            arr[i] = {
-              asset_id: data[i].asset_id,
-              asset_name: data[i].asset_name,
-              asset_uuid: data[i].asset_uuid,
-              category: data[i].category
-            }
-          }
-          that.setData({
-            asset_list: arr,
-            asset_index: 0,
-            asset_id: arr[0].asset_id,
-            asset_uuid: arr[0].asset_uuid,
-            isSubmit: false
-          });
-        }
-
-      }
-    });
-
-    //获取当前场地下的子场地
-    wx.request({
-      url: 'https://wx.zhejiuban.com/wx/area/get_area',
-      method: "POST",
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      data: {
-        openId: app.globalData.openId,
-        org_id: that.data.org_id,
-        pid: area_id
-      },
-      success: function (res) {
-        console.log(res);
-        let arr = [];
-        let data = res.data;
-        let page = that.data.page + 1;
-        for (var i = 0; i < data.length; i++) {
-          arr[i] = {
-            area_id: data[i].area_id,
-            name: data[i].name,
-            org_id: data[i].org_id,
-            pid: data[i].pid
-          };
-        }
-        that.setData({
-          area: arr,
-        })
-      }
-    });
-  },
-
-  //重置
-  resetArea: function () {
-    let that = this;
-
-    that.setData({
-      //场地
-      area: [],
-      //资产列表
-      asset_list: [],
-      asset_index: 0,
-      //固定场地值
-      area_names: '',
-      asset_uuid: null,
-      asset_id: null,
-      asset_name: '',
-      category: null,
-
-      inputShow: true,
-      pickerShow: false,
-    });
-    app.globalData.uuid = null;
-    // that.onLoad();
-  },
-
-  //选择资产
-  bindAssetChange: function (e) {
-    let that = this;
-    let asset_id = that.data.asset_list[e.detail.value].asset_id;
-    let asset_uuid = that.data.asset_list[e.detail.value].asset_uuid;
-    that.setData({
-      asset_index: e.detail.value,
-      asset_id: asset_id,
-      asset_uuid: asset_uuid
-    });
-  },
 
   //获取资产信息
   getAssetInfo: function(asset_uuid){
     let that = this;
-    // app.globalData.uuid = asset_uuid;
-    
     wx.request({
       url: 'https://wx.zhejiuban.com/wx/need_validation',
       method: "POST",
@@ -352,19 +135,19 @@ Page({
                   } else {
                     that.setData({
                       asset_name: res.data.name,
-                      category: res.data.category,
-                      area_names: res.data.field,
                       asset_id: res.data.id,
                       asset_uuid: res.data.asset_uid,
-                      org_id: res.data.org_id,
-                      area_id: res.data.area_id,
 
-                      area: [],
-                      asset_list: [],
-                      inputShow: true,
-                      pickerShow: false,
+                      area: res.data.field ? res.data.field : '暂无',
+                      category: res.data.category.name ? res.data.category.name : '暂无',
+                      department: res.data.department.name ? res.data.department.name : '暂无',
+                      org: res.data.org.name ? res.data.org.name : '暂无',
+                      spec: res.data.spec ? res.data.spec : '暂无',
+
                       isSubmit: false
                     });
+
+                    console.log(that.data);
                   }
                   wx.hideLoading();
                 }
@@ -374,52 +157,6 @@ Page({
         }
       }
     });
-  },
-
-
-  input_uuid: function (e) {
-    let that = this;
-    if(e.detail.cursor==36){
-      let asset_uuid = e.detail.value;
-      wx.request({
-        url: 'https://wx.zhejiuban.com/asset/find',
-        method: "POST",
-        data: {
-          openId: app.globalData.openId,
-          asset_uuid: asset_uuid
-        },
-        header: {
-          'content-type': 'application/json' // 默认值
-        },
-        success: function (res) {
-          that.setData({
-            asset_name: res.data.name,
-            category: res.data.category,
-            field: res.data.field,
-            asset_id: res.data.id,
-            asset_uuid: asset_uuid,
-            org_id: res.data.org_id,
-            isSubmit: false
-          });
-          if (that.data.asset_id) {
-            that.setData({
-              disabled: false
-            });
-          } else {
-            that.setData({
-              disabled: true
-            });
-          }
-        }
-      })
-    }else{
-      that.setData({
-        asset_name: '',
-        category: '',
-        field: '',
-        asset_id: ''
-      });
-    }
   },
 
   click_scan:function(){
@@ -545,7 +282,6 @@ Page({
       })
     }
   },
-
 
   formSubmit: function (e) {
     let that = this;

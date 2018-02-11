@@ -23,6 +23,8 @@ Page({
     //场地
     area_id: null,
     area_name: '',
+
+    org_name: null
   },
 
   /**
@@ -89,7 +91,8 @@ Page({
         that.setData({
           area_id: res.data.area_id,
           area_name: res.data.area_name,
-          org_id: res.data.org_id
+          org_id: res.data.org_id,
+          org_name: res.data.org_name
         })
       }
     })
@@ -153,8 +156,8 @@ Page({
         }
       })
     }
-
   },
+
 
   // 按钮触摸开始触发的事件
   touchStart: function (e) {
@@ -218,9 +221,19 @@ Page({
 
   formSubmit: function (e) {
     let that = this;
+    console.log(e);
     e.detail.value['img'] = that.data.img;
     let remarks = e.detail.value.remarks;
+    let user_phone = null;
+    if (e.detail.value.user_phone){
+      user_phone = e.detail.value.user_phone;
+      // console.log(user_phone);
+    }
+    
     let img_id = that.data.img_ids.join(",");
+
+    console.log(user_phone);
+    
 
     if (!that.data.area_id) {
       wx.showModal({
@@ -253,7 +266,8 @@ Page({
           org_id: that.data.org_id,
           remarks: remarks,
           img_id: img_id,
-          openId: app.globalData.openId
+          openId: app.globalData.openId,
+          user_phone: user_phone
         },
         header: {
           'content-type': 'application/json'

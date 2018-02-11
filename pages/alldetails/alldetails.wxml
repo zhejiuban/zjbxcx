@@ -33,6 +33,10 @@
       <text style='line-height:70rpx;' >暂无图片</text>
     </block>
   </view>
+  <view wx:if="{{user_phone}}" class='list'>
+    <text class='list_label'>联系方式：</text>
+    <text catchtap='phoneCall' data-phone='{{user_phone}}' class='list_value'>{{user_phone}}</text>
+  </view>
 
   <!--维修人员信息  -->
   <view wx:if="{{service_worker}}">

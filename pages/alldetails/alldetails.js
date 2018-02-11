@@ -26,7 +26,8 @@ Page({
     result: null,
     service_img_url: [],
     create_time: null,
-    finish_time: null
+    finish_time: null,
+    user_phone: null
   },
   imgShow: function (e) {
     var that = this;
@@ -108,12 +109,30 @@ Page({
             service_img_url: res.data.service_img_url,
             repair_status: res.data.repair_status,
             create_time: res.data.create_time,
-            finish_time: res.data.finish_time
+            finish_time: res.data.finish_time,
+            user_phone: res.data.user_phone
           });
         }
       },
       complete: function () {
         wx.hideLoading();
+      }
+    })
+  },
+
+  phoneCall: function (e) {
+    console.log(e.currentTarget.dataset.phone);
+    wx.showModal({
+      title: '提示',
+      content: '是否拨打：' + e.currentTarget.dataset.phone,
+      success: function (res) {
+        if (res.confirm) {
+          wx.makePhoneCall({
+            phoneNumber: e.currentTarget.dataset.phone
+          })
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
       }
     })
   },
