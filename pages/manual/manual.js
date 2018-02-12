@@ -138,12 +138,12 @@ Page({
                       asset_id: res.data.id,
                       asset_uuid: res.data.asset_uid,
 
-                      area: res.data.field ? res.data.field : '暂无',
+                      area: res.data.area ? res.data.area.name : '暂无',
                       category: res.data.category.name ? res.data.category.name : '暂无',
                       department: res.data.department.name ? res.data.department.name : '暂无',
                       org: res.data.org.name ? res.data.org.name : '暂无',
                       spec: res.data.spec ? res.data.spec : '暂无',
-
+                      area_id : res.data.area_id,
                       isSubmit: false
                     });
 

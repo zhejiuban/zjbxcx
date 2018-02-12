@@ -6,16 +6,16 @@
 
   <view class="section">
     <input type="text" name="name" value="{{asset_name}}" disabled='true' placeholder="物品名称" />
-    <view catchtap='click_scan' class='scanBtn'>
+    <!-- <view catchtap='click_scan' class='scanBtn'>
       <image style='width:70rpx;height:70rpx;' src='/images/s.png'></image>
-    </view>  
+    </view>   -->
   </view>
 
   <view class="section">
     <input type="text" name="spec" value="{{spec}}" disabled='true' placeholder="规格型号" />
   </view>
 
-    <view class="section">
+  <view class="section">
     <input type="text"  name="category" value="{{category}}" disabled='true' placeholder="所属分类" />
   </view>
 
