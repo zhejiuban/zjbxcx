@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/timeAxis/timeAxis",
+    "pages/time/time",
     "pages/login/login",
     "pages/phone/phone",
     "pages/index/service/service",

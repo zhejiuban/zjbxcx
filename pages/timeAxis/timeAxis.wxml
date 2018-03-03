@@ -1,0 +1,26 @@
+<view >
+  <!--头部  -->
+  <view class='view-header' >维修日志记录</view>
+  <!--列表  -->
+  <view class='view-list' wx:for='{{arrData}}' wx:key='key' >
+    <view class='view-list-cell' >
+      <!--时间  -->
+      <view class='view-cell-time' >
+        <view class='view-time' >{{item.time}}</view>
+      </view>
+      <!--点  -->
+      <view class='view-cell-dot' >
+        <view class='view-dot' ></view>
+      </view>
+      <!--图片  -->
+      <view class='view-cell-image' >
+        <view class='view-header-image' ></view>
+      </view>
+      <!--时间线  -->
+      <view class='view-line' >
+        <view class='view-line-top' ></view>
+        <view class='view-line-bottom' ></view>
+      </view>
+    </view>
+  </view>
+</view>

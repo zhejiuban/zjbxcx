@@ -18,6 +18,33 @@ App({
     console.log("onLaunch");
   },
 
+  network_state: function () {
+    wx.getNetworkType({
+      success: function (res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        var networkType = res.networkType;
+        if(networkType=='none'){
+          console.log("暂无网络");
+          wx.showModal({
+            title: '提示',
+            content: '网络失败，请重试',
+            showCancel: false,
+            confirmText: '点击重试',
+            success: function (res) {
+              if (res.confirm) {
+                console.log('点击重试');
+
+              } else if (res.cancel) {
+                console.log('关闭程序')
+              }
+            }
+          })
+        }
+      }
+    })
+  },
+
   /**
    * 用户授权  用户信息(昵称等信息)
    */
@@ -55,6 +82,15 @@ App({
                   },
                   success: function (res) {
                     console.log(res);
+                    let jsonStr = res.data;
+                    jsonStr = jsonStr.replace(" ", "");
+                    if (typeof jsonStr != 'object') {
+                      jsonStr = jsonStr.replace(/\ufeff/g, "");//重点
+                      var jj = JSON.parse(jsonStr);
+                      res.data = jj;
+                    }
+                    console.log(res.data);
+                    console.log(res.data.openId);
                     that.globalData.openId = res.data.openId;
                     that.globalData.unionid = res.data.unionId;
                     //判断有没有验证身份(判断是否注册)
@@ -81,6 +117,7 @@ App({
                               // url: "/pages/areaManual/areaManual"
                               // url: "/pages/manual/manual"
                               // url: "/pages/index/assess/assess"
+                              // url: "/pages/timeAxis/timeAxis"
                               url: "/pages/index/service/service"
                             });
                           }
@@ -154,6 +191,8 @@ App({
                             })
                           }else{
                             wx.redirectTo({
+                              // url: "/pages/time/time"
+                              // url: "/pages/timeAxis/timeAxis"
                               url: "/pages/index/service/service"
                             });
                           }

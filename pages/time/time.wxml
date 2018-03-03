@@ -1,0 +1,15 @@
+<view class='view-list' >
+  <view class='view-item' >
+    <!--小圆点  -->
+     <!-- <view class='view-item-dot' ></view>  -->
+     <view class='view-item-dot' >
+      <image src='/images/infos.png' ></image>
+    </view> 
+    <!--文本区域  -->
+    <view class='view-item-info' >
+      <view class='info-status' >状态：已完成</view>
+      <view class='info-text' >Conference on the sales results for the previous year. Monica please examine sales trends in marketing and products. Below please find the current status of the sale.</view>
+      <view class='info-time' >2017-01-07 18:32:35</view>
+    </view>
+  </view>
+</view>

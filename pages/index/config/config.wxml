@@ -10,11 +10,11 @@
 
 <template name="tabBar">
   <view class='tabBar'>
-    <view class='tabBar_litem' bindtap='toManual' >
+    <!-- <view class='tabBar_litem' bindtap='toManual' >
       <view class='item_icon' >
         <image src='/images/repair.png' ></image>
       </view>
-    </view>
+    </view> -->
     <view class='tabBar_litem' bindtap='scanCode' >
       <view class='item_icon' >
         <image src='/images/scan.png' ></image>

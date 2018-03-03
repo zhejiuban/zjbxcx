@@ -6,11 +6,16 @@
 
   <view class="section">
     <input type="text" name="name" value="{{asset_name}}" disabled='true' placeholder="物品名称" />
+
+    <view catchtap='click_info' class='scanBtn'>
+      <image style='width:70rpx;height:70rpx;' src="{{infoIcon}}"></image>
+    </view>
     <!-- <view catchtap='click_scan' class='scanBtn'>
       <image style='width:70rpx;height:70rpx;' src='/images/s.png'></image>
-    </view>   -->
+    </view>    -->
   </view>
 
+  <view wx:if="{{infoShow}}" >
   <view class="section">
     <input type="text" name="spec" value="{{spec}}" disabled='true' placeholder="规格型号" />
   </view>
@@ -25,6 +30,8 @@
 
   <view class="section">
     <input type="text" name="department" value="{{department}}" disabled='true' placeholder="所属部门" />
+  </view>
+
   </view>
 
   <view class="textarea_view">

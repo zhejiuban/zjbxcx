@@ -15,6 +15,7 @@ Page({
     
     spec: '',
     org: '',
+    org_id: '',
     dempartment:'',
     area: '',
     category: '',
@@ -25,6 +26,9 @@ Page({
     //长按事件
     touchStartTime: 0,    // 触摸开始时间
     touchEndTime: 0,      // 触摸结束时间
+
+    infoShow: false,
+    infoIcon: '/images/arrow-down.png'
     
   },
 
@@ -142,6 +146,7 @@ Page({
                       category: res.data.category.name ? res.data.category.name : '暂无',
                       department: res.data.department.name ? res.data.department.name : '暂无',
                       org: res.data.org.name ? res.data.org.name : '暂无',
+                      org_id: res.data.org_id,
                       spec: res.data.spec ? res.data.spec : '暂无',
                       area_id : res.data.area_id,
                       isSubmit: false
@@ -157,6 +162,22 @@ Page({
         }
       }
     });
+  },
+
+  click_info: function () {
+    let that = this;
+    if(that.data.infoShow==false){
+      this.setData({
+        infoShow: true,
+        infoIcon: '/images/arrow-up.png'
+      });
+    }else{
+      this.setData({
+        infoShow: false,
+        infoIcon: '/images/arrow-down.png'
+      });
+    }
+    
   },
 
   click_scan:function(){
@@ -175,49 +196,43 @@ Page({
 
   selectImg: function () {
     let that = this;
-    if (!that.data.asset_id) {
-      wx.showModal({
-        title: '提示',
-        content: '请先选择报修的资产',
-        showCancel: false
-      })
-    } else {
-      wx.chooseImage({
-        count: that.data.img_count, // 默认9
-        sizeType: ['original', 'compressed'],
-        sourceType: ['album', 'camera'],
-        success: function (res) {
-          var tempFilePaths = res.tempFilePaths;
-          for (var i = 0; i < tempFilePaths.length; i++) {
-            wx.uploadFile({
-              url: 'https://wx.zhejiuban.com/file/img_file',
-              filePath: tempFilePaths[i],
-              method: "POST",
-              name: 'img',
-              formData: {
-                openId: app.globalData.openId,
-                org_id: that.data.org_id
-              },
-              header: {
-                'content-type': 'multipart/form-data' // 默认值
-              },
-              success: function (res) {
-                let arrs1 = that.data.img_ids.concat(res.data);
-                that.setData({
-                  img_ids: arrs1
-                })
-              }
-            })
-          }
-          let old_imgs = that.data.imgs.concat(tempFilePaths);
-          let count = that.data.img_count - tempFilePaths.length;
-          that.setData({
-            imgs: old_imgs,
-            img_count: count
-          });
+    wx.chooseImage({
+      count: that.data.img_count, // 默认9
+      sizeType: ['original', 'compressed'],
+      sourceType: ['album', 'camera'],
+      success: function (res) {
+        let tempFilePaths = res.tempFilePaths;
+        let str = that.data.imgId;
+        for (let i = 0; i < tempFilePaths.length; i++) {
+          wx.uploadFile({
+            url: 'https://wx.zhejiuban.com/file/img_file',
+            filePath: tempFilePaths[i],
+            method: "POST",
+            name: 'img',
+            formData: {
+              openId: app.globalData.openId,
+              org_id: that.data.org_id
+            },
+            header: {
+              'content-type': 'multipart/form-data' // 默认值
+            },
+            success: function (res) {
+              console.log(res);
+              let arrs1 = that.data.img_ids.concat(res.data);
+              that.setData({
+                img_ids: arrs1
+              });
+            }
+          })
         }
-      })
-    }
+        var old_imgs = that.data.imgs.concat(tempFilePaths);
+        var count = that.data.img_count - tempFilePaths.length;
+        that.setData({
+          imgs: old_imgs,
+          img_count: count
+        });
+      }
+    })
   },
 
   // 按钮触摸开始触发的事件
