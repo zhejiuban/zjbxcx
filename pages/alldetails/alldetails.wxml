@@ -20,7 +20,8 @@
   </view>
   <view class='list-bewrite'>
     <text>故障描述：</text>
-    <textarea class='bewrite' disabled>{{remarks}}</textarea>
+    <!-- <textarea class='bewrite' disabled>{{remarks}}</textarea> -->
+    <text class='bewrite'>{{remarks}}</text>
   </view>
   <view class='list'>
     <text class='list_label'>图片拍摄：</text>
@@ -55,7 +56,7 @@
     </view>
     <view class='list-bewrite'>
       <text>反馈信息：</text>
-      <textarea class='bewrite' disabled>{{result}}</textarea>
+      <text class='bewrite'>{{result}}</text>
     </view>
     <view class='list'>
       <text class='list_label'>反馈图片：</text>
@@ -69,8 +70,6 @@
       </block>
     </view>
   </view>
-
-
 
   <!--评价详情  -->
   <view wx:if="{{stars_key}}" >
@@ -86,15 +85,26 @@
           </block>
         </view>
     </view>
-    <view class='section_remarks'>
-      <view class='section_title'>评论内容：</view>
-      <textarea class='remraks' name="appraisal" disabled >{{appraisal}}</textarea>
+    <view class='list-bewrite'>
+      <view >评论内容：</view>
+      <text class='bewrite' name="appraisal">{{appraisal}}</text>
     </view>
   </view>
 </view>
 
-  <block wx:if="{{stars_key==null && result!=null}}">
-    <view class="btn-area">
-      <button class='submitBtn' disabled="{{isSubmit}}" catchtap='to_evaluate' data-id="{{repair_id}}">前往评价</button>
+<block wx:if="{{stars_key==null && result!=null}}">
+  <view class='tabBar'>
+    <view class='tabBar_litem' bindtap='to_processLog' data-id='{{repair_id}}' >
+        查看日志
     </view>
-  </block>
+    <view class='tabBar_litem' bindtap='to_evaluate' data-id="{{repair_id}}">
+        前往评价
+    </view>
+  </view>
+
+</block>
+<block wx:else >
+  <view class="btn-area">
+    <button class='submitBtn' catchtap='to_processLog' data-id='{{repair_id}}'>查看日志</button>
+  </view> 
+</block> 

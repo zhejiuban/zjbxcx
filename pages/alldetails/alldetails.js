@@ -50,8 +50,18 @@ Page({
   to_evaluate: function (e) {
     let that = this;
     let id = e.currentTarget.dataset.id;
+    console.log(id);
     wx.navigateTo({
       url: '/pages/evaluate/evaluate?id=' + id,
+    })
+  },
+
+  // 点击跳转到维修日志记录
+  to_processLog: function (e) {
+    let that = this;
+    let id = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: '/pages/time/time?id=' + id,
     })
   },
 

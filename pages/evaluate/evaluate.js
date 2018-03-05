@@ -98,9 +98,6 @@ Page({
             showCancel: false,
           })
         }
-      },
-      complete: function () {
-        wx.hideLoading();
       }
     })
   }

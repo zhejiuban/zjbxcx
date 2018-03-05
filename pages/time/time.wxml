@@ -1,15 +1,41 @@
-<view class='view-list' >
-  <view class='view-item' >
-    <!--小圆点  -->
-     <!-- <view class='view-item-dot' ></view>  -->
-     <view class='view-item-dot' >
-      <image src='/images/infos.png' ></image>
-    </view> 
-    <!--文本区域  -->
-    <view class='view-item-info' >
-      <view class='info-status' >状态：已完成</view>
-      <view class='info-text' >Conference on the sales results for the previous year. Monica please examine sales trends in marketing and products. Below please find the current status of the sale.</view>
-      <view class='info-time' >2017-01-07 18:32:35</view>
-    </view>
+<block wx:if="{{logs.length>0}}" >
+  <view class='title' >维修工单日志记录</view>
+  <view class='view-list' >
+    <block wx:for="{{logs}}" >
+      <view class='view-item' >
+        <!--小圆点  -->
+        <!-- <view class='view-item-dot' ></view>  -->
+        <view class='view-item-dot' >
+          <block wx:if="{{item.op_state==1}}">
+            <image src='/images/infos.png' ></image>
+          </block>
+          <block wx:elif="{{item.op_state==2}}">
+            <image src='/images/right1.png' ></image>
+          </block>
+          <block wx:elif="{{item.op_state==3}}">
+            <image src='/images/right2.png' ></image>
+          </block>
+          <block wx:elif="{{item.op_state==4}}">
+            <image src='/images/refuse.png' ></image>
+          </block>
+          <block wx:elif="{{item.op_state==5}}">
+            <image src='/images/result.png' ></image>
+          </block>
+          <block wx:elif="{{item.op_state==6}}">
+            <image src='/images/result.png' ></image>
+          </block>
+          
+        </view> 
+        <!--文本区域  -->
+        <view class='view-item-info' >
+          <view class='info-status' >状态：{{item.state}}</view>
+          <view class='info-text' >{{item.remarks}}</view>
+          <view class='info-time' >{{item.created_at}}</view>
+        </view>
+      </view>
+    </block>
   </view>
-</view>
+</block>
+<block wx:else >
+  <view class='title' >暂无此维修工单日志记录</view>
+</block>

@@ -72,8 +72,8 @@
   width: 90%;
 }
 .section .uploader_imgs{
-  max-width:100rpx;
-  max-height:100rpx;
+  width:100rpx;
+  height:100rpx;
   padding: 0 10rpx;  
 }
 
@@ -85,8 +85,8 @@
 }
 
 .uploaderBtn image {
-  width: 90rpx;
-  height: 90rpx;
+  width: 100rpx;
+  height: 100rpx;
 }
 
 /* .btn-area {
