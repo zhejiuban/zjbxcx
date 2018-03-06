@@ -227,13 +227,9 @@ Page({
     let user_phone = null;
     if (e.detail.value.user_phone){
       user_phone = e.detail.value.user_phone;
-      // console.log(user_phone);
     }
     
     let img_id = that.data.img_ids.join(",");
-
-    console.log(user_phone);
-    
 
     if (!that.data.area_id) {
       wx.showModal({

@@ -65,6 +65,7 @@ Page({
         'content-type': 'application/json'
       },
       success: function (res) {
+        wx.hideLoading();
         if(res.data.code == 1){
           wx.showModal({
             title: '提示',

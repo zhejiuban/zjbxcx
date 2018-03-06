@@ -70,7 +70,7 @@
 }
 .section1 .uploader_imgs{
   width:100rpx;
-  height:70rpx;
+  height:100rpx;
   padding: 0 10rpx;  
 }
 
@@ -78,8 +78,8 @@
   width: 100%;
 }
 .uploaderBtn image {
-  width: 90rpx;
-  height: 90rpx;
+  width: 100rpx;
+  height: 100rpx;
 }
 
 .btn-area{
