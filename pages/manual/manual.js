@@ -33,14 +33,14 @@ Page({
   },
 
   onLoad: function (options) {
-    console.log(options);
+    // console.log(options);
     let that = this;
     //微信扫描二维码链接携带的参数
     
     // 微信扫小程序获取的参数
     if(app.globalData.uuid){
       wx.showLoading({
-        // mask: true,
+        mask: true,
         title: '加载中',
       });
       that.setData({
@@ -49,12 +49,12 @@ Page({
       if(app.globalData.openId){
         that.getAssetInfo(that.data.asset_uuid);
       }
-      wx.hideLoading();
+      // wx.hideLoading();
     } else if (options.asset_uuid){
       //小程序里面扫描二维码
       wx.showLoading({
         mask: true,
-        title: '加载中2',
+        title: '加载中',
       });
       let asset_uuid = options.asset_uuid;
       that.getAssetInfo(asset_uuid);
@@ -63,6 +63,16 @@ Page({
       });
       // wx.hideLoading();
     } 
+  },
+
+  // onShow: function (options) {
+  //   console.log(options);
+  //   console.log("ssss");
+  // },
+
+  onHide: function () {
+    console.log("onhide");
+    this.onUnload();
   },
   
 
@@ -142,7 +152,7 @@ Page({
                       asset_id: res.data.id,
                       asset_uuid: res.data.asset_uid,
 
-                      area: res.data.area ? res.data.area.name : '暂无',
+                      area: res.data.area ? res.data.area_path : '暂无',
                       category: res.data.category.name ? res.data.category.name : '暂无',
                       department: res.data.department.name ? res.data.department.name : '暂无',
                       org: res.data.org.name ? res.data.org.name : '暂无',
@@ -354,6 +364,7 @@ Page({
               content: '维修工单报修成功，等待维修',
               showCancel: false,
               success: function (res) {
+                app.globalData.uuid = null;
                 if (res.confirm) {
                   wx.redirectTo({
                     url: '/pages/index/service/service'
@@ -386,6 +397,7 @@ Page({
         },
         complete: function () {
           wx.hideLoading();
+          this.onUnload();
         }
       })
     }

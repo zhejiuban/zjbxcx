@@ -82,15 +82,7 @@ App({
                   },
                   success: function (res) {
                     console.log(res);
-                    let jsonStr = res.data;
-                    jsonStr = jsonStr.replace(" ", "");
-                    if (typeof jsonStr != 'object') {
-                      jsonStr = jsonStr.replace(/\ufeff/g, "");//重点
-                      var jj = JSON.parse(jsonStr);
-                      res.data = jj;
-                    }
-                    console.log(res.data);
-                    console.log(res.data.openId);
+                    res.data = that.getResData(res);
                     that.globalData.openId = res.data.openId;
                     that.globalData.unionid = res.data.unionId;
                     //判断有没有验证身份(判断是否注册)
@@ -106,6 +98,7 @@ App({
                         unionid: that.globalData.unionid
                       },
                       success: function (res) {
+                        res.data = that.getResData(res);
                         if(res.data.code==1){
                           //验证过了
                           if (that.globalData.uuid) {
@@ -114,10 +107,6 @@ App({
                             });
                           }else{
                             wx.redirectTo({
-                              // url: "/pages/areaManual/areaManual"
-                              // url: "/pages/manual/manual"
-                              // url: "/pages/index/assess/assess"
-                              // url: "/pages/timeAxis/timeAxis"
                               url: "/pages/index/service/service"
                             });
                           }
@@ -139,10 +128,12 @@ App({
                                 'content-type': 'application/json'
                               },
                               success: function (res) {
+                                res.data = that.getResData(res);
                                 console.log(res.data);
+                                console.log("asdasd");
                                 wx.hideLoading();
                                 if(res.data.code==1){
-                                  // 前去验证  暂未写
+                                  // 前去验证  利用手机号验证
                                   //需要LDAP验证
                                   wx.showModal({
                                     title: '提示',
@@ -150,7 +141,7 @@ App({
                                     success: function (res) {
                                       if (res.confirm) {
                                         wx.redirectTo({
-                                          url: '/pages/login/login',
+                                          url: '/pages/phone/phone',
                                         });
                                       } else if (res.cancel) {
                                         wx.redirectTo({
@@ -191,27 +182,10 @@ App({
                             })
                           }else{
                             wx.redirectTo({
-                              // url: "/pages/time/time"
-                              // url: "/pages/timeAxis/timeAxis"
                               url: "/pages/index/service/service"
                             });
                           }
                         }
-                        // if(res.data.code==0){
-                        //   wx.redirectTo({
-                        //     url: '/pages/login/login',
-                        //   })
-                        // }else{
-                        //   if(that.globalData.uuid){
-                        //     wx.redirectTo({
-                        //       url: "/pages/manual/manual"
-                        //     });
-                        //   }else{
-                        //     wx.redirectTo({
-                        //       url: "/pages/index/service/service"
-                        //     })
-                        //   }
-                        // }
                       }
                     })
                   }
@@ -372,6 +346,17 @@ App({
       }
     }
     return "";
+  },
+
+  getResData: function (res) {
+    let jsonStr = res.data;
+    jsonStr = jsonStr.replace(" ", "");
+    if (typeof jsonStr != 'object') {
+      jsonStr = jsonStr.replace(/\ufeff/g, "");//重点
+      var jj = JSON.parse(jsonStr);
+      res.data = jj;
+    }
+    return res.data
   },
 
   //  我的

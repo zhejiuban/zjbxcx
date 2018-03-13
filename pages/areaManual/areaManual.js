@@ -31,34 +31,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let that = this;
-    wx.request({
-      url: 'https://wx.zhejiuban.com/wx/area/get_classify',
-      method: 'GET',
-      data: {
-        openId: app.globalData.openId,
-        pid: 0
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success: function (res) {
-        console.log(res);
-        let data = res.data;
-        let arr = [];
-        for (let i=0;i<data.length;i++) {
-          arr[i] = {
-            id: data[i].id,
-            name: data[i].name,
-            org_id: data[i].org_id 
-          };
-        }
-        that.setData({
-          classify: arr,
-          classify_id: arr[0].id
-        });
-      }
-    })
+    
   },
 
   click_scan: function () {
@@ -93,7 +66,42 @@ Page({
           area_name: res.data.area_name,
           org_id: res.data.org_id,
           org_name: res.data.org_name
-        })
+        });
+        that.get_classify(that.data.org_id);
+      }
+    })
+  },
+
+  //获取该单位下的所有报修项目
+  get_classify: function (orgId) {
+    let that = this;
+    wx.request({
+      url: 'https://wx.zhejiuban.com/wx/area/get_classify',
+      method: 'GET',
+      data: {
+        openId: app.globalData.openId,
+        pid: 0,
+        org_id: orgId
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function (res) {
+        console.log(res);
+        let data = res.data;
+        let arr = [];
+        for (let i = 0; i < data.length; i++) {
+          arr[i] = {
+            id: data[i].id,
+            name: data[i].name,
+            org_id: data[i].org_id
+          };
+        }
+        that.setData({
+          classify: arr,
+          classify_id: arr[0].id
+        });
+        console.log(that.data.classify);
       }
     })
   },
@@ -228,8 +236,10 @@ Page({
     if (e.detail.value.user_phone){
       user_phone = e.detail.value.user_phone;
     }
-    
-    let img_id = that.data.img_ids.join(",");
+    let img_id = null;
+    if(that.data.img_ids.length>0){
+      img_id = that.data.img_ids.join(",");
+    }
 
     if (!that.data.area_id) {
       wx.showModal({

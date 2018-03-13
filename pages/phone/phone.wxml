@@ -2,5 +2,5 @@
 <view class='btn_view' >
   <image class='logo' src='/images/logo.png' ></image>
   <text class='title' >这就办维修平台</text>
-  <button class='btn' open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">绑定手机号</button>
+  <button class='btn' open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">授权开通</button>
 </view>

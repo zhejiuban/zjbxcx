@@ -13,12 +13,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // console.log(options);
-    // if(options.uuid){
-    //   this.setData({
-    //     uuid: options.uuid
-    //   })
-    // }
   },
 
   /**
@@ -29,13 +23,6 @@ Page({
     let iv = e.detail.iv;
     let encryptedData = e.detail.encryptedData;
     if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {
-      // wx.showModal({
-      //   title: '提示',
-      //   showCancel: false,
-      //   content: '未授权不能操作',
-      //   success: function (res) {
-      //   }
-      // });
     } else {
       wx.login({
         success: res => {
@@ -51,7 +38,8 @@ Page({
                   role: 1,    //用户角色
                   code: code,
                   iv: iv,
-                  encryptedData: encryptedData
+                  encryptedData: encryptedData,
+                  asset_uid: app.globalData.uuid
                 },
                 header: {
                   'content-type': 'application/json' // 默认值
