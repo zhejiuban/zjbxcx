@@ -33,7 +33,6 @@ Page({
   },
 
   onLoad: function (options) {
-    // console.log(options);
     let that = this;
     //微信扫描二维码链接携带的参数
     
@@ -65,11 +64,6 @@ Page({
     } 
   },
 
-  // onShow: function (options) {
-  //   console.log(options);
-  //   console.log("ssss");
-  // },
-
   onHide: function () {
     console.log("onhide");
     this.onUnload();
@@ -79,97 +73,109 @@ Page({
   //获取资产信息
   getAssetInfo: function(asset_uuid){
     let that = this;
+    if (app.globalData.authorization==1){
+      //已经授权
+      that.getAsset(asset_uuid);
+    }else{
+      wx.request({
+        url: 'https://wx.zhejiuban.com/wx/need_validation',
+        method: "POST",
+        data: {
+          asset_uuid: asset_uuid
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        success: function (res) {
+          console.log(res.data);
+          res.data = app.getResData(res);
+          if (res.data.code == 1) {
+            // 前去验证  暂未写
+            //需要LDAP验证
+            wx.hideLoading();
+            wx.showModal({
+              title: '提示',
+              content: '需要授权手机号',
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/phone/phone',
+                  });
+                } 
+                // else if (res.cancel) {
+                //   wx.redirectTo({
+                //     url: '/pages/index/service/service',
+                //   });
+                // }
+              }
+            });
+          } else if (res.data.code == 403) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false
+            })
+          } else {
+            wx.request({
+              url: 'https://wx.zhejiuban.com/wx/add_user',
+              method: "POST",
+              data: {
+                openId: app.globalData.openId,
+                unionid: app.globalData.unionid,
+                name: app.globalData.userInfo.nickName,
+                asset_uuid: asset_uuid
+              },
+              header: {
+                'content-type': 'application/json'
+              },
+              success: function (res) {
+                that.getAsset(asset_uuid);
+              }
+            })
+          }
+        }
+      });
+    }
+  },
+
+  getAsset: function (asset_uuid) {
+    let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/need_validation',
+      url: 'https://wx.zhejiuban.com/wx/asset_find',
       method: "POST",
       data: {
+        openId: app.globalData.openId,
         asset_uuid: asset_uuid
       },
       header: {
-        'content-type': 'application/json'
+        'content-type': 'application/json' // 默认值
       },
       success: function (res) {
+        console.log(res);
         if (res.data.code == 1) {
-          // 前去验证  暂未写
-          //需要LDAP验证
-          wx.showModal({
-            title: '提示',
-            content: '需要LDAP用户验证',
-            success: function (res) {
-              if (res.confirm) {
-                wx.redirectTo({
-                  url: '/pages/login/login',
-                });
-              } else if (res.cancel) {
-                wx.redirectTo({
-                  url: '/pages/index/service/service',
-                });
-              }
-            }
-          });
-        } else if (res.data.code == 403) {
           wx.showModal({
             title: '提示',
             content: res.data.message,
             showCancel: false
           })
         } else {
-          console.log("不需要LDAP验证");
-          wx.request({
-            url: 'https://wx.zhejiuban.com/wx/add_user',
-            method: "POST",
-            data: {
-              openId: app.globalData.openId,
-              unionid: app.globalData.unionid,
-              name: app.globalData.userInfo.nickName,
-              asset_uuid: asset_uuid
-            },
-            header: {
-              'content-type': 'application/json'
-            },
-            success: function (res) {
-              wx.request({
-                url: 'https://wx.zhejiuban.com/wx/asset_find',
-                method: "POST",
-                data: {
-                  openId: app.globalData.openId,
-                  asset_uuid: asset_uuid
-                },
-                header: {
-                  'content-type': 'application/json' // 默认值
-                },
-                success: function (res) {
-                  console.log(res);
-                  if (res.data.code == 1) {
-                    wx.showModal({
-                      title: '提示',
-                      content: res.data.message,
-                      showCancel: false
-                    })
-                  } else {
-                    that.setData({
-                      asset_name: res.data.name,
-                      asset_id: res.data.id,
-                      asset_uuid: res.data.asset_uid,
-
-                      area: res.data.area ? res.data.area_path : '暂无',
-                      category: res.data.category.name ? res.data.category.name : '暂无',
-                      department: res.data.department.name ? res.data.department.name : '暂无',
-                      org: res.data.org.name ? res.data.org.name : '暂无',
-                      org_id: res.data.org_id,
-                      spec: res.data.spec ? res.data.spec : '暂无',
-                      area_id : res.data.area_id,
-                      isSubmit: false
-                    });
-
-                    console.log(that.data);
-                  }
-                  wx.hideLoading();
-                }
-              });
-            }
-          })
+          that.setData({
+            asset_name: res.data.name,
+            asset_id: res.data.id,
+            asset_uuid: res.data.asset_uid,
+            area: res.data.area ? res.data.area_path : '暂无',
+            category: res.data.category.name ? res.data.category.name : '暂无',
+            department: res.data.department.name ? res.data.department.name : '暂无',
+            org: res.data.org.name ? res.data.org.name : '暂无',
+            org_id: res.data.org_id,
+            spec: res.data.spec ? res.data.spec : '暂无',
+            area_id: res.data.area_id,
+            isSubmit: false
+          });
+          console.log(that.data);
         }
+        wx.hideLoading();
       }
     });
   },
@@ -336,6 +342,10 @@ Page({
         }
       });
     }else{
+      let user_phone = null;
+      if (e.detail.value.user_phone) {
+        user_phone = e.detail.value.user_phone;
+      }
       app.globalData.uuid = null;
       wx.showLoading({
         mask: true,
@@ -350,7 +360,8 @@ Page({
           remarks: remarks,
           img_id: img_id,
           area_id: that.data.area_id,
-          openId: app.globalData.openId
+          openId: app.globalData.openId,
+          user_phone: user_phone
         },
         header: {
           'content-type': 'application/json'
@@ -366,6 +377,7 @@ Page({
               success: function (res) {
                 app.globalData.uuid = null;
                 if (res.confirm) {
+                  // that.onUnload();
                   wx.redirectTo({
                     url: '/pages/index/service/service'
                   });

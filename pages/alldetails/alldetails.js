@@ -27,7 +27,10 @@ Page({
     service_img_url: [],
     create_time: null,
     finish_time: null,
-    user_phone: null
+    user_name: '',
+    user_phone: '',
+    method: null,
+    appointment: null
   },
   imgShow: function (e) {
     var that = this;
@@ -120,7 +123,10 @@ Page({
             repair_status: res.data.repair_status,
             create_time: res.data.create_time,
             finish_time: res.data.finish_time,
-            user_phone: res.data.user_phone
+            user_name: res.data.user_name,
+            user_phone: res.data.user_phone,
+            method: res.data.method,
+            appointment: res.data.appointment
           });
         }
       },

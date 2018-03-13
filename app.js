@@ -6,16 +6,35 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs);
-    if(e.query.q){
+    // if(e.query.q){
+    //   //微信扫描二维码携带的参数
+    //   let url = decodeURIComponent(e.query.q);
+    //   let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
+    //   that.globalData.uuid = asset_uuid;
+    //   that.getUserInfo();
+    // }else{
+    //   that.getUserInfo();
+    // }
+    console.log("onLaunch");
+  },
+
+  onShow: function (e) {
+    let that = this;
+    if (e.query.q) {
       //微信扫描二维码携带的参数
       let url = decodeURIComponent(e.query.q);
       let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
       that.globalData.uuid = asset_uuid;
-      that.getUserInfo();
+      if (!that.globalData.validate){
+        that.getUserInfo();
+        console.log("执行了");
+      }
     }else{
-      that.getUserInfo();
+      if (!that.globalData.validate) {
+        that.getUserInfo();
+        console.log("执行了");
+      }
     }
-    console.log("onLaunch");
   },
 
   network_state: function () {
@@ -99,8 +118,11 @@ App({
                       },
                       success: function (res) {
                         res.data = that.getResData(res);
+                        console.log(res.data);
                         if(res.data.code==1){
                           //验证过了
+                          that.globalData.authorization=1;
+                          that.globalData.validate = true;
                           if (that.globalData.uuid) {
                             wx.redirectTo({
                               url: '/pages/manual/manual',
@@ -115,7 +137,7 @@ App({
                           /**
                            * 首先判断是否有资产uuid
                            * 有资产id存在的话，去后台判断是否需要LDAP
-                           * 如果没有资产存在的，直接登录
+                           * 如果没有资产存在的，直接授权手机号验证
                            * */
                           if (that.globalData.uuid) {
                             wx.request({
@@ -130,26 +152,13 @@ App({
                               success: function (res) {
                                 res.data = that.getResData(res);
                                 console.log(res.data);
-                                console.log("asdasd");
                                 wx.hideLoading();
                                 if(res.data.code==1){
                                   // 前去验证  利用手机号验证
                                   //需要LDAP验证
-                                  wx.showModal({
-                                    title: '提示',
-                                    content: '需要LDAP用户验证',
-                                    success: function (res) {
-                                      if (res.confirm) {
-                                        wx.redirectTo({
-                                          url: '/pages/phone/phone',
-                                        });
-                                      } else if (res.cancel) {
-                                        wx.redirectTo({
-                                          url: '/pages/index/service/service',
-                                        });
-                                      }
-                                    }
-                                  });
+                                    wx.redirectTo({
+                                      url: '/pages/phone/phone',
+                                    });
                                 } else if (res.data.code == 403) {
                                   wx.showModal({
                                     title: '提示',
@@ -172,6 +181,7 @@ App({
                                     },
                                     success: function (res) {
                                       wx.hideLoading();
+                                      that.globalData.validate = true;
                                       wx.redirectTo({
                                         url: "/pages/manual/manual"
                                       });
@@ -182,7 +192,7 @@ App({
                             })
                           }else{
                             wx.redirectTo({
-                              url: "/pages/index/service/service"
+                              url: "/pages/phone/phone"
                             });
                           }
                         }
@@ -298,6 +308,9 @@ App({
     showLoad: false,
     firstLogin: 1,
     uuid: null,
+    //是否已经授权手机号
+    authorization:null,
+    validate: false
     // login: null
   },
   swichNav: function (url) {

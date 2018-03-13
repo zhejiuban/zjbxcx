@@ -15,6 +15,12 @@ Page({
   onLoad: function (options) {
   },
 
+  close_order: function () {
+    wx.navigateBack({
+      delta: 1
+    }) 
+  },
+
   /**
    * 点击授权绑定手机号
    */
@@ -39,20 +45,39 @@ Page({
                   code: code,
                   iv: iv,
                   encryptedData: encryptedData,
-                  asset_uid: app.globalData.uuid
+                  asset_uid: app.globalData.uuid ? app.globalData.uuid : '',
+                  union_id: app.globalData.unionid,
+                  openid: app.globalData.openId
                 },
                 header: {
                   'content-type': 'application/json' // 默认值
                 },
                 success: function (res) {
-                  if (app.globalData.uuid){
-                    console.log(app.globalData.uuid);
-                    wx.redirectTo({
-                      url: "/pages/manual/manual"
-                    });
+                  res.data = app.getResData(res);
+                  console.log(res.data);
+                  if(res.data.code==1){
+                    app.globalData.authorization = 1;
+                    app.globalData.validate = true;
+                    if (app.globalData.uuid){
+                      console.log(app.globalData.uuid);
+                      wx.redirectTo({
+                        url: "/pages/manual/manual"
+                      });
+                    }else{
+                      wx.redirectTo({
+                        url: "/pages/index/service/service"
+                      })
+                    }
                   }else{
-                    wx.redirectTo({
-                      url: "/pages/index/service/service"
+                    wx.showModal({
+                      title: '提示',
+                      content: res.data.message,
+                      showCancel: false,
+                      success: function (res) {
+                        if (res.confirm) {
+                          console.log("不是报修人员");
+                        }
+                      }
                     })
                   }
                 }

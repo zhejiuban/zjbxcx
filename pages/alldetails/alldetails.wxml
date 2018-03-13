@@ -34,6 +34,10 @@
       <text style='line-height:70rpx;' >暂无图片</text>
     </block>
   </view>
+  <view class='list'>
+    <text class='list_label'>报修人：</text>
+    <text class='list_value'>{{user_name}}</text>
+  </view>
   <view wx:if="{{user_phone}}" class='list'>
     <text class='list_label'>联系方式：</text>
     <text catchtap='phoneCall' data-phone='{{user_phone}}' class='list_value'>{{user_phone}}</text>
@@ -46,6 +50,16 @@
       <text class='list_label'>维修人员：</text>
       <text class='list_value'>{{service_worker}}({{repair_status}})</text>
     </view>
+    <view class='list'>
+      <text class='list_label'>维修方式：</text>
+      <text class='list_value'>{{method}}</text>
+    </view>
+    <block wx:if="{{appointment}}" >
+      <view class='list'>
+        <text class='list_label'>预计维修时间：</text>
+        <text class='list_value'>{{appointment}}({{appointment}})</text>
+      </view>
+    </block>
   </view>
 
   <!--维修人员反馈信息  -->
