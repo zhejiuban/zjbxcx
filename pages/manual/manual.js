@@ -64,12 +64,6 @@ Page({
     } 
   },
 
-  onHide: function () {
-    console.log("onhide");
-    this.onUnload();
-  },
-  
-
   //获取资产信息
   getAssetInfo: function(asset_uuid){
     let that = this;
@@ -87,7 +81,7 @@ Page({
           'content-type': 'application/json'
         },
         success: function (res) {
-          console.log(res.data);
+          console.log(res);
           res.data = app.getResData(res);
           if (res.data.code == 1) {
             // 前去验证  暂未写
@@ -103,11 +97,6 @@ Page({
                     url: '/pages/phone/phone',
                   });
                 } 
-                // else if (res.cancel) {
-                //   wx.redirectTo({
-                //     url: '/pages/index/service/service',
-                //   });
-                // }
               }
             });
           } else if (res.data.code == 403) {
@@ -377,7 +366,6 @@ Page({
               success: function (res) {
                 app.globalData.uuid = null;
                 if (res.confirm) {
-                  // that.onUnload();
                   wx.redirectTo({
                     url: '/pages/index/service/service'
                   });
@@ -409,7 +397,6 @@ Page({
         },
         complete: function () {
           wx.hideLoading();
-          this.onUnload();
         }
       })
     }

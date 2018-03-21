@@ -50,56 +50,70 @@ Page({
     });
     let that = this;
     let score = that.data.key;
-    let appraisal = e.detail.value.appraisal;
-    let repair_id = that.data.repair_id;
-    wx.request({
-      url: 'https://wx.zhejiuban.com/wx/repair/evaluate',
-      method:"POST",
-      data: {
-        openId: app.globalData.openId,
-        repair_id: repair_id,
-        score: score,
-        appraisal: appraisal,
-      },
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
-        wx.hideLoading();
-        if(res.data.code == 1){
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.redirectTo({
-                  url: '/pages/index/all/all'
-                })
+    if (score){
+      let appraisal = e.detail.value.appraisal;
+      let repair_id = that.data.repair_id;
+      wx.request({
+        url: 'https://wx.zhejiuban.com/wx/repair/evaluate',
+        method: "POST",
+        data: {
+          openId: app.globalData.openId,
+          repair_id: repair_id,
+          score: score,
+          appraisal: appraisal,
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        success: function (res) {
+          wx.hideLoading();
+          if (res.data.code == 1) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/index/all/all'
+                  })
+                }
               }
-            }
-          })
-        } else if (res.data.code == 403) {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.navigateBack({
-                  url: "/pages/home/home"
-                })
+            })
+          } else if (res.data.code == 403) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.navigateBack({
+                    url: "/pages/home/home"
+                  })
+                }
               }
-            }
-          })
-        } else{
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-          })
+            })
+          } else {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+            })
+          }
         }
-      }
-    })
+      })
+    }else{
+      wx.hideLoading();
+      wx.showModal({
+        title: '提示',
+        content: '请先选择评分，以便于我们以后更好的服务，谢谢',
+        showCancel: false,
+        success: function (res) {
+          if (res.confirm) {
+            // console.log('用户点击确定')
+          } 
+        }
+      })
+    }
   }
 })

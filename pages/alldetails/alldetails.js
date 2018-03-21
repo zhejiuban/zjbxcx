@@ -30,7 +30,7 @@ Page({
     user_name: '',
     user_phone: '',
     method: null,
-    appointment: null
+    // appointment: null
   },
   imgShow: function (e) {
     var that = this;
@@ -114,7 +114,7 @@ Page({
             remarks: res.data.remarks,
             img_url: res.data.img_url,
             stars_key: res.data.stars_key,
-            appraisal: res.data.appraisal,
+            appraisal: res.data.appraisal ? res.data.appraisal: '',
             complain: res.data.complain,
             service_status: res.data.service_status,
             service_worker: res.data.service_worker,
@@ -126,7 +126,7 @@ Page({
             user_name: res.data.user_name,
             user_phone: res.data.user_phone,
             method: res.data.method,
-            appointment: res.data.appointment
+            // appointment: res.data.appointment
           });
         }
       },

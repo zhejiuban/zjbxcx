@@ -31,7 +31,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    let that = this;
+    if (app.globalData.area_uuid){
+      that.getAreaInfo(app.globalData.area_uuid);
+      // app.globalData.area_uuid=null;
+    }
   },
 
   click_scan: function () {
@@ -281,6 +285,7 @@ Page({
         success: function (res) {
           wx.hideLoading();
           if (res.data.code == 1) {
+            app.globalData.area_uuid = null;
             wx.showModal({
               title: '提示',
               content: '维修人员正在赶来的路上，请耐心等待',

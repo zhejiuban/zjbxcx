@@ -73,19 +73,38 @@
   width: 80%;
   font-size: 24rpx;
   color: #b0b0b0;
-  line-height: 1.5em;
+  height: 130rpx;
   padding-left: 20rpx;
+  text-overflow: ellipsis;
 }
 
 .expertInfo .name {
   font-size: 34rpx;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
   color: #000;
   margin-bottom: 10rpx;
 }
 
-.expertInfo .wait_tag {
+.expertInfo .wait_name {
   width: 75%;
 }
+.expertInfo .tag{
+  margin-top: 50rpx;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+}
+.expertInfo .wait_tag {
+  width: 75%;
+  margin-top: 50rpx;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+}
+
+
 
 .tab-content {
   margin-top: 90rpx;

@@ -15,7 +15,7 @@
               <image class="img" wx:else src="/images/no_img.jpg" ></image>
             </view>
             <view class="expertInfo">
-              <view class="name">报修项目：{{item['1']}}</view>
+              <view class="name wait_name">报修项目：{{item['1']}}</view>
               <view class="tag wait_tag ">保修场地：{{item['2']}}</view>
               <button class='evaluate_btn' catchtap='to_evaluate' data-id="{{item['3']}}">评价</button>
             </view>

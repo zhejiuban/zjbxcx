@@ -24,44 +24,20 @@ App({
       //微信扫描二维码携带的参数
       let url = decodeURIComponent(e.query.q);
       let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
-      that.globalData.uuid = asset_uuid;
-      if (!that.globalData.validate){
-        that.getUserInfo();
-        console.log("执行了");
+      if(asset_uuid){
+        that.globalData.uuid = asset_uuid;
+      }else{
+        let area_uuid = that.getUrlParam(url, "uuid");
+        that.globalData.area_uuid = area_uuid;
       }
-    }else{
       if (!that.globalData.validate) {
         that.getUserInfo();
-        console.log("执行了");
+      }
+    } else {
+      if (!that.globalData.validate) {
+        that.getUserInfo();
       }
     }
-  },
-
-  network_state: function () {
-    wx.getNetworkType({
-      success: function (res) {
-        // 返回网络类型, 有效值：
-        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-        var networkType = res.networkType;
-        if(networkType=='none'){
-          console.log("暂无网络");
-          wx.showModal({
-            title: '提示',
-            content: '网络失败，请重试',
-            showCancel: false,
-            confirmText: '点击重试',
-            success: function (res) {
-              if (res.confirm) {
-                console.log('点击重试');
-
-              } else if (res.cancel) {
-                console.log('关闭程序')
-              }
-            }
-          })
-        }
-      }
-    })
   },
 
   /**
@@ -101,6 +77,7 @@ App({
                   },
                   success: function (res) {
                     console.log(res);
+                    console.log("wx/login");
                     res.data = that.getResData(res);
                     that.globalData.openId = res.data.openId;
                     that.globalData.unionid = res.data.unionId;
@@ -126,6 +103,10 @@ App({
                           if (that.globalData.uuid) {
                             wx.redirectTo({
                               url: '/pages/manual/manual',
+                            });
+                          }else if(that.globalData.area_uuid){
+                            wx.redirectTo({
+                              url: '/pages/areaManual/areaManual',
                             });
                           }else{
                             wx.redirectTo({
@@ -308,6 +289,7 @@ App({
     showLoad: false,
     firstLogin: 1,
     uuid: null,
+    area_uuid:null,
     //是否已经授权手机号
     authorization:null,
     validate: false
@@ -330,9 +312,30 @@ App({
       success: (res) => {
         let url = res.result;
         let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
-        wx.navigateTo({
-          url: '/pages/manual/manual?asset_uuid=' + asset_uuid,
-        })
+        if (asset_uuid){
+          wx.navigateTo({
+            url: '/pages/manual/manual?asset_uuid=' + asset_uuid,
+          })
+        }else{
+
+          let area_uuid = that.getUrlParam(url, "uuid");
+          that.globalData.area_uuid = area_uuid;
+          wx.redirectTo({
+            url: '/pages/areaManual/areaManual',
+          });
+
+          // wx.showModal({
+          //   title: '提示',
+          //   content: '此处扫码仅支持资产二维码',
+          //   showCancel: false,
+          //   success: function (res) {
+          //     if (res.confirm) {
+          //       console.log('用户点击确定')
+          //     }
+          //   }
+          // })
+        }
+        
       }
     })
   },
