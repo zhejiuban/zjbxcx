@@ -6,15 +6,6 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs);
-    // if(e.query.q){
-    //   //微信扫描二维码携带的参数
-    //   let url = decodeURIComponent(e.query.q);
-    //   let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
-    //   that.globalData.uuid = asset_uuid;
-    //   that.getUserInfo();
-    // }else{
-    //   that.getUserInfo();
-    // }
     console.log("onLaunch");
   },
 
@@ -59,7 +50,7 @@ App({
             wx.getUserInfo({
               success: res => {
                 console.log(res.userInfo);
-                that.globalData.userInfo = res.userInfo;
+                
                 let iv = res.iv;
                 let encryptedData = res.encryptedData;
                 //发起网络请求
@@ -77,8 +68,8 @@ App({
                   },
                   success: function (res) {
                     console.log(res);
-                    console.log("wx/login");
                     res.data = that.getResData(res);
+                    that.globalData.userInfo = res.data;
                     that.globalData.openId = res.data.openId;
                     that.globalData.unionid = res.data.unionId;
                     //判断有没有验证身份(判断是否注册)
@@ -95,7 +86,7 @@ App({
                       },
                       success: function (res) {
                         res.data = that.getResData(res);
-                        console.log(res.data);
+                        console.log(res);
                         if(res.data.code==1){
                           //验证过了
                           that.globalData.authorization=1;
@@ -114,68 +105,15 @@ App({
                             });
                           }
                         }else{
-                          //未验证用户信息
+                          //未注册用户信息
                           /**
                            * 首先判断是否有资产uuid
                            * 有资产id存在的话，去后台判断是否需要LDAP
                            * 如果没有资产存在的，直接授权手机号验证
                            * */
-                          if (that.globalData.uuid) {
-                            wx.request({
-                              url: 'https://wx.zhejiuban.com/wx/need_validation',
-                              method: "POST",
-                              data: {
-                                asset_uuid: that.globalData.uuid
-                              },
-                              header: {
-                                'content-type': 'application/json'
-                              },
-                              success: function (res) {
-                                res.data = that.getResData(res);
-                                console.log(res.data);
-                                wx.hideLoading();
-                                if(res.data.code==1){
-                                  // 前去验证  利用手机号验证
-                                  //需要LDAP验证
-                                    wx.redirectTo({
-                                      url: '/pages/phone/phone',
-                                    });
-                                } else if (res.data.code == 403) {
-                                  wx.showModal({
-                                    title: '提示',
-                                    content: res.data.message,
-                                    showCancel: false
-                                  })
-                                } else{
-                                  //不需要LDAP验证
-                                  wx.request({
-                                    url: 'https://wx.zhejiuban.com/wx/add_user',
-                                    method: "POST",
-                                    data: {
-                                      openId: that.globalData.openId,
-                                      unionid: that.globalData.unionid,
-                                      name: that.globalData.userInfo.nickName,
-                                      asset_uuid: that.globalData.uuid
-                                    },
-                                    header: {
-                                      'content-type': 'application/json'
-                                    },
-                                    success: function (res) {
-                                      wx.hideLoading();
-                                      that.globalData.validate = true;
-                                      wx.redirectTo({
-                                        url: "/pages/manual/manual"
-                                      });
-                                    }
-                                  })
-                                }
-                              }
-                            })
-                          }else{
-                            wx.redirectTo({
-                              url: "/pages/phone/phone"
-                            });
-                          }
+                          wx.redirectTo({
+                            url: "/pages/phone/phone"
+                          });
                         }
                       }
                     })

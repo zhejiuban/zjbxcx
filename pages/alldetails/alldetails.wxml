@@ -20,7 +20,6 @@
   </view>
   <view class='list-bewrite'>
     <text>故障描述：</text>
-    <!-- <textarea class='bewrite' disabled>{{remarks}}</textarea> -->
     <text class='bewrite'>{{remarks}}</text>
   </view>
   <view class='list'>

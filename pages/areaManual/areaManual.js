@@ -31,10 +31,18 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options);
+    console.log("areaManual");
     let that = this;
     if (app.globalData.area_uuid){
       that.getAreaInfo(app.globalData.area_uuid);
-      // app.globalData.area_uuid=null;
+    }
+  },
+
+  onHide: function () {
+    if (app.globalData.area_uuid){
+      //清除场地uuid
+      app.globalData.area_uuid = null;
     }
   },
 
@@ -46,12 +54,57 @@ Page({
         let str = decodeURIComponent(res.result);
         let url = res.result;
         let uuid = app.getUrlParam(url, "uuid");
+        console.log(uuid);
+        console.log("asdasdasd");
         that.getAreaInfo(uuid);
       }
     });
   },
 
   getAreaInfo: function (area_uuid) {
+    let that = this;
+    wx.request({
+      url: 'https://wx.zhejiuban.com/wx/need_validation',
+      method: "POST",
+      data: {
+        area_uuid: area_uuid,
+        openId: app.globalData.openId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        wx.hideLoading();
+        console.log(res);
+        res.data = app.getResData(res);
+        if (res.data.code == 1) {
+          //验证通过，可以正常报修
+          that.getArea(area_uuid);
+        } else if (res.data.code == 403) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false
+          });
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                });
+              }
+            }
+          })
+        }
+      }
+    });
+  },
+
+  getArea:function(area_uuid) {
     let that = this;
     wx.request({
       url: 'https://wx.zhejiuban.com/wx/area/find_area',

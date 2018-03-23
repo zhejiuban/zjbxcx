@@ -30,6 +30,7 @@ Page({
     let encryptedData = e.detail.encryptedData;
     if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {
     } else {
+      // console.log(app.globalData.userInfo);
       wx.login({
         success: res => {
           console.log(res);
@@ -46,6 +47,8 @@ Page({
                   iv: iv,
                   encryptedData: encryptedData,
                   asset_uid: app.globalData.uuid ? app.globalData.uuid : '',
+                  area_uuid: app.globalData.area_uuid ? app.globalData.area_uuid : '',
+                  nickName: app.globalData.userInfo.nickName,
                   union_id: app.globalData.unionid,
                   openid: app.globalData.openId
                 },
@@ -62,6 +65,10 @@ Page({
                       console.log(app.globalData.uuid);
                       wx.redirectTo({
                         url: "/pages/manual/manual"
+                      });
+                    } else if (app.globalData.area_uuid){
+                      wx.redirectTo({
+                        url: "/pages/areaManual/areaManual"
                       });
                     }else{
                       wx.redirectTo({
