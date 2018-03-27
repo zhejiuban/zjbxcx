@@ -8,7 +8,7 @@ Page({
     imgs: [],             //上传图片的url路径
     img_ids: [],          //上传图片的id
     img_count: 3,         //目前可以上传图片的数量
-    
+     
     asset_uuid: null,
     asset_id: null,
     asset_name:'',
@@ -72,6 +72,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/need_validation',
       method: "POST",
       data: {
+        role: app.globalData.role,
         asset_uuid: asset_uuid,
         openId: app.globalData.openId
       },
@@ -80,7 +81,6 @@ Page({
       },
       success: function (res) {
         wx.hideLoading();
-        console.log(res);
         res.data = app.getResData(res);
         if (res.data.code == 1) {
           //验证通过，可以正常报修
@@ -115,6 +115,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/asset_find',
       method: "POST",
       data: {
+        role: app.globalData.role,
         openId: app.globalData.openId,
         asset_uuid: asset_uuid
       },
@@ -122,7 +123,6 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        console.log(res);
         if (res.data.code == 1) {
           wx.showModal({
             title: '提示',
@@ -143,7 +143,6 @@ Page({
             area_id: res.data.area_id,
             isSubmit: false
           });
-          console.log(that.data);
         }
         wx.hideLoading();
       }
@@ -174,7 +173,6 @@ Page({
         let str = decodeURIComponent(res.result);
         let url = res.result;
         let asset_uuid = app.getUrlParam(url, app.globalData.asset_uuid);
-        console.log(asset_uuid);
         that.getAssetInfo(asset_uuid);
       }
     });
@@ -203,7 +201,6 @@ Page({
               'content-type': 'multipart/form-data' // 默认值
             },
             success: function (res) {
-              console.log(res);
               let arrs1 = that.data.img_ids.concat(res.data);
               that.setData({
                 img_ids: arrs1
@@ -246,6 +243,8 @@ Page({
             url: 'https://wx.zhejiuban.com/file/delete_img_file',
             method: "POST",
             data: {
+              role: app.globalData.role,
+              openId: app.globalData.openId,
               id: img_ids[index]
             },
             header: {
@@ -292,9 +291,6 @@ Page({
     let remarks = e.detail.value.remarks;
     let img_id = that.data.img_ids.join(",");
     let asset_id = that.data.asset_id;
-
-    console.log(img_id);
-
     if (!that.data.asset_id){
       wx.showModal({
         title: '提示',
@@ -325,6 +321,7 @@ Page({
         url: 'https://wx.zhejiuban.com/wx/repair/add', 
         method:"POST",
         data: {
+          role: app.globalData.role,
           asset_uuid: asset_uuid,
           asset_id: asset_id,
           remarks: remarks,
@@ -362,6 +359,19 @@ Page({
                 if (res.confirm) {
                   wx.navigateBack({
                     url: "/pages/home/home"
+                  });
+                }
+              }
+            })
+          } else if (res.data.code == 404) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.navigateBack({
+                    url: "/pages/service/service"
                   });
                 }
               }

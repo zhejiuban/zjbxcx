@@ -7,7 +7,7 @@ Page({
     searchLoadingComplete: false,  //“没有数据”的变量，默认false，隐藏  
     page: 1,   //分页
     items: [],
-    status: 30,
+    status: 100,
     content: '1',    //判断上拉是否还有数据
     itemsLength: ''  //获取有无数据
   },
@@ -132,6 +132,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/repair/repair_list', //仅为示例，并非真实的接口地址
       method: "POST",
       data: {
+        role: app.globalData.role,
         status: that.data.status,
         openId: app.globalData.openId,
         page: 1
@@ -172,6 +173,7 @@ Page({
         url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
         method: "POST",
         data: {
+          role: app.globalData.role,
           status: that.data.status,
           openId: app.globalData.openId,
           page: that.data.page + 1
@@ -234,6 +236,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/repair/repair_list', //仅为示例，并非真实的接口地址
       method: "POST",
       data: {
+        role: app.globalData.role,
         status: that.data.status,
         openId: app.globalData.openId,
         page: 1
@@ -242,7 +245,6 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        console.log(res);
         if (res.data.code == 0) {
           that.setData({
             itemsLength: '0'

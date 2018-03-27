@@ -29,6 +29,7 @@ Page({
       url: 'https://wx.zhejiuban.com/repair/repair_info',
       method:"POST",
       data: {
+        role: app.globalData.role,
         openId: app.globalData.openId,
         repair_id: options.repair_id,
         status: options.status

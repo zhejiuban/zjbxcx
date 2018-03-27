@@ -1,4 +1,5 @@
 // pages/time/time.js
+let app = getApp();
 Page({
 
   /**
@@ -21,13 +22,14 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/repair/process_log', //仅为示例，并非真实的接口地址
       method: 'POST',
       data: {
+        role: app.globalData.role,
+        openId: app.globalData.openId,
         process_id: options.id
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        console.log(res.data);
         let data = res.data;
         let arr = [];
         for(let i=0;i<data.length;i++){

@@ -7,7 +7,7 @@ Page({
     searchLoadingComplete: false,  //“没有数据”的变量，默认false，隐藏  
     page: 1,   //分页
     items: [],
-    status: 10,
+    status: 4,
     content: '1',    //判断上拉是否还有数据
     itemsLength: ''  //获取有无数据
   },
@@ -47,6 +47,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
       method: "POST",
       data: {
+        role: app.globalData.role,
         status: that.data.status,
         openId: app.globalData.openId,
         page: that.data.page
@@ -172,6 +173,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
       method: "POST",
       data: {
+        role: app.globalData.role,
         status: that.data.status,
         openId: app.globalData.openId,
         page: 1
@@ -212,6 +214,7 @@ Page({
         url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
         method: "POST",
         data: {
+          role: app.globalData.role,
           status: that.data.status,
           openId: app.globalData.openId,
           page: that.data.page + 1

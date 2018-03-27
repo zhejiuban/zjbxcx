@@ -31,8 +31,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options);
-    console.log("areaManual");
     let that = this;
     if (app.globalData.area_uuid){
       that.getAreaInfo(app.globalData.area_uuid);
@@ -54,8 +52,6 @@ Page({
         let str = decodeURIComponent(res.result);
         let url = res.result;
         let uuid = app.getUrlParam(url, "uuid");
-        console.log(uuid);
-        console.log("asdasdasd");
         that.getAreaInfo(uuid);
       }
     });
@@ -67,6 +63,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/need_validation',
       method: "POST",
       data: {
+        role: app.globalData.role,
         area_uuid: area_uuid,
         openId: app.globalData.openId
       },
@@ -75,7 +72,6 @@ Page({
       },
       success: function (res) {
         wx.hideLoading();
-        console.log(res);
         res.data = app.getResData(res);
         if (res.data.code == 1) {
           //验证通过，可以正常报修
@@ -86,6 +82,19 @@ Page({
             content: res.data.message,
             showCancel: false
           });
+        } else if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.navigateBack({
+                  url: "/pages/service/service"
+                });
+              }
+            }
+          })
         } else {
           wx.showModal({
             title: '提示',
@@ -113,11 +122,11 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       data: {
+        role: app.globalData.role,
         uuid: area_uuid,
         openId: app.globalData.openId
       },
       success: function (res) {
-        console.log(res);
         that.setData({
           area_id: res.data.area_id,
           area_name: res.data.area_name,
@@ -136,6 +145,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/area/get_classify',
       method: 'GET',
       data: {
+        role: app.globalData.role,
         openId: app.globalData.openId,
         pid: 0,
         org_id: orgId
@@ -144,7 +154,6 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        console.log(res);
         let data = res.data;
         let arr = [];
         for (let i = 0; i < data.length; i++) {
@@ -158,14 +167,12 @@ Page({
           classify: arr,
           classify_id: arr[0].id
         });
-        console.log(that.data.classify);
       }
     })
   },
 
   //选择资产
   bindClassifyChange: function (e) {
-    console.log(e);
     let that = this;
     let classify_id = that.data.classify[e.detail.value].id;
     let org_id = that.data.classify[e.detail.value].org_id;
@@ -250,6 +257,8 @@ Page({
             url: 'https://wx.zhejiuban.com/file/delete_img_file',
             method: "POST",
             data: {
+              role: app.globalData.role,
+              openId: app.globalData.openId,
               id: img_ids[index]
             },
             header: {
@@ -286,7 +295,6 @@ Page({
 
   formSubmit: function (e) {
     let that = this;
-    console.log(e);
     e.detail.value['img'] = that.data.img;
     let remarks = e.detail.value.remarks;
     let user_phone = null;
@@ -324,6 +332,7 @@ Page({
         url: 'https://wx.zhejiuban.com/wx/repair/area_repair',
         method: "POST",
         data: {
+          role: app.globalData.role,
           area_id: that.data.area_id,
           classify_id: that.data.classify_id,
           org_id: that.data.org_id,

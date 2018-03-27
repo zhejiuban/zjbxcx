@@ -31,6 +31,36 @@ App({
     }
   },
 
+  network_state: function () {
+    let that = this;
+    wx.getNetworkType({
+      success: function (res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        var networkType = res.networkType;
+        if (networkType == 'none') {
+          console.log("暂无网络");
+          wx.showModal({
+            title: '提示',
+            content: '网络失败，请重试',
+            showCancel: false,
+            confirmText: '点击重试',
+            success: function (res) {
+              if (res.confirm) {
+                console.log('点击重试');
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                })
+              } else if (res.cancel) {
+                console.log('关闭程序')
+              }
+            }
+          })
+        }
+      }
+    })
+  },
+
   /**
    * 用户授权  用户信息(昵称等信息)
    */
@@ -230,8 +260,9 @@ App({
     area_uuid:null,
     //是否已经授权手机号
     authorization:null,
-    validate: false
-    // login: null
+    validate: false,
+    //角色
+    role: 1
   },
   swichNav: function (url) {
     wx.redirectTo({
@@ -261,19 +292,7 @@ App({
           wx.redirectTo({
             url: '/pages/areaManual/areaManual',
           });
-
-          // wx.showModal({
-          //   title: '提示',
-          //   content: '此处扫码仅支持资产二维码',
-          //   showCancel: false,
-          //   success: function (res) {
-          //     if (res.confirm) {
-          //       console.log('用户点击确定')
-          //     }
-          //   }
-          // })
         }
-        
       }
     })
   },

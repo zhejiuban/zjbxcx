@@ -38,7 +38,6 @@ Page({
     } else {
       wx.login({
         success: res => {
-          console.log(res);
           let code = res.code;
           wx.getUserInfo({
             success: res => {
@@ -47,6 +46,7 @@ Page({
                 url: 'https://wx.zhejiuban.com/login/find_phone', //仅为示例，并非真实的接口地址
                 method: "POST",
                 data: {
+                  role: app.globalData.role,
                   code: code,
                   iv: iv,
                   encryptedData: encryptedData
@@ -55,7 +55,6 @@ Page({
                   'content-type': 'application/json' // 默认值
                 },
                 success: function (res) {
-                  console.log(res);
                 }
               })
             }
@@ -88,6 +87,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
       method: "POST",
       data: {
+        role: app.globalData.role,
         status: that.data.status,
         openId: app.globalData.openId,
         page: that.data.page
@@ -223,6 +223,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/repair/repair_list', //仅为示例，并非真实的接口地址
       method: "POST",
       data: {
+        role: app.globalData.role,
         status: that.data.status,
         openId: app.globalData.openId,
         page: 1
@@ -262,6 +263,7 @@ Page({
         url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
         method: "POST",
         data: {
+          role: app.globalData.role,
           status: that.data.status,
           openId: app.globalData.openId,
           page: that.data.page + 1
@@ -270,7 +272,6 @@ Page({
           'content-type': 'application/json' // 默认值
         },
         success: function (res) {
-          console.log(res);
           if (res.data.length > 0) {
             let arr = [];
             let data = res.data;

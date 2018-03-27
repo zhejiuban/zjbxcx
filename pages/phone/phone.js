@@ -30,10 +30,8 @@ Page({
     let encryptedData = e.detail.encryptedData;
     if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {
     } else {
-      // console.log(app.globalData.userInfo);
       wx.login({
         success: res => {
-          console.log(res);
           let code = res.code;
           wx.getUserInfo({
             success: res => {
@@ -57,12 +55,10 @@ Page({
                 },
                 success: function (res) {
                   res.data = app.getResData(res);
-                  console.log(res.data);
                   if(res.data.code==1){
                     app.globalData.authorization = 1;
                     app.globalData.validate = true;
                     if (app.globalData.uuid){
-                      console.log(app.globalData.uuid);
                       wx.redirectTo({
                         url: "/pages/manual/manual"
                       });

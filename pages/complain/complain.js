@@ -28,6 +28,7 @@ Page({
       url: 'https://wx.zhejiuban.com/repair/complain',
       method: "POST",
       data: {
+        role: app.globalData.role,
         repair_id: repair_id,
         complain: complain,
         openId: app.globalData.openId

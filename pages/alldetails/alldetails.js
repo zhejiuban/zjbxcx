@@ -53,7 +53,6 @@ Page({
   to_evaluate: function (e) {
     let that = this;
     let id = e.currentTarget.dataset.id;
-    console.log(id);
     wx.navigateTo({
       url: '/pages/evaluate/evaluate?id=' + id,
     })
@@ -73,6 +72,7 @@ Page({
    */
   onLoad: function (options) {
     let that = this;
+    app.network_state();
     wx.showLoading({
       mask: true,
       title: '加载中',
@@ -86,6 +86,7 @@ Page({
       url: 'https://wx.zhejiuban.com/wx/repair/repair_all_info',
       method: "POST",
       data: {
+        role:app.globalData.role,
         repair_id: repair_id,
         openId: app.globalData.openId
       },
@@ -107,7 +108,6 @@ Page({
             }
           })
         }else{
-          console.log(res);
           that.setData({
             asset_name: res.data.asset_name,
             field_path: res.data.field_path,
@@ -136,8 +136,35 @@ Page({
     })
   },
 
+
+  network_state: function () {
+    let that = this;
+    wx.getNetworkType({
+      success: function (res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        var networkType = res.networkType;
+        if (networkType == 'none') {
+          wx.showModal({
+            title: '提示',
+            content: '网络失败，请重试',
+            showCancel: false,
+            confirmText: '点击重试',
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                })
+              }
+            }
+          })
+        }
+      }
+    })
+  },
+
+
   phoneCall: function (e) {
-    console.log(e.currentTarget.dataset.phone);
     wx.showModal({
       title: '提示',
       content: '是否拨打：' + e.currentTarget.dataset.phone,

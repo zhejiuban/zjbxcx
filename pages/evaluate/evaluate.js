@@ -57,6 +57,7 @@ Page({
         url: 'https://wx.zhejiuban.com/wx/repair/evaluate',
         method: "POST",
         data: {
+          role: app.globalData.role,
           openId: app.globalData.openId,
           repair_id: repair_id,
           score: score,
@@ -110,7 +111,6 @@ Page({
         showCancel: false,
         success: function (res) {
           if (res.confirm) {
-            // console.log('用户点击确定')
           } 
         }
       })
