@@ -30,6 +30,7 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
+        console.log(res.data);
         let data = res.data;
         let arr = [];
         for(let i=0;i<data.length;i++){

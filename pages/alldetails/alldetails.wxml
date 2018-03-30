@@ -25,7 +25,7 @@
   <view class='list'>
     <text class='list_label'>图片拍摄：</text>
     <block wx:if="{{img_url.length>0}}">
-      <view wx:for="{{img_url}}">
+      <view wx:for="{{img_url}}" wx:key="property" >
         <image src='{{item}}' data-url='{{item}}' bindtap='imgShow' mode='aspectFill'></image>
       </view>
     </block>
@@ -47,7 +47,7 @@
   <view class='order_title' >维修详情</view>
     <view class='list'>
       <text class='list_label'>维修人员：</text>
-      <text class='list_value'>{{service_worker}}({{repair_status}})</text>
+      <text class='list_value'>{{service_worker}}</text>
     </view>
     <block wx:if="{{method}}" >
       <view class='list'>
@@ -65,6 +65,10 @@
 
   <!--维修人员反馈信息  -->
   <view wx:if="{{result}}" >
+    <view class='list'>
+      <text class='list_label'>维修结果：</text>
+      <text class='list_value'>{{result_status}}</text>
+    </view>
     <view class='list'>
       <text class='list_label'>完成时间：</text>
       <text class='list_value'>{{finish_time}}</text>

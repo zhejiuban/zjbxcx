@@ -27,11 +27,11 @@ Page({
   onShow: function () {
     if(app.globalData.openId){
       if (app.globalData.asset_uuid){
-        wx.redirectTo({
+        wx.navigateTo({
           url: '/pages/manual/manual',
         })
       }else{
-        wx.redirectTo({
+        wx.navigateTo({
           url: '/pages/index/service/service',
         })
       }

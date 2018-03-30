@@ -1,7 +1,11 @@
 .page {
   position: relative;
 }
-
+text{
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+}
 .section {
   display: flex;
   flex-grow: row no-wrap;

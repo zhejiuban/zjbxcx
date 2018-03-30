@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/groupManual/groupManual",
     "pages/time/time",
     "pages/login/login",
     "pages/phone/phone",

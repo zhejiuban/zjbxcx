@@ -2,10 +2,15 @@
 
   <view class="section">
     <view class="section_title">选择场地：</view>
-    <text wx:if="{{area_name}}">{{area_name}}</text>
-    <view catchtap='click_scan' class='scanBtn'>
+    <block wx:if="{{room_name}}" >
+      <text wx:if="{{area_name}}">{{area_name}}({{room_name}})</text>
+    </block>
+    <block wx:else>
+      <text wx:if="{{area_name}}">{{area_name}}</text>
+    </block>
+    <!-- <view catchtap='click_scan' class='scanBtn'>
       <image style='width:70rpx;height:70rpx;' src='/images/s.png'></image>
-    </view>
+    </view> -->
   </view>
 
   <view class="section">
@@ -27,7 +32,7 @@
   </view>
 
   <view class='section1' >
-    <block wx:for="{{imgs}}">
+    <block wx:for="{{imgs}}" wx:key="property">
       <image src="{{item}}" class='uploader_imgs' bindtap='imgShow' data-src="{{item}}" data-img-id="{{img_ids[index]}}" bindlongtap="longTap" bindtouchstart="touchStart" bindtouchend="touchEnd" data-index="{{index}}"></image>
     </block>
     <view class='uploaderBtn' bindtap='selectImg'>

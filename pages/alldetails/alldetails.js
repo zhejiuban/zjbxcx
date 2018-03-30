@@ -12,7 +12,7 @@ Page({
     halfSrc: '../../images/half.png',
 
     //工单详情
-    repair_id: null,
+    repair_id: '',
     asset_name: '',
     field_path: '',
     remarks: '',
@@ -23,14 +23,15 @@ Page({
     repair_status: '',    //工单状态
     service_status: '',  //维修状态
     service_worker: '',
-    result: null,
+    result: '',
+    result_status: '',
     service_img_url: [],
-    create_time: null,
-    finish_time: null,
+    create_time: '',
+    finish_time: '',
     user_name: '',
     user_phone: '',
-    method: null,
-    // appointment: null
+    method: '',
+    // appointment: ''
   },
   imgShow: function (e) {
     var that = this;
@@ -126,6 +127,7 @@ Page({
             user_name: res.data.user_name,
             user_phone: res.data.user_phone,
             method: res.data.method,
+            result_status: res.data.result_status
             // appointment: res.data.appointment
           });
         }
@@ -152,7 +154,7 @@ Page({
             confirmText: '点击重试',
             success: function (res) {
               if (res.confirm) {
-                wx.redirectTo({
+                wx.navigateTowx({
                   url: '/pages/index/service/service',
                 })
               }

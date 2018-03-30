@@ -1,36 +1,35 @@
 <form bindsubmit="formSubmit" bindreset="formReset">
-
   <view class="section">
-    <input type="text" value="{{area}}" disabled='true' placeholder="所在场地" />
-  </view>
-
-  <view class="section">
+  <view class="section_title">资产名称：</view>
     <input type="text" name="name" value="{{asset_name}}" disabled='true' placeholder="物品名称" />
-
     <view catchtap='click_info' class='scanBtn'>
       <image style='width:70rpx;height:70rpx;' src="{{infoIcon}}"></image>
     </view>
-    <!-- <view catchtap='click_scan' class='scanBtn'>
-      <image style='width:70rpx;height:70rpx;' src='/images/s.png'></image>
-    </view>    -->
   </view>
-
   <view wx:if="{{infoShow}}" >
-  <view class="section">
-    <input type="text" name="spec" value="{{spec}}" disabled='true' placeholder="规格型号" />
-  </view>
+    <view class="section">
+      <view class="section_title">所在场地：</view>
+      <input type="text" value="{{area}}" disabled='true' placeholder="所在场地" />
+    </view>
+    <view class="section">
+      <view class="section_title">规格型号：</view>
+      <input type="text" name="spec" value="{{spec}}" disabled='true' placeholder="规格型号" />
+    </view>
 
-  <view class="section">
-    <input type="text"  name="category" value="{{category}}" disabled='true' placeholder="所属分类" />
-  </view>
+    <view class="section">
+      <view class="section_title">所属分类：</view>
+      <input type="text"  name="category" value="{{category}}" disabled='true' placeholder="所属分类" />
+    </view>
 
-  <view class="section">
-    <input type="text" name="org" value="{{org}}" disabled='true' placeholder="所属单位" />
-  </view>
+    <view class="section">
+      <view class="section_title">所属单位：</view>
+      <input type="text" name="org" value="{{org}}" disabled='true' placeholder="所属单位" />
+    </view>
 
-  <view class="section">
-    <input type="text" name="department" value="{{department}}" disabled='true' placeholder="所属部门" />
-  </view>
+    <view class="section">
+      <view class="section_title">所属部门：</view>
+      <input type="text" name="department" value="{{department}}" disabled='true' placeholder="所属部门" />
+    </view>
 
   </view>
 
@@ -41,7 +40,7 @@
     <input type="text" name="user_phone"  placeholder="联系方式(选填)" />
   </view>
   <view class='section' style='border-bottom:none;'>
-    <block wx:for="{{imgs}}">
+    <block wx:for="{{imgs}}" wx:key="property">
       <image src="{{item}}" class='uploader_imgs' bindtap='imgShow' data-src="{{item}}" data-img-id="{{img_ids[index]}}" bindlongtap="longTap" bindtouchstart="touchStart" bindtouchend="touchEnd" data-index="{{index}}"></image>
     </block>
     <view class='uploaderBtn' bindtap='selectImg'>

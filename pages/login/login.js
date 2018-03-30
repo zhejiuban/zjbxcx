@@ -46,11 +46,11 @@ Page({
             success: function (res) {
               if (res.confirm) {
                 if(app.globalData.uuid){
-                  wx.redirectTo({
+                  wx.navigateTo({
                     url: '/pages/manual/manual'
                   })
                 }else{
-                  wx.redirectTo({
+                  wx.navigateTo({
                     url: '/pages/index/service/service'
                   })
                 }

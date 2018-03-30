@@ -7,7 +7,7 @@
         <view class='item-none'  wx:if="{{itemsLength=='0'}}" >
           ---- 暂无数据 ----
         </view>
-        <block wx:for="{{items}}">
+        <block wx:for="{{items}}" wx:key="property">
           <view class="item-ans" bindtap='clickAllDetail' data-id="{{item['3']}}">
             <view class="avatar">
               <image class="img" wx:if="{{item['0']['0']['0'].length>0}}" src="{{item['0']['0']['0']}}" catchtap='prev_img' data-url="{{item['0']}}"></image> 

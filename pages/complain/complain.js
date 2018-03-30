@@ -57,7 +57,7 @@ Page({
             showCancel: false,
             success: function (res) {
               if (res.confirm) {
-                wx.redirectTo({
+                wx.navigateTo({
                   url: '/pages/index/over/over'
                 })
               }

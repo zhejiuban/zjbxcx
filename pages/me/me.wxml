@@ -3,7 +3,7 @@
   <text class='top_name'>{{nickName}}</text>
 </view>
 <view class='content'>
-  <view class='list_item'>
+  <!-- <view class='list_item'>
     <image class='item_icon' src='/images/info.png'></image>
     <view class='item_title'>个人信息</view>
     <image class='item_more' src='/images/more.png'></image>
@@ -17,7 +17,7 @@
     <image class='item_icon' src='/images/jifen.png'></image>
     <view class='item_title'>场地报修</view>
     <image class='item_more' src='/images/more.png'></image>
-  </view>
+  </view> -->
 
   
 

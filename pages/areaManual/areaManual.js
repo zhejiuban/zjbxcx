@@ -13,18 +13,19 @@ Page({
     classify:[],
     index: 0,
     uploaderImg: "/images/upload.png",
-    classify_id: null,
-    org_id: null,
+    classify_id: '',
+    org_id: '',
     isSubmit: true,       // 是否可以点击提交
     //长按事件
     touchStartTime: 0,    // 触摸开始时间
     touchEndTime: 0,      // 触摸结束时间
 
     //场地
-    area_id: null,
+    area_id: '',
     area_name: '',
+    room_name:'',
 
-    org_name: null
+    org_name: ''
   },
 
   /**
@@ -102,7 +103,7 @@ Page({
             showCancel: false,
             success: function (res) {
               if (res.confirm) {
-                wx.redirectTo({
+                wx.navigateTo({
                   url: '/pages/index/service/service',
                 });
               }
@@ -131,14 +132,15 @@ Page({
           area_id: res.data.area_id,
           area_name: res.data.area_name,
           org_id: res.data.org_id,
-          org_name: res.data.org_name
+          org_name: res.data.org_name,
+          room_name: res.data.room_name
         });
         that.get_classify(that.data.org_id);
       }
     })
   },
 
-  //获取该单位下的所有报修项目
+  //获取所有报修项目
   get_classify: function (orgId) {
     let that = this;
     wx.request({
@@ -160,7 +162,6 @@ Page({
           arr[i] = {
             id: data[i].id,
             name: data[i].name,
-            org_id: data[i].org_id
           };
         }
         that.setData({
@@ -171,14 +172,12 @@ Page({
     })
   },
 
-  //选择资产
+  //选择报修项目
   bindClassifyChange: function (e) {
     let that = this;
     let classify_id = that.data.classify[e.detail.value].id;
-    let org_id = that.data.classify[e.detail.value].org_id;
     that.setData({
       classify_id: classify_id,
-      org_id: org_id,
       index: e.detail.value
     })
   },
@@ -350,11 +349,11 @@ Page({
             app.globalData.area_uuid = null;
             wx.showModal({
               title: '提示',
-              content: '维修人员正在赶来的路上，请耐心等待',
+              content: '报修成功,等待维修',
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.navigateTo({
                     url: '/pages/index/service/service'
                   })
                 }

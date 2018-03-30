@@ -14,7 +14,7 @@
   </view>
   <view class='list'>
     <text class='list_label'>图片拍摄：</text>
-    <view wx:for="{{img_url}}">
+    <view wx:for="{{img_url}}" wx:key="property">
       <image src='{{item}}' bindtap='imgShow' data-url='{{item}}' mode='aspectFill'></image>
     </view>
   </view>

@@ -1,10 +1,8 @@
 <block wx:if="{{logs.length>0}}" >
   <view class='title' >维修工单日志记录</view>
   <view class='view-list' >
-    <block wx:for="{{logs}}" >
+    <block wx:for="{{logs}}" wx:key="property">
       <view class='view-item' >
-        <!--小圆点  -->
-        <!-- <view class='view-item-dot' ></view>  -->
         <view class='view-item-dot' >
           <block wx:if="{{item.op_state==1}}">
             <image src='/images/infos.png' ></image>
@@ -24,7 +22,6 @@
           <block wx:elif="{{item.op_state==6}}">
             <image src='/images/result.png' ></image>
           </block>
-          
         </view> 
         <!--文本区域  -->
         <view class='view-item-info' >

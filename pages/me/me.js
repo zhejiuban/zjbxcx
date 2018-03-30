@@ -23,7 +23,7 @@ Page({
   },
 
   toArea: function (){
-    wx.redirectTo({
+    wx.navigateTo({
       url: '/pages/areaManual/areaManual',
     })
   },

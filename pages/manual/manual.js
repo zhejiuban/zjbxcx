@@ -9,8 +9,8 @@ Page({
     img_ids: [],          //上传图片的id
     img_count: 3,         //目前可以上传图片的数量
      
-    asset_uuid: null,
-    asset_id: null,
+    asset_uuid: '',
+    asset_id: '',
     asset_name:'',
     
     spec: '',
@@ -98,7 +98,7 @@ Page({
             showCancel: false,
             success: function (res) {
               if (res.confirm) {
-                wx.redirectTo({
+                wx.navigateTo({
                   url: '/pages/index/service/service',
                 });
               }
@@ -130,6 +130,7 @@ Page({
             showCancel: false
           })
         } else {
+          console.log(res.data);
           that.setData({
             asset_name: res.data.name,
             asset_id: res.data.id,
@@ -339,12 +340,12 @@ Page({
             app.globalData.uuid = null;
             wx.showModal({
               title: '提示',
-              content: '维修工单报修成功，等待维修',
+              content: '报修成功，等待维修',
               showCancel: false,
               success: function (res) {
                 app.globalData.uuid = null;
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.navigateTo({
                     url: '/pages/index/service/service'
                   });
                 }

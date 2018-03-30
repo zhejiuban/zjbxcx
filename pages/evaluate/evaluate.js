@@ -75,8 +75,8 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
-                    url: '/pages/index/all/all'
+                  wx.navigateTo({
+                    url: '/pages/index/over/over'
                   })
                 }
               }

@@ -1,8 +1,7 @@
 <!--pages/phone/phone.wxml-->
 <view class='btn_view' >
   <image class='logo' src='/images/logo.png' ></image>
-  <text class='title' >这就办维修平台</text>
-  <text class='explain' >如果要正常使用该小程序，则需要授权微信绑定的手机号,点击“取消”，关闭小程序，点击“授权手机号”进行授权</text>
+  <text class='explain' >如果要正常使用该小程序，则需要授权微信绑定的手机号,点击“取消”，关闭小程序，点击“确认”进行授权</text>
   <view class='btn_gorup' >
     <button class='close_btn' catchtap='close_order' >取消</button>
     <button class='btn' open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">确定</button>

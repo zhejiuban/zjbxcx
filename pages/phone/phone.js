@@ -59,15 +59,15 @@ Page({
                     app.globalData.authorization = 1;
                     app.globalData.validate = true;
                     if (app.globalData.uuid){
-                      wx.redirectTo({
+                      wx.navigateTo({
                         url: "/pages/manual/manual"
                       });
                     } else if (app.globalData.area_uuid){
-                      wx.redirectTo({
+                      wx.navigateTo({
                         url: "/pages/areaManual/areaManual"
                       });
                     }else{
-                      wx.redirectTo({
+                      wx.navigateTo({
                         url: "/pages/index/service/service"
                       })
                     }

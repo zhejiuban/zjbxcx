@@ -6,7 +6,6 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs);
-    console.log("onLaunch");
   },
 
   onShow: function (e) {
@@ -39,7 +38,6 @@ App({
         // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
         var networkType = res.networkType;
         if (networkType == 'none') {
-          console.log("暂无网络");
           wx.showModal({
             title: '提示',
             content: '网络失败，请重试',
@@ -47,8 +45,7 @@ App({
             confirmText: '点击重试',
             success: function (res) {
               if (res.confirm) {
-                console.log('点击重试');
-                wx.redirectTo({
+                wx.navigateTo({
                   url: '/pages/index/service/service',
                 })
               } else if (res.cancel) {
@@ -79,8 +76,6 @@ App({
             });
             wx.getUserInfo({
               success: res => {
-                console.log(res.userInfo);
-                
                 let iv = res.iv;
                 let encryptedData = res.encryptedData;
                 //发起网络请求
@@ -97,7 +92,6 @@ App({
                     encryptedData: encryptedData
                   },
                   success: function (res) {
-                    console.log(res);
                     res.data = that.getResData(res);
                     that.globalData.userInfo = res.data;
                     that.globalData.openId = res.data.openId;
@@ -116,21 +110,20 @@ App({
                       },
                       success: function (res) {
                         res.data = that.getResData(res);
-                        console.log(res);
                         if(res.data.code==1){
                           //验证过了
                           that.globalData.authorization=1;
                           that.globalData.validate = true;
                           if (that.globalData.uuid) {
-                            wx.redirectTo({
+                            wx.navigateTo({
                               url: '/pages/manual/manual',
                             });
                           }else if(that.globalData.area_uuid){
-                            wx.redirectTo({
+                            wx.navigateTo({
                               url: '/pages/areaManual/areaManual',
                             });
                           }else{
-                            wx.redirectTo({
+                            wx.navigateTo({
                               url: "/pages/index/service/service"
                             });
                           }
@@ -141,7 +134,7 @@ App({
                            * 有资产id存在的话，去后台判断是否需要LDAP
                            * 如果没有资产存在的，直接授权手机号验证
                            * */
-                          wx.redirectTo({
+                          wx.navigateTo({
                             url: "/pages/phone/phone"
                           });
                         }
@@ -163,7 +156,7 @@ App({
                   that.globalData.firstLogin = 2;
                 }
                 if (that.globalData.firstLogin==1){
-                  wx.redirectTo({
+                  wx.navigateTo({
                     url: '/pages/home/home?type=1',
                   });
                 }else{
@@ -184,7 +177,7 @@ App({
                             that.getUserInfo();
                           } else {
                             // 拒绝授权用户信息，回到home页面进行授权
-                            wx.redirectTo({
+                            wx.navigateTo({
                               url: '/pages/home/home',
                             })
                           }
@@ -194,7 +187,7 @@ App({
                       that.globalData.showLoad = false;
                       that.globalData.btnShow = true;
                       //拒绝授权用户信息，回到home页面进行授权
-                      wx.redirectTo({
+                      wx.navigateTo({
                         url: '/pages/home/home?type=1',
                       })
                     }
@@ -265,7 +258,7 @@ App({
     role: 1
   },
   swichNav: function (url) {
-    wx.redirectTo({
+    wx.navigateTo({
       url: url,
     })
   },
@@ -289,7 +282,7 @@ App({
 
           let area_uuid = that.getUrlParam(url, "uuid");
           that.globalData.area_uuid = area_uuid;
-          wx.redirectTo({
+          wx.navigateTo({
             url: '/pages/areaManual/areaManual',
           });
         }
