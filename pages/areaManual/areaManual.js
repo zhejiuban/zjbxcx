@@ -38,13 +38,6 @@ Page({
     }
   },
 
-  onHide: function () {
-    if (app.globalData.area_uuid){
-      //清除场地uuid
-      app.globalData.area_uuid = null;
-    }
-  },
-
   click_scan: function () {
     // 允许从相机和相册扫码
     let that = this;
@@ -60,58 +53,63 @@ Page({
 
   getAreaInfo: function (area_uuid) {
     let that = this;
-    wx.request({
-      url: 'https://wx.zhejiuban.com/wx/need_validation',
-      method: "POST",
-      data: {
-        role: app.globalData.role,
-        area_uuid: area_uuid,
-        openId: app.globalData.openId
-      },
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
-        wx.hideLoading();
-        res.data = app.getResData(res);
-        if (res.data.code == 1) {
-          //验证通过，可以正常报修
-          that.getArea(area_uuid);
-        } else if (res.data.code == 403) {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false
-          });
-        } else if (res.data.code == 404) {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.navigateBack({
-                  url: "/pages/service/service"
-                });
-              }
-            }
-          })
-        } else {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.navigateTo({
-                  url: '/pages/index/service/service',
-                });
-              }
-            }
-          })
-        }
-      }
-    });
+    that.getArea(area_uuid);
+    // wx.request({
+    //   url: 'https://wx.zhejiuban.com/wx/need_validation',
+    //   method: "POST",
+    //   data: {
+    //     role: app.globalData.role,
+    //     area_uuid: area_uuid,
+    //     openId: app.globalData.openId
+    //   },
+    //   header: {
+    //     'content-type': 'application/json'
+    //   },
+    //   success: function (res) {
+    //     wx.hideLoading();
+    //     res.data = app.getResData(res);
+    //     if (res.data.code == 1) {
+    //       //验证通过，可以正常报修
+    //       that.getArea(area_uuid);
+    //     } else if (res.data.code == 403) {
+    //       wx.showModal({
+    //         title: '提示',
+    //         content: res.data.message,
+    //         showCancel: false
+    //       });
+    //     } else if (res.data.code == 404) {
+    //       wx.showModal({
+    //         title: '提示',
+    //         content: res.data.message,
+    //         showCancel: false,
+    //         success: function (res) {
+    //           if (res.confirm) {
+    //             wx.redirectTo({
+    //               url: "/pages/index/service/service"
+    //             });
+    //           }
+    //         }
+    //       })
+    //     } else if (res.data.code == 'system') {
+    //       wx.redirectTo({
+    //         url: "/pages/system/system"
+    //       });
+    //     } else {
+    //       wx.showModal({
+    //         title: '提示',
+    //         content: res.data.message,
+    //         showCancel: false,
+    //         success: function (res) {
+    //           if (res.confirm) {
+    //             wx.redirectTo({
+    //               url: '/pages/index/service/service',
+    //             });
+    //           }
+    //         }
+    //       })
+    //     }
+    //   }
+    // });
   },
 
   getArea:function(area_uuid) {
@@ -128,6 +126,8 @@ Page({
         openId: app.globalData.openId
       },
       success: function (res) {
+        console.log(res.data);
+        console.log("classify");
         that.setData({
           area_id: res.data.area_id,
           area_name: res.data.area_name,
@@ -353,7 +353,7 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.navigateTo({
+                  wx.redirectTo({
                     url: '/pages/index/service/service'
                   })
                 }
@@ -366,8 +366,8 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.navigateBack({
-                    url: "/pages/home/home"
+                  wx.redirectTo({
+                    url: "/pages/index/service/service"
                   })
                 }
               }

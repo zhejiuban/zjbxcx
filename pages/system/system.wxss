@@ -1,0 +1,20 @@
+/* pages/system/system.wxss */
+
+page{
+  background-color: #efefef;
+}
+text{
+  display: block;
+  text-align: center;
+  padding: 20rpx;
+}
+
+.phone{
+  width: 80%;
+  background-color: #fff;
+  padding: 10rpx;
+  color: #666;
+  margin: 50rpx 10%;
+}
+
+

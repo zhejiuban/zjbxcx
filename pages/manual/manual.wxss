@@ -1,3 +1,4 @@
+
 .page {
   position: relative;
 }
@@ -33,7 +34,7 @@
 .scanBtn{
   position: absolute;
   right: 20rpx; 
-  /* top:20rpx; */
+  width: 10%;
 }
 
 .reset{
@@ -66,7 +67,7 @@
 }
 
 .section input {
-  width: 600rpx;
+  width: 65%;
   padding: 10rpx;
 }
 .section .mult {

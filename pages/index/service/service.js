@@ -246,7 +246,8 @@ Page({
           }
           that.setData({
             items: arr,
-            page: 1
+            page: 1,
+            itemsLength: '1'
           })
         }
       }

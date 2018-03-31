@@ -29,35 +29,6 @@ App({
       }
     }
   },
-
-  network_state: function () {
-    let that = this;
-    wx.getNetworkType({
-      success: function (res) {
-        // 返回网络类型, 有效值：
-        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-        var networkType = res.networkType;
-        if (networkType == 'none') {
-          wx.showModal({
-            title: '提示',
-            content: '网络失败，请重试',
-            showCancel: false,
-            confirmText: '点击重试',
-            success: function (res) {
-              if (res.confirm) {
-                wx.navigateTo({
-                  url: '/pages/index/service/service',
-                })
-              } else if (res.cancel) {
-                console.log('关闭程序')
-              }
-            }
-          })
-        }
-      }
-    })
-  },
-
   /**
    * 用户授权  用户信息(昵称等信息)
    */
@@ -110,9 +81,11 @@ App({
                       },
                       success: function (res) {
                         res.data = that.getResData(res);
+                        console.log(res.data);
                         if(res.data.code==1){
                           //验证过了
                           that.globalData.authorization=1;
+                          that.globalData.user_id = res.data.user_id;
                           that.globalData.validate = true;
                           if (that.globalData.uuid) {
                             wx.navigateTo({
@@ -123,7 +96,7 @@ App({
                               url: '/pages/areaManual/areaManual',
                             });
                           }else{
-                            wx.navigateTo({
+                            wx.redirectTo({
                               url: "/pages/index/service/service"
                             });
                           }
@@ -134,9 +107,94 @@ App({
                            * 有资产id存在的话，去后台判断是否需要LDAP
                            * 如果没有资产存在的，直接授权手机号验证
                            * */
-                          wx.navigateTo({
-                            url: "/pages/phone/phone"
+                           console.log("暂未注册");
+                          wx.request({
+                            url: 'https://wx.zhejiuban.com/wx/add_user',
+                            method: "POST",
+                            header: {
+                              'content-type': 'application/json' // 默认值
+                            },
+                            data: {
+                              role: 1,    //用户角色
+                              openId: that.globalData.openId,
+                              unionid: that.globalData.unionid,
+                              name: that.globalData.userInfo.username
+                            },
+                            success: function (res) {
+                              res.data = that.getResData(res);
+                              console.log(res.data);
+                              console.log("add_user");
+                              if (res.data.code == 1) {
+                                that.globalData.user_id = res.data.user_id;
+                                //用户添加成功
+                                //判断此单位是如何验证用户的
+                                if (that.globalData.uuid || that.globalData.area_uuid) {
+                                  wx.request({
+                                    url: 'https://wx.zhejiuban.com/wx/user_auth',
+                                    method: "POST",
+                                    header: {
+                                      'content-type': 'application/json' // 默认值
+                                    },
+                                    data: {
+                                      role: 1,    //用户角色
+                                      user_id: that.globalData.user_id,
+                                      asset_uuid: that.globalData.uuid,
+                                      area_uuid: that.globalData.area_uuid
+                                    },
+                                    success: function (res) {
+                                      res.data = that.getResData(res);
+                                      if(res.data.code==1){
+                                        if (that.globalData.uuid) {
+                                          wx.redirectTo({
+                                            url: '/pages/manual/manual',
+                                          })
+                                        }else{
+                                          wx.redirectTo({
+                                            url: '/pages/areaManual/areaManual',
+                                          })
+                                        }
+                                      }else if(res.data.code==0){
+                                        wx.showModal({
+                                          title: '提示',
+                                          content: '二维码url错误',
+                                          showCancel: false,
+                                          success: function (res) {
+                                            if (res.confirm) {
+                                              wx.redirectTo({
+                                                url: '/pages/index/service/service',
+                                              })
+                                            } 
+                                          }
+                                        })
+                                      }else if (res.data.code == 'LDAP') {
+                                        wx.showModal({
+                                          title: '提示',
+                                          content: '需要LDAP验证',
+                                          showCancel: false,
+                                          success: function (res) {
+                                            if (res.confirm) {
+                                              wx.navigateTo({
+                                                url: '/pages/index/service/service',
+                                              })
+                                            }
+                                          }
+                                        })
+                                      } else if (res.data.code == 'system') {
+                                        wx.navigateTo({
+                                          url: '/pages/system/system',
+                                        })
+                                      }
+                                    }
+                                  })
+                                } else {
+                                  wx.navigateTo({
+                                    url: '/pages/index/service/service',
+                                  })
+                                }
+                              }
+                            }
                           });
+                          
                         }
                       }
                     })
@@ -244,6 +302,7 @@ App({
     userInfo: null,
     openId: null,
     unionid: null,
+    user_id: null,
     //二维码资产参数key
     asset_uuid: 'id',
     btnShow: false,
@@ -274,18 +333,79 @@ App({
       success: (res) => {
         let url = res.result;
         let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
+        let area_uuid = null;
         if (asset_uuid){
-          wx.navigateTo({
-            url: '/pages/manual/manual?asset_uuid=' + asset_uuid,
-          })
+          that.globalData.uuid = asset_uuid;
         }else{
-
-          let area_uuid = that.getUrlParam(url, "uuid");
+          area_uuid = that.getUrlParam(url, "uuid");
           that.globalData.area_uuid = area_uuid;
-          wx.navigateTo({
-            url: '/pages/areaManual/areaManual',
-          });
         }
+
+        wx.request({
+          url: 'https://wx.zhejiuban.com/wx/need_validation',
+          method: "POST",
+          data: {
+            role: that.globalData.role,
+            area_uuid: that.globalData.area_uuid,
+            asset_uuid: that.globalData.uuid,
+            openId: that.globalData.openId
+          },
+          header: {
+            'content-type': 'application/json'
+          },
+          success: function (res) {
+            wx.hideLoading();
+            res.data = that.getResData(res);
+            if (res.data.code == 1) {
+              //验证通过，可以正常报修
+              if (that.globalData.area_uuid){
+                wx.navigateTo({
+                  url: '/pages/areaManual/areaManual',
+                })
+              }else{
+                wx.navigateTo({
+                  url: '/pages/manual/manual',
+                })
+              }
+            } else if (res.data.code == 403) {
+              wx.showModal({
+                title: '提示',
+                content: res.data.message,
+                showCancel: false
+              });
+            } else if (res.data.code == 404) {
+              wx.showModal({
+                title: '提示',
+                content: res.data.message,
+                showCancel: false,
+                success: function (res) {
+                  if (res.confirm) {
+                    wx.redirectTo({
+                      url: "/pages/index/service/service"
+                    });
+                  }
+                }
+              })
+            } else if (res.data.code == 'system') {
+              wx.navigateTo({
+                url: "/pages/system/system"
+              });
+            } else {
+              wx.showModal({
+                title: '提示',
+                content: res.data.message,
+                showCancel: false,
+                success: function (res) {
+                  if (res.confirm) {
+                    wx.redirectTo({
+                      url: '/pages/index/service/service',
+                    });
+                  }
+                }
+              })
+            }
+          }
+        });
       }
     })
   },

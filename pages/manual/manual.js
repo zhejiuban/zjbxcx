@@ -57,56 +57,20 @@ Page({
       });
       let asset_uuid = options.asset_uuid;
       that.getAssetInfo(asset_uuid);
+      app.globalData.uuid = asset_uuid;
       that.setData({
-        asset_uuid: asset_uuid
+        uuid: asset_uuid
       });
-      // wx.hideLoading();
+      wx.hideLoading();
     } 
   },
   
 
   //获取资产信息
   getAssetInfo: function(asset_uuid){
+    console.log(app.globalData.uuid);
     let that = this;
-    wx.request({
-      url: 'https://wx.zhejiuban.com/wx/need_validation',
-      method: "POST",
-      data: {
-        role: app.globalData.role,
-        asset_uuid: asset_uuid,
-        openId: app.globalData.openId
-      },
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
-        wx.hideLoading();
-        res.data = app.getResData(res);
-        if (res.data.code == 1) {
-          //验证通过，可以正常报修
-          that.getAsset(asset_uuid);
-        } else if (res.data.code == 403) {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false
-          })
-        } else {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.navigateTo({
-                  url: '/pages/index/service/service',
-                });
-              }
-            }
-          })
-        }
-      }
-    });
+    that.getAsset(asset_uuid);
   },
 
   getAsset: function (asset_uuid) {
@@ -136,9 +100,9 @@ Page({
             asset_id: res.data.id,
             asset_uuid: res.data.asset_uid,
             area: res.data.area ? res.data.area_path : '暂无',
-            category: res.data.category.name ? res.data.category.name : '暂无',
-            department: res.data.department.name ? res.data.department.name : '暂无',
-            org: res.data.org.name ? res.data.org.name : '暂无',
+            category: res.data.category ? res.data.category.name : '暂无',
+            department: res.data.department ? res.data.department.name : '暂无',
+            org: res.data.org ? res.data.org.name : '暂无',
             org_id: res.data.org_id,
             spec: res.data.spec ? res.data.spec : '暂无',
             area_id: res.data.area_id,
@@ -345,7 +309,7 @@ Page({
               success: function (res) {
                 app.globalData.uuid = null;
                 if (res.confirm) {
-                  wx.navigateTo({
+                  wx.redirectTo({
                     url: '/pages/index/service/service'
                   });
                 }
@@ -358,7 +322,7 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.navigateBack({
+                  wx.redirectTo({
                     url: "/pages/home/home"
                   });
                 }
@@ -371,8 +335,8 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.navigateBack({
-                    url: "/pages/service/service"
+                  wx.redirectTo({
+                    url: "/pages/index/service/service"
                   });
                 }
               }

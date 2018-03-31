@@ -6,6 +6,7 @@
       <image style='width:70rpx;height:70rpx;' src="{{infoIcon}}"></image>
     </view>
   </view>
+
   <view wx:if="{{infoShow}}" >
     <view class="section">
       <view class="section_title">所在场地：</view>
