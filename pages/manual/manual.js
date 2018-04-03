@@ -28,11 +28,13 @@ Page({
     touchEndTime: 0,      // 触摸结束时间
 
     infoShow: false,
-    infoIcon: '/images/arrow-down.png'
+    // infoIcon: '/images/arrow-down.png'
+    infoIcon: '/images/nav.png'
     
   },
 
   onLoad: function (options) {
+    app.network_state();
     let that = this;
     //微信扫描二维码链接携带的参数
     
@@ -119,12 +121,12 @@ Page({
     if(that.data.infoShow==false){
       this.setData({
         infoShow: true,
-        infoIcon: '/images/arrow-up.png'
+        // infoIcon: '/images/arrow-up.png'
       });
     }else{
       this.setData({
         infoShow: false,
-        infoIcon: '/images/arrow-down.png'
+        // infoIcon: '/images/arrow-down.png'
       });
     }
     

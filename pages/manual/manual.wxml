@@ -1,7 +1,7 @@
 <form bindsubmit="formSubmit" bindreset="formReset">
   <view class="section">
-  <view class="section_title">资产名称：</view>
-    <input type="text" name="name" value="{{asset_name}}" disabled='true' placeholder="物品名称" />
+    <view class="section_title">资产名称：</view>
+    <input type="text" name="name" style='width:65%;' value="{{asset_name}}" disabled='true' placeholder="物品名称" />
     <view catchtap='click_info' class='scanBtn'>
       <image style='width:70rpx;height:70rpx;' src="{{infoIcon}}"></image>
     </view>

@@ -279,6 +279,7 @@ Page({
   },
 
   onLoad: function () {
+    app.network_state();
     var that = this;
     //  高度自适应
     wx.getSystemInfo({

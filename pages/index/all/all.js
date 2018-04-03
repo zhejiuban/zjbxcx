@@ -215,6 +215,7 @@ Page({
   },
 
   onLoad: function () {
+    app.network_state();
     wx.showLoading({
       mask: true,
       title: '加载中',

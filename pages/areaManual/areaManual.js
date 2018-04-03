@@ -32,6 +32,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    app.network_state();
     let that = this;
     if (app.globalData.area_uuid){
       that.getAreaInfo(app.globalData.area_uuid);
@@ -54,62 +55,6 @@ Page({
   getAreaInfo: function (area_uuid) {
     let that = this;
     that.getArea(area_uuid);
-    // wx.request({
-    //   url: 'https://wx.zhejiuban.com/wx/need_validation',
-    //   method: "POST",
-    //   data: {
-    //     role: app.globalData.role,
-    //     area_uuid: area_uuid,
-    //     openId: app.globalData.openId
-    //   },
-    //   header: {
-    //     'content-type': 'application/json'
-    //   },
-    //   success: function (res) {
-    //     wx.hideLoading();
-    //     res.data = app.getResData(res);
-    //     if (res.data.code == 1) {
-    //       //验证通过，可以正常报修
-    //       that.getArea(area_uuid);
-    //     } else if (res.data.code == 403) {
-    //       wx.showModal({
-    //         title: '提示',
-    //         content: res.data.message,
-    //         showCancel: false
-    //       });
-    //     } else if (res.data.code == 404) {
-    //       wx.showModal({
-    //         title: '提示',
-    //         content: res.data.message,
-    //         showCancel: false,
-    //         success: function (res) {
-    //           if (res.confirm) {
-    //             wx.redirectTo({
-    //               url: "/pages/index/service/service"
-    //             });
-    //           }
-    //         }
-    //       })
-    //     } else if (res.data.code == 'system') {
-    //       wx.redirectTo({
-    //         url: "/pages/system/system"
-    //       });
-    //     } else {
-    //       wx.showModal({
-    //         title: '提示',
-    //         content: res.data.message,
-    //         showCancel: false,
-    //         success: function (res) {
-    //           if (res.confirm) {
-    //             wx.redirectTo({
-    //               url: '/pages/index/service/service',
-    //             });
-    //           }
-    //         }
-    //       })
-    //     }
-    //   }
-    // });
   },
 
   getArea:function(area_uuid) {

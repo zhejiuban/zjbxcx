@@ -10,6 +10,10 @@
     <text class='list_label'>创建时间：</text>
     <text class='list_value'>{{create_time}}</text>
   </view>
+  <view wx:if="{{equipment_id}}" class='list'>
+    <text class='list_label'>设备组名称：</text>
+    <text class='list_value'>{{equipment_name}}</text>
+  </view>
   <view class='list'>
     <text class='list_label'>报修资产：</text>
     <text class='list_value'>{{asset_name}}</text>

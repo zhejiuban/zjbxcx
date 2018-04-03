@@ -15,7 +15,7 @@
             </view>
             <view class="expertInfo">
               <view class="name">报修项目：{{item['1']}}</view>
-              <view class="tag">保修场地：{{item['2']}}</view>
+              <view class="tag">报修场地：{{item['2']}}</view>
             </view>
           </view>
         </block>

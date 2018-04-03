@@ -14,6 +14,8 @@ Page({
     //工单详情
     repair_id: '',
     asset_name: '',
+    equipment_id: '',
+    equipment_name: '',
     field_path: '',
     remarks: '',
     img_url: [],
@@ -110,6 +112,8 @@ Page({
           })
         }else{
           that.setData({
+            equipment_id: res.data.equipment_id ? res.data.equipment_id : '',
+            equipment_name: res.data.equipment_name ? res.data.equipment_name : '',
             asset_name: res.data.asset_name,
             field_path: res.data.field_path,
             remarks: res.data.remarks,
@@ -154,7 +158,7 @@ Page({
             confirmText: '点击重试',
             success: function (res) {
               if (res.confirm) {
-                wx.navigateTowx({
+                wx.redirectTo({
                   url: '/pages/index/service/service',
                 })
               }

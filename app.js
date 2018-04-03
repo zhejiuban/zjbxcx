@@ -18,7 +18,12 @@ App({
         that.globalData.uuid = asset_uuid;
       }else{
         let area_uuid = that.getUrlParam(url, "uuid");
-        that.globalData.area_uuid = area_uuid;
+        if (area_uuid){
+          that.globalData.area_uuid = area_uuid;
+        }else{
+          let group_uuid = that.getUrlParam(url, "group_uuid");
+          that.globalData.group_uuid = group_uuid;
+        }
       }
       if (!that.globalData.validate) {
         that.getUserInfo();
@@ -95,9 +100,14 @@ App({
                             wx.navigateTo({
                               url: '/pages/areaManual/areaManual',
                             });
-                          }else{
+                          } else if (that.globalData.group_uuid) {
+                            wx.navigateTo({
+                              url: '/pages/groupManual/groupManual',
+                            });
+                          } else {
                             wx.redirectTo({
                               url: "/pages/index/service/service"
+                              // url: '/pages/groupManual/groupManual',
                             });
                           }
                         }else{
@@ -118,7 +128,8 @@ App({
                               role: 1,    //用户角色
                               openId: that.globalData.openId,
                               unionid: that.globalData.unionid,
-                              name: that.globalData.userInfo.username
+                              name: that.globalData.userInfo.username,
+                              avatar: that.globalData.userInfo.avatarUrl
                             },
                             success: function (res) {
                               res.data = that.getResData(res);
@@ -148,9 +159,13 @@ App({
                                           wx.redirectTo({
                                             url: '/pages/manual/manual',
                                           })
-                                        }else{
+                                        } else if (that.globalData.area_uuid){
                                           wx.redirectTo({
                                             url: '/pages/areaManual/areaManual',
+                                          })
+                                        } else if (that.globalData.group_uuid){
+                                          wx.redirectTo({
+                                            url: '/pages/groupManual/groupManual',
                                           })
                                         }
                                       }else if(res.data.code==0){
@@ -310,6 +325,7 @@ App({
     firstLogin: 1,
     uuid: null,
     area_uuid:null,
+    group_uuid: null,
     //是否已经授权手机号
     authorization:null,
     validate: false,
@@ -334,11 +350,18 @@ App({
         let url = res.result;
         let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
         let area_uuid = null;
+        let group_uuid = null;
         if (asset_uuid){
           that.globalData.uuid = asset_uuid;
         }else{
           area_uuid = that.getUrlParam(url, "uuid");
-          that.globalData.area_uuid = area_uuid;
+          if (area_uuid){
+            that.globalData.area_uuid = area_uuid;
+          }else{
+            group_uuid = that.getUrlParam(url, "group_uuid");
+            that.globalData.group_uuid = group_uuid;
+          }
+          
         }
 
         wx.request({
@@ -348,6 +371,7 @@ App({
             role: that.globalData.role,
             area_uuid: that.globalData.area_uuid,
             asset_uuid: that.globalData.uuid,
+            group_uuid: that.globalData.group_uuid,
             openId: that.globalData.openId
           },
           header: {
@@ -361,6 +385,10 @@ App({
               if (that.globalData.area_uuid){
                 wx.navigateTo({
                   url: '/pages/areaManual/areaManual',
+                })
+              } else if (that.globalData.group_uuid) {
+                wx.navigateTo({
+                  url: '/pages/groupManual/groupManual',
                 })
               }else{
                 wx.navigateTo({
@@ -443,6 +471,32 @@ App({
       res.data = jj;
     }
     return res.data
+  },
+
+  network_state: function () {
+    let that = this;
+    wx.getNetworkType({
+      success: function (res) {
+        // 返回网络类型, 有效值：
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        var networkType = res.networkType;
+        if (networkType == 'none') {
+          wx.showModal({
+            title: '提示',
+            content: '网络失败，请重试',
+            showCancel: false,
+            confirmText: '点击重试',
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                })
+              }
+            }
+          })
+        }
+      }
+    })
   },
 
   //  我的
