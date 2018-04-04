@@ -43,7 +43,7 @@ Page({
             success: res => {
               //发起网络请求
               wx.request({
-                url: 'https://wx.zhejiuban.com/login/find_phone', //仅为示例，并非真实的接口地址
+                url: app.globalData.url + 'login/find_phone', //仅为示例，并非真实的接口地址
                 method: "POST",
                 data: {
                   role: app.globalData.role,
@@ -85,7 +85,7 @@ Page({
       }
     });
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
+      url: app.globalData.url + 'wx/repair/repair_list',
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -102,18 +102,8 @@ Page({
             itemsLength: '0'
           })
         } else if (res.data.code == 403) {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.navigateBack({
-                  url: "/pages/home/home"
-                })
-              }
-            }
-          })
+          app.globalData.openId = null;
+          app.closeProgram(res);
         } else {
           let arr = [];
           let data = res.data;
@@ -221,7 +211,7 @@ Page({
     wx.showNavigationBarLoading(); //在标题栏中显示加载
     let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/repair/repair_list', //仅为示例，并非真实的接口地址
+      url: app.globalData.url +'wx/repair/repair_list', //仅为示例，并非真实的接口地址
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -262,7 +252,7 @@ Page({
     if (that.data.content!='0'){
       wx.showLoading();
       wx.request({
-        url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
+        url: app.globalData.url + 'wx/repair/repair_list',
         method: "POST",
         data: {
           role: app.globalData.role,

@@ -26,7 +26,7 @@ Page({
     let complain = e.detail.value.complain;
     let repair_id = that.data.repair_id;
     wx.request({
-      url: 'https://wx.zhejiuban.com/repair/complain',
+      url: app.globalData.url +'repair/complain',
       method: "POST",
       data: {
         role: app.globalData.role,

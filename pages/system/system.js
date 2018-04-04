@@ -14,14 +14,13 @@ Page({
    */
   onLoad: function (options) {
     app.network_state();
-    console.log(app.globalData);
   },
 
   formSubmit: function (e) {
     let that = this;
     let phone = e.detail.value.phone;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/system_auth',
+      url: app.globalData.url + 'wx/system_auth',
       method: "POST",
       data: {
         role: app.globalData.role,

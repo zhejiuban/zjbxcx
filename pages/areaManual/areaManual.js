@@ -60,7 +60,7 @@ Page({
   getArea:function(area_uuid) {
     let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/area/find_area',
+      url: app.globalData.url +'wx/area/find_area',
       method: "post",
       header: {
         'content-type': 'application/json' // 默认值
@@ -89,7 +89,7 @@ Page({
   get_classify: function (orgId) {
     let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/area/get_classify',
+      url: app.globalData.url +'wx/area/get_classify',
       method: 'GET',
       data: {
         role: app.globalData.role,
@@ -144,7 +144,7 @@ Page({
           var tempFilePaths = res.tempFilePaths;
           for (var i = 0; i < tempFilePaths.length; i++) {
             wx.uploadFile({
-              url: 'https://wx.zhejiuban.com/file/img_file',
+              url: app.globalData.url +'file/img_file',
               filePath: tempFilePaths[i],
               method: "POST",
               name: 'img',
@@ -198,7 +198,7 @@ Page({
           //数组下标
           let index = e.currentTarget.dataset.index;
           wx.request({
-            url: 'https://wx.zhejiuban.com/file/delete_img_file',
+            url: app.globalData.url +'file/delete_img_file',
             method: "POST",
             data: {
               role: app.globalData.role,
@@ -273,7 +273,7 @@ Page({
         title: '正在提交中...',
       })
       wx.request({
-        url: 'https://wx.zhejiuban.com/wx/repair/area_repair',
+        url: app.globalData.url +'wx/repair/area_repair',
         method: "POST",
         data: {
           role: app.globalData.role,
@@ -333,5 +333,12 @@ Page({
       })
     }
   },
+
+  to_index:function () {
+    let that = this;
+    app.globalData.area_uuid = null;
+    that.data.area_id = null;
+    app.toIndex();
+  }
 
 })

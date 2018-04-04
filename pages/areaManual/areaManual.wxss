@@ -114,3 +114,28 @@ button::after{
 .section .org-name{
   width: 500rpx;
 }
+
+/*底部tabBar  */
+.tabBar{
+  width:100%;
+  position: fixed;
+  white-space: nowrap;
+  justify-content: space-between;
+  bottom:0;
+  height:60rpx;
+  line-height: 60rpx;
+  padding: 20rpx 0;
+  background-color: #4898fa;
+  color: #fff;
+}
+.tabBar_litem{
+  width:50%;
+  height: 60rpx;
+  overflow: auto;
+  font-size: 32rpx;
+  display: inline-block; 
+  text-align: center;
+  color: #fff;
+  background-color: #4898fa;
+  line-height: 60rpx;
+}

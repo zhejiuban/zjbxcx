@@ -14,8 +14,8 @@
   </view>
 
   <view class="section">
-  <view class="section_title">所属单位：</view>
-    <input class='org-name' type="text" name="org" value='{{org_name}}' />
+    <view class="section_title">所属单位：</view>
+    <text>{{org_name}}</text>
   </view>
 
   <view class="section">
@@ -45,7 +45,13 @@
     <input type="text" name="user_phone"  placeholder="联系方式(选填)" />
   </view>
 
-  <view class="btn-area">
-     <button class='submitBtn' formType="submit">提交</button>
+  <view class='tabBar'>
+    <view class='tabBar_litem' catchtap='to_index' >
+        取消
+    </view>
+    <button class='tabBar_litem submitBtn' formType="submit">
+        提交
+    </button>
   </view>
+
 </form>

@@ -45,7 +45,7 @@ Page({
     });
 
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
+      url: app.globalData.url +'wx/repair/repair_list',
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -62,18 +62,8 @@ Page({
             itemsLength: '0'
           })
         } else if (res.data.code == 403) {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.navigateBack({
-                  url: "/pages/home/home"
-                })
-              }
-            }
-          })
+          app.globalData.openId = null;
+          app.closeProgram(res);
         } else {
           let arr = [];
           let data = res.data;
@@ -171,7 +161,7 @@ Page({
     let that = this;
     wx.showNavigationBarLoading();
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
+      url: app.globalData.url +'wx/repair/repair_list',
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -213,7 +203,7 @@ Page({
     if (that.data.content != '0') {
       wx.showLoading();
       wx.request({
-        url: 'https://wx.zhejiuban.com/wx/repair/repair_list',
+        url: app.globalData.url +'wx/repair/repair_list',
         method: "POST",
         data: {
           role: app.globalData.role,

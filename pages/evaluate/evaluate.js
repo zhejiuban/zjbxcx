@@ -55,7 +55,7 @@ Page({
       let appraisal = e.detail.value.appraisal;
       let repair_id = that.data.repair_id;
       wx.request({
-        url: 'https://wx.zhejiuban.com/wx/repair/evaluate',
+        url: app.globalData.url +'wx/repair/evaluate',
         method: "POST",
         data: {
           role: app.globalData.role,

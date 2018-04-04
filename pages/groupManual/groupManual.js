@@ -43,7 +43,7 @@ Page({
   getEquipment: function (group_uuid) {
     let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/find_equipment',
+      url: app.globalData.url +'wx/find_equipment',
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -111,7 +111,7 @@ Page({
         let str = that.data.imgId;
         for (let i = 0; i < tempFilePaths.length; i++) {
           wx.uploadFile({
-            url: 'https://wx.zhejiuban.com/file/img_file',
+            url: app.globalData.url +'file/img_file',
             filePath: tempFilePaths[i],
             method: "POST",
             name: 'img',
@@ -162,7 +162,7 @@ Page({
           let index = e.currentTarget.dataset.index;
 
           wx.request({
-            url: 'https://wx.zhejiuban.com/file/delete_img_file',
+            url: app.globalData.url +'file/delete_img_file',
             method: "POST",
             data: {
               role: app.globalData.role,
@@ -238,7 +238,7 @@ Page({
         title: '正在提交中...',
       });
       wx.request({
-        url: 'https://wx.zhejiuban.com/wx/repair/add',
+        url: app.globalData.url +'wx/repair/add',
         method: "POST",
         data: {
           role: app.globalData.role,
@@ -311,6 +311,12 @@ Page({
         }
       })
     }
+  },
+  to_index: function () {
+    let that = this;
+    that.data.equipment_id = null;
+    app.globalData.group_uuid = null;
+    app.toIndex();
   }
   
 })

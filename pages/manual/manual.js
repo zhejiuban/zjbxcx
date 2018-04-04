@@ -52,6 +52,8 @@ Page({
       }
       // wx.hideLoading();
     } else if (options.asset_uuid){
+      console.log(options.asset_uuid);
+      console.log("adfghggfd");
       //小程序里面扫描二维码
       wx.showLoading({
         mask: true,
@@ -61,7 +63,7 @@ Page({
       that.getAssetInfo(asset_uuid);
       app.globalData.uuid = asset_uuid;
       that.setData({
-        uuid: asset_uuid
+        asset_uuid: asset_uuid
       });
       wx.hideLoading();
     } 
@@ -78,7 +80,7 @@ Page({
   getAsset: function (asset_uuid) {
     let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/asset_find',
+      url: app.globalData.url + 'wx/asset_find',
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -121,12 +123,10 @@ Page({
     if(that.data.infoShow==false){
       this.setData({
         infoShow: true,
-        // infoIcon: '/images/arrow-up.png'
       });
     }else{
       this.setData({
         infoShow: false,
-        // infoIcon: '/images/arrow-down.png'
       });
     }
     
@@ -156,7 +156,7 @@ Page({
         let str = that.data.imgId;
         for (let i = 0; i < tempFilePaths.length; i++) {
           wx.uploadFile({
-            url: 'https://wx.zhejiuban.com/file/img_file',
+            url: app.globalData.url + 'file/img_file',
             filePath: tempFilePaths[i],
             method: "POST",
             name: 'img',
@@ -207,7 +207,7 @@ Page({
           let index = e.currentTarget.dataset.index;
 
           wx.request({
-            url: 'https://wx.zhejiuban.com/file/delete_img_file',
+            url: app.globalData.url + 'file/delete_img_file',
             method: "POST",
             data: {
               role: app.globalData.role,
@@ -285,7 +285,7 @@ Page({
         title: '正在提交中...',
       });
       wx.request({
-        url: 'https://wx.zhejiuban.com/wx/repair/add', 
+        url: app.globalData.url + 'wx/repair/add', 
         method:"POST",
         data: {
           role: app.globalData.role,
@@ -358,5 +358,12 @@ Page({
         }
       })
     }
+  },
+  to_index: function () {
+    let that = this;
+    that.data.asset_uuid = null;
+    that.data.asset_id = null;
+    app.globalData.uuid = null;
+    app.toIndex();
   }
 })

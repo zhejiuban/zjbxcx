@@ -50,7 +50,17 @@
     <text class='prompt'>上传图片\n最多三张,长按删除</text>
   </view>
   
-  <view class="btn-area">
+   <!-- <view class="btn-area">
     <button class='submitBtn' disabled="{{isSubmit}}" formType="submit">提交</button>
-  </view>
+  </view>  -->
+
+   <view class='tabBar'>
+    <view class='tabBar_litem' catchtap='to_index' >
+        取消
+    </view>
+    <button class='tabBar_litem submitBtn' formType="submit">
+        提交
+    </button>
+  </view> 
+
 </form>

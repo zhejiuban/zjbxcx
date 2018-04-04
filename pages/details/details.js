@@ -27,7 +27,7 @@ Page({
     app.network_state();
     let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/repair/repair_info',
+      url: app.globalData.url +'repair/repair_info',
       method:"POST",
       data: {
         role: app.globalData.role,

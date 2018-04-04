@@ -37,7 +37,7 @@ Page({
             success: res => {
               //发起网络请求
               wx.request({
-                url: 'https://wx.zhejiuban.com/wx/find_phone', //仅为示例，并非真实的接口地址
+                url: app.globalData.url + 'wx/find_phone', //仅为示例，并非真实的接口地址
                 method: "POST",
                 data: {
                   role: 1,    //用户角色

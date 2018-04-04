@@ -7,28 +7,41 @@ Page({
    */
   data: {
     butName: '点我重新授权',
-    btnShow: false,
+    btnShow: app.globalData.btnShow,
     btnLoading: false,
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options.type);
     let that = this;
     if(options.type!=1){
-      // wx.showLoading({
-      //   mask: true,
-      //   title: '登录中',
-      // });
       app.globalData.firstLogin=2;
     };
+    // if (!app.globalData.openId){
+    //   that.setData({
+    //     btnShow: true
+    //   });
+    // }
+
+    console.log(that.data);
   },
 
   onShow: function () {
+    let that = this;
     if(app.globalData.openId){
       if (app.globalData.asset_uuid){
         wx.navigateTo({
           url: '/pages/manual/manual',
+        })
+      } else if (app.globalData.area_uuid){
+        wx.navigateTo({
+          url: '/pages/areaManual/areaManual',
+        })
+      } else if (app.globalData.group_uuid){
+        wx.navigateTo({
+          url: '/pages/groupManual/groupManual',
         })
       }else{
         wx.navigateTo({

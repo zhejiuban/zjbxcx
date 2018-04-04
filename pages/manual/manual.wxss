@@ -67,8 +67,8 @@
 }
 
 .section input {
-  width: 600rpx;
-  padding: 10rpx;
+  /* width: 600rpx; */
+   padding: 15rpx 10rpx; 
 }
 
 .section .mult {
@@ -83,43 +83,16 @@
 .section .picker {
   width: 100%;
 }
-.uploaderBtn {
-  /* position: absolute; *//* right: 30rpx; *//* margin-top: 5rpx;  *//* text-align: center; *//* width: 140rpx;  *//* height: 60rpx; *//* line-height: 60rpx; *//* font-size: 10px; *//* background-color: #4898fa; *//* color: #fff; *//* border: none; */
-}
 
 .uploaderBtn image {
   width: 100rpx;
   height: 100rpx;
 }
 
-/* .btn-area {
-  display: flex;
-  flex-grow: row no-wrap;
-  margin-top: 80rpx;
-  width: 100%;
-}
-.btn-area button{
-  width: 160rpx;
-  height: 80rpx;
-  line-height: 80rpx;
-  font-size: 34rpx;
-} */
-.btn-area{
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-}
-.btn-area>button {
-  color: #fff;
-  background-color: #4898fa;
-  height: 100rpx;
-  line-height: 100rpx;
-  border: none;
-  border-radius: 0;
-}
 button::after{
   border: none;
 }
+
 .prompt{
   margin-top: 15rpx; 
   overflow:auto;
@@ -128,3 +101,29 @@ button::after{
   line-height: 35rpx;
   color: #999;
 }
+
+/*底部tabBar  */
+.tabBar{
+  width:100%;
+  position: fixed;
+  white-space: nowrap;
+  justify-content: space-between;
+  bottom:0;
+  height:60rpx;
+  line-height: 60rpx;
+  padding: 20rpx 0;
+  background-color: #4898fa;
+  color: #fff;
+}
+.tabBar_litem{
+  width:50%;
+  height: 60rpx;
+  overflow: auto;
+  font-size: 32rpx;
+  display: inline-block; 
+  text-align: center;
+  color: #fff;
+  background-color: #4898fa;
+  line-height: 60rpx;
+}
+

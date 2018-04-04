@@ -10,6 +10,7 @@ App({
 
   onShow: function (e) {
     let that = this;
+    console.log("app.show");
     if (e.query.q) {
       //微信扫描二维码携带的参数
       let url = decodeURIComponent(e.query.q);
@@ -29,7 +30,9 @@ App({
         that.getUserInfo();
       }
     } else {
+      console.log(that.globalData.validate);
       if (!that.globalData.validate) {
+        console.log("执行");
         that.getUserInfo();
       }
     }
@@ -57,7 +60,7 @@ App({
                 //发起网络请求
                 //登录授权
                 wx.request({
-                  url: 'https://wx.zhejiuban.com/wx/login',
+                  url: that.globalData.url + 'wx/login',
                   method: "POST",
                   header: {
                     'content-type': 'application/json' // 默认值
@@ -69,12 +72,14 @@ App({
                   },
                   success: function (res) {
                     res.data = that.getResData(res);
+                    console.log(res.data);
+                    console.log("个人信息");
                     that.globalData.userInfo = res.data;
                     that.globalData.openId = res.data.openId;
                     that.globalData.unionid = res.data.unionId;
                     //判断有没有验证身份(判断是否注册)
                     wx.request({
-                      url: 'https://wx.zhejiuban.com/wx/authentication',
+                      url: that.globalData.url + 'wx/authentication',
                       method: "POST",
                       header: {
                         'content-type': 'application/json' // 默认值
@@ -87,27 +92,28 @@ App({
                       success: function (res) {
                         res.data = that.getResData(res);
                         console.log(res.data);
+                        console.log("role");
                         if(res.data.code==1){
                           //验证过了
                           that.globalData.authorization=1;
                           that.globalData.user_id = res.data.user_id;
                           that.globalData.validate = true;
+                          console.log(that.globalData.validate);
                           if (that.globalData.uuid) {
-                            wx.navigateTo({
+                            wx.redirectTo({
                               url: '/pages/manual/manual',
                             });
                           }else if(that.globalData.area_uuid){
-                            wx.navigateTo({
+                            wx.redirectTo({
                               url: '/pages/areaManual/areaManual',
                             });
                           } else if (that.globalData.group_uuid) {
-                            wx.navigateTo({
+                            wx.redirectTo({
                               url: '/pages/groupManual/groupManual',
                             });
                           } else {
                             wx.redirectTo({
                               url: "/pages/index/service/service"
-                              // url: '/pages/groupManual/groupManual',
                             });
                           }
                         }else{
@@ -119,7 +125,7 @@ App({
                            * */
                            console.log("暂未注册");
                           wx.request({
-                            url: 'https://wx.zhejiuban.com/wx/add_user',
+                            url: that.globalData.url + 'wx/add_user',
                             method: "POST",
                             header: {
                               'content-type': 'application/json' // 默认值
@@ -128,20 +134,21 @@ App({
                               role: 1,    //用户角色
                               openId: that.globalData.openId,
                               unionid: that.globalData.unionid,
-                              name: that.globalData.userInfo.username,
+                              name: that.globalData.userInfo.nickName,
                               avatar: that.globalData.userInfo.avatarUrl
                             },
                             success: function (res) {
                               res.data = that.getResData(res);
+                              that.globalData.validate = true;
                               console.log(res.data);
                               console.log("add_user");
                               if (res.data.code == 1) {
                                 that.globalData.user_id = res.data.user_id;
                                 //用户添加成功
                                 //判断此单位是如何验证用户的
-                                if (that.globalData.uuid || that.globalData.area_uuid) {
+                                if (that.globalData.uuid || that.globalData.area_uuid || that.globalData.group_uuid) {
                                   wx.request({
-                                    url: 'https://wx.zhejiuban.com/wx/user_auth',
+                                    url: that.globalData.url + 'wx/user_auth',
                                     method: "POST",
                                     header: {
                                       'content-type': 'application/json' // 默认值
@@ -150,7 +157,8 @@ App({
                                       role: 1,    //用户角色
                                       user_id: that.globalData.user_id,
                                       asset_uuid: that.globalData.uuid,
-                                      area_uuid: that.globalData.area_uuid
+                                      area_uuid: that.globalData.area_uuid,
+                                      group_uuid: that.globalData.group_uuid
                                     },
                                     success: function (res) {
                                       res.data = that.getResData(res);
@@ -217,9 +225,9 @@ App({
                 });
                 // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
                 // 所以此处加入 callback 以防止这种情况
-                if (that.userInfoReadyCallback) {
-                  that.userInfoReadyCallback(res)
-                }
+                // if (that.userInfoReadyCallback) {
+                //   that.userInfoReadyCallback(res)
+                // }
               },
               fail: function () {
                 wx.hideLoading();
@@ -247,10 +255,9 @@ App({
                               mask: true,
                               title: '登录中',
                             });
-                            that.getUserInfo();
                           } else {
                             // 拒绝授权用户信息，回到home页面进行授权
-                            wx.navigateTo({
+                            wx.redirectTo({
                               url: '/pages/home/home',
                             })
                           }
@@ -260,7 +267,7 @@ App({
                       that.globalData.showLoad = false;
                       that.globalData.btnShow = true;
                       //拒绝授权用户信息，回到home页面进行授权
-                      wx.navigateTo({
+                      wx.redirectTo({
                         url: '/pages/home/home?type=1',
                       })
                     }
@@ -280,7 +287,7 @@ App({
   getAssetInfo: function (asset_uuid) {
     let that = this;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/asset_find',
+      url: that.globalData.url + 'wx/asset_find',
       method: "POST",
       data: {
         openId: that.globalData.openId,
@@ -329,11 +336,14 @@ App({
     //是否已经授权手机号
     authorization:null,
     validate: false,
+    btnShow: false,
     //角色
-    role: 1
+    role: 1,
+    //全局变量 url
+    url: 'https://wx.zhejiuban.com/'
   },
   swichNav: function (url) {
-    wx.navigateTo({
+    wx.redirectTo({
       url: url,
     })
   },
@@ -361,11 +371,9 @@ App({
             group_uuid = that.getUrlParam(url, "group_uuid");
             that.globalData.group_uuid = group_uuid;
           }
-          
         }
-
         wx.request({
-          url: 'https://wx.zhejiuban.com/wx/need_validation',
+          url: that.globalData.url + 'wx/need_validation',
           method: "POST",
           data: {
             role: that.globalData.role,
@@ -378,20 +386,22 @@ App({
             'content-type': 'application/json'
           },
           success: function (res) {
+            
             wx.hideLoading();
             res.data = that.getResData(res);
+            console.log(res.data);
             if (res.data.code == 1) {
               //验证通过，可以正常报修
               if (that.globalData.area_uuid){
-                wx.navigateTo({
+                wx.redirectTo({
                   url: '/pages/areaManual/areaManual',
                 })
               } else if (that.globalData.group_uuid) {
-                wx.navigateTo({
+                wx.redirectTo({
                   url: '/pages/groupManual/groupManual',
                 })
               }else{
-                wx.navigateTo({
+                wx.redirectTo({
                   url: '/pages/manual/manual',
                 })
               }
@@ -440,7 +450,7 @@ App({
 
   // 报修
   toManual: function () {
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/manual/manual',
     })
   },
@@ -496,6 +506,35 @@ App({
           })
         }
       }
+    })
+  },
+
+  //403 退出小程序
+  closeProgram: function (res) {
+    let that = this;
+    wx.showModal({
+      title: '提示',
+      content: res.data.message,
+      success: function (res) {
+        if (res.confirm) {
+          that.globalData.btnShow = true;
+          wx.navigateTo({
+            url: '/pages/home/home?type='+1,
+          })
+        } else if (res.cancel) {
+          wx.navigateBack({
+            delta: 1
+          });
+        }
+
+      }
+    })
+  },
+
+  //回到首页
+  toIndex: function () {
+    wx.redirectTo({
+      url: "/pages/index/service/service"
     })
   },
 

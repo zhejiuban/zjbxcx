@@ -86,7 +86,7 @@ Page({
       repair_id: repair_id
     });
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/repair/repair_all_info',
+      url: app.globalData.url+'wx/repair/repair_all_info',
       method: "POST",
       data: {
         role:app.globalData.role,

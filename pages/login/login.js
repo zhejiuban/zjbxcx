@@ -25,7 +25,7 @@ Page({
     let job_number = e.detail.value.number;
     let password = e.detail.value.password;
     wx.request({
-      url: 'https://wx.zhejiuban.com/wx/job_number',
+      url: app.globalData.url + 'wx/job_number',
       method: "POST",
       data: {
         role: 1,
