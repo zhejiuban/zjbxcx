@@ -50,10 +50,8 @@ Page({
       if(app.globalData.openId){
         that.getAssetInfo(that.data.asset_uuid);
       }
-      // wx.hideLoading();
     } else if (options.asset_uuid){
       console.log(options.asset_uuid);
-      console.log("adfghggfd");
       //小程序里面扫描二维码
       wx.showLoading({
         mask: true,
@@ -91,11 +89,29 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
+        console.log(res.data);
         if (res.data.code == 1) {
           wx.showModal({
             title: '提示',
             content: res.data.message,
             showCancel: false
+          })
+        } else if (res.data.code==403) {
+          wx.redirectTo({
+            url: '/pages/index/service/service',
+          })
+        } else if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                })
+              }
+            }
           })
         } else {
           console.log(res.data);
@@ -206,27 +222,27 @@ Page({
           //数组下标
           let index = e.currentTarget.dataset.index;
 
-          wx.request({
-            url: app.globalData.url + 'file/delete_img_file',
-            method: "POST",
-            data: {
-              role: app.globalData.role,
-              openId: app.globalData.openId,
-              id: img_ids[index]
-            },
-            header: {
-              'content-type': 'application/json'
-            },
-            success: function (res) {
-              if(res.data.code==1){
-                wx.showToast({
-                  title: '成功',
-                  icon: 'success',
-                  duration: 2000
-                })
-              }
-            }
-          });
+          // wx.request({
+          //   url: app.globalData.url + 'file/delete_img_file',
+          //   method: "POST",
+          //   data: {
+          //     role: app.globalData.role,
+          //     openId: app.globalData.openId,
+          //     id: img_ids[index]
+          //   },
+          //   header: {
+          //     'content-type': 'application/json'
+          //   },
+          //   success: function (res) {
+          //     if(res.data.code==1){
+          //       wx.showToast({
+          //         title: '成功',
+          //         icon: 'success',
+          //         duration: 2000
+          //       })
+          //     }
+          //   }
+          // });
 
           imgs.splice(index, 1);
           img_ids.splice(index, 1);

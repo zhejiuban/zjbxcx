@@ -71,16 +71,33 @@ Page({
         openId: app.globalData.openId
       },
       success: function (res) {
-        console.log(res.data);
-        console.log("classify");
-        that.setData({
-          area_id: res.data.area_id,
-          area_name: res.data.area_name,
-          org_id: res.data.org_id,
-          org_name: res.data.org_name,
-          room_name: res.data.room_name
-        });
-        that.get_classify(that.data.org_id);
+        if (res.data.code == 404){
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                })
+              }
+            }
+          })
+        } else if (res.data.code==403) {
+          wx.redirectTo({
+            url: '/pages/index/service/service',
+          })
+        }else {
+          that.setData({
+            area_id: res.data.area_id,
+            area_name: res.data.area_name,
+            org_id: res.data.org_id,
+            org_name: res.data.org_name,
+            room_name: res.data.room_name
+          });
+          that.get_classify(that.data.org_id);
+        }
       }
     })
   },
@@ -197,21 +214,6 @@ Page({
           let img_ids = that.data.img_ids;
           //数组下标
           let index = e.currentTarget.dataset.index;
-          wx.request({
-            url: app.globalData.url +'file/delete_img_file',
-            method: "POST",
-            data: {
-              role: app.globalData.role,
-              openId: app.globalData.openId,
-              id: img_ids[index]
-            },
-            header: {
-              'content-type': 'application/json'
-            },
-            success: function (res) {
-            }
-          });
-
           imgs.splice(index, 1);
           img_ids.splice(index, 1);
           that.setData({
@@ -236,6 +238,13 @@ Page({
     }
   },
 
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+    console.log("onUnload");
+    app.globalData.area_uuid = null;
+  },
 
   formSubmit: function (e) {
     let that = this;

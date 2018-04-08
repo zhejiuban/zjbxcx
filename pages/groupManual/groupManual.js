@@ -40,6 +40,14 @@ Page({
     }
   },
 
+  /**
+   * 生命周期函数--监听页面卸载
+  */
+  onUnload: function () {
+    console.log("onUnload");
+    app.globalData.area_uuid = null;
+  },
+
   getEquipment: function (group_uuid) {
     let that = this;
     wx.request({
@@ -66,6 +74,23 @@ Page({
             asset_list: data.list,
             asset_id: data.list[0].asset_id,
             asset_uuid: data.list[0].asset_uuid
+          })
+        } else if (res.data.code == 403) {
+          wx.redirectTo({
+            url: '/pages/index/service/service',
+          })
+        } else if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                })
+              }
+            }
           })
         } else {
           wx.showModal({
@@ -160,29 +185,6 @@ Page({
           let img_ids = that.data.img_ids;
           //数组下标
           let index = e.currentTarget.dataset.index;
-
-          wx.request({
-            url: app.globalData.url +'file/delete_img_file',
-            method: "POST",
-            data: {
-              role: app.globalData.role,
-              openId: app.globalData.openId,
-              id: img_ids[index]
-            },
-            header: {
-              'content-type': 'application/json'
-            },
-            success: function (res) {
-              if (res.data.code == 1) {
-                wx.showToast({
-                  title: '成功',
-                  icon: 'success',
-                  duration: 2000
-                })
-              }
-            }
-          });
-
           imgs.splice(index, 1);
           img_ids.splice(index, 1);
           that.setData({

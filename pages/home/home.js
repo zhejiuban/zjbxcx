@@ -14,17 +14,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options.type);
+    
     let that = this;
     if(options.type!=1){
       app.globalData.firstLogin=2;
     };
-    // if (!app.globalData.openId){
-    //   that.setData({
-    //     btnShow: true
-    //   });
-    // }
-
     console.log(that.data);
   },
 
@@ -44,7 +38,7 @@ Page({
           url: '/pages/groupManual/groupManual',
         })
       }else{
-        wx.navigateTo({
+        wx.redirectTo({
           url: '/pages/index/service/service',
         })
       }

@@ -11,7 +11,7 @@
 .section {
   display: flex;
   flex-grow: row no-wrap;
-  padding: 15rpx 40rpx;
+  padding: 15rpx 0rpx;
   height: 100rpx;
   line-height: 100rpx;
   font-size: 28rpx;
@@ -23,7 +23,7 @@
 .section_remarks {
   display: flex;
   flex-grow: row no-wrap;
-  padding: 15rpx 40rpx;
+  padding: 15rpx 0rpx;
   height: 160rpx;
   font-size: 14px;
   position: relative;
@@ -39,10 +39,11 @@
 
 .remarks {
   border: 1rpx solid #eee;
-  padding: 10rpx;
+  padding: 10rpx; 
   border-radius: 10rpx;
   height: 140rpx;
-  width: 70%;
+  width: 80%;
+  margin: 0 10%;
 }
 
 .btn-area {
@@ -60,15 +61,20 @@
   border-radius: 0;
 }
 
+button::after{
+  border: none;
+}
+
 .stars {
   position: relative;
-  width: 100%;
+  width: 80%;
+  margin: 0 10%;
   height: 100rpx;
 }
 
 .star-image {
   position: absolute;
-  right: 0;
+  right: 0; 
   width: 100rpx;
   height: 100rpx;
   src: "../../images/normal.png";
@@ -76,7 +82,7 @@
 
 .item {
   position: absolute;
-  top: 50rpx;
-  width: 75rpx;
-  height: 150rpx;
+  top: 0rpx;
+  width: 100rpx;
+  height: 100rpx;
 }

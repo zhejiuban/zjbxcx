@@ -8,9 +8,6 @@
     <block wx:else>
       <text wx:if="{{area_name}}">{{area_name}}</text>
     </block>
-    <!-- <view catchtap='click_scan' class='scanBtn'>
-      <image style='width:70rpx;height:70rpx;' src='/images/s.png'></image>
-    </view> -->
   </view>
 
   <view class="section">

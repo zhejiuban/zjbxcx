@@ -16,7 +16,6 @@
 }
 
 .section_title{
-  /* border: 1px solid red; */
   width: 25%;
   text-align: center;
 }
@@ -67,7 +66,6 @@
 }
 
 .section input {
-  /* width: 600rpx; */
    padding: 15rpx 10rpx; 
 }
 

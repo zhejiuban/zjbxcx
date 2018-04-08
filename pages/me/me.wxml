@@ -19,8 +19,6 @@
     <image class='item_more' src='/images/more.png'></image>
   </view> -->
 
-  
-
   <button class='list_item contact_btn' open-type="contact">
     <image class='item_icon' src='/images/kefu.png'></image>
     <view class='item_title'>在线客服</view>

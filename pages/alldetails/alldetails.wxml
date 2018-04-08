@@ -59,12 +59,6 @@
         <text class='list_value'>{{method==2?'远程协助维修':'上门维修'}}</text>
       </view>
     </block>
-    <!-- <block wx:if="{{appointment}}" >
-      <view class='list'>
-        <text class='list_label'>预计维修时间：</text>
-        <text class='list_value'>{{appointment}}({{appointment}})</text>
-      </view>
-    </block> -->
   </view>
 
   <!--维修人员反馈信息  -->

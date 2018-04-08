@@ -45,13 +45,9 @@
 
 
 .btn{
-  /* position: absolute; */
   width: 300rpx;
   height: 100rpx;
   line-height: 100rpx;
-  /* top: 70%; */
-  /* left: 50%; */
-  /* margin-left: -200rpx; */
   background-color: #4898fa;
   color: #fff;
   border: none;

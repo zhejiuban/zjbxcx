@@ -1,20 +1,50 @@
 /* pages/system/system.wxss */
 
-page{
-  background-color: #efefef;
+.content{
+  width: 100vm;
+  height: 100vh;
+  position: relative;
+  text-align: center;
 }
-text{
+
+.logo{
+  width: 200rpx;
+  height: 200rpx;
+  margin-top: 100rpx;
+}
+
+.title{
+  display: block;
+  color: #333;
+  font-size: 34rpx;
+}
+
+ text{
   display: block;
   text-align: center;
   padding: 20rpx;
-}
+} 
 
 .phone{
-  width: 80%;
-  background-color: #fff;
+  width: 500rpx;
+  border: 2rpx solid #cfcfcf;
+  text-align: center;
   padding: 10rpx;
   color: #666;
-  margin: 50rpx 10%;
+  margin: 100rpx auto;
 }
 
 
+button {
+  color: #fff;
+  background-color: #4898fa;
+  width: 300rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  border: none;
+  border-radius: 0;
+}
+
+button::after{
+  border: none;
+}

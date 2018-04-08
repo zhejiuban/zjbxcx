@@ -132,7 +132,6 @@ Page({
             user_phone: res.data.user_phone,
             method: res.data.method,
             result_status: res.data.result_status
-            // appointment: res.data.appointment
           });
         }
       },
@@ -179,17 +178,8 @@ Page({
           wx.makePhoneCall({
             phoneNumber: e.currentTarget.dataset.phone
           })
-        } else if (res.cancel) {
-          console.log('用户点击取消')
         }
       }
     })
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

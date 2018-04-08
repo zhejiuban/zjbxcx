@@ -48,9 +48,17 @@ Page({
                   wx.redirectTo({
                     url: '/pages/manual/manual',
                   })
-                }else{
+                } else if (app.globalData.area_uuid){
                   wx.redirectTo({
                     url: '/pages/areaManual/areaManual',
+                  })
+                } else if (app.globalData.group_uuid){
+                  wx.redirectTo({
+                    url: '/pages/groupManual/groupManual',
+                  })
+                }else{
+                  wx.redirectTo({
+                    url: '/pages/index/service/service',
                   })
                 }
               }

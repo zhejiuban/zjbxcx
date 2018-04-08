@@ -90,6 +90,7 @@ App({
                         unionid: that.globalData.unionid
                       },
                       success: function (res) {
+                        wx.hideLoading();
                         res.data = that.getResData(res);
                         console.log(res.data);
                         console.log("role");
@@ -99,18 +100,8 @@ App({
                           that.globalData.user_id = res.data.user_id;
                           that.globalData.validate = true;
                           console.log(that.globalData.validate);
-                          if (that.globalData.uuid) {
-                            wx.redirectTo({
-                              url: '/pages/manual/manual',
-                            });
-                          }else if(that.globalData.area_uuid){
-                            wx.redirectTo({
-                              url: '/pages/areaManual/areaManual',
-                            });
-                          } else if (that.globalData.group_uuid) {
-                            wx.redirectTo({
-                              url: '/pages/groupManual/groupManual',
-                            });
+                          if (that.globalData.uuid || that.globalData.area_uuid || that.globalData.group_uuid){
+                            that.needValidation();
                           } else {
                             wx.redirectTo({
                               url: "/pages/index/service/service"
@@ -210,7 +201,7 @@ App({
                                     }
                                   })
                                 } else {
-                                  wx.navigateTo({
+                                  wx.redirectTo({
                                     url: '/pages/index/service/service',
                                   })
                                 }
@@ -242,37 +233,37 @@ App({
                   });
                 }else{
                   wx.showModal({
-                  title: '提示',
-                  content: '需要允许获取用户信息，确定将继续设置，取消将回到首页',
-                  cancelText: '取消',
-                  confirmText: '确定',
-                  success: function (res) {
-                    if (res.confirm) {
-                      wx.openSetting({
-                        success: function (res) {
-                          if (!res.authSetting["scope.userInfo"] || !res.authSetting["scope.userLocation"]) {
-                            wx.showLoading({
-                              mask: true,
-                              title: '登录中',
-                            });
-                          } else {
-                            // 拒绝授权用户信息，回到home页面进行授权
-                            wx.redirectTo({
-                              url: '/pages/home/home',
-                            })
+                    title: '微信授权',
+                    content: '获取你的公开信息（昵称、头像等）',
+                    confirmText: '允许',
+                    cancelText: '拒绝',
+                    success: function (res) {
+                      if (res.confirm) {
+                        wx.openSetting({
+                          success: function (res) {
+                            if (!res.authSetting["scope.userInfo"] || !res.authSetting["scope.userLocation"]) {
+                              wx.showLoading({
+                                mask: true,
+                                title: '登录中',
+                              });
+                            } else {
+                              // 拒绝授权用户信息，回到home页面进行授权
+                              wx.redirectTo({
+                                url: '/pages/home/home',
+                              })
+                            }
                           }
-                        }
-                      })
-                    } else if (res.cancel) {
-                      that.globalData.showLoad = false;
-                      that.globalData.btnShow = true;
-                      //拒绝授权用户信息，回到home页面进行授权
-                      wx.redirectTo({
-                        url: '/pages/home/home?type=1',
-                      })
+                        })
+                      } else if (res.cancel) {
+                        that.globalData.showLoad = false;
+                        that.globalData.btnShow = true;
+                        //拒绝授权用户信息，回到home页面进行授权
+                        wx.redirectTo({
+                          url: '/pages/home/home?type=1',
+                        })
+                      }
                     }
-                  }
-                })
+                  })
                 }
               }
             })
@@ -281,7 +272,6 @@ App({
       }
     })
   },
-
 
   //获取资产信息
   getAssetInfo: function (asset_uuid) {
@@ -372,80 +362,90 @@ App({
             that.globalData.group_uuid = group_uuid;
           }
         }
-        wx.request({
-          url: that.globalData.url + 'wx/need_validation',
-          method: "POST",
-          data: {
-            role: that.globalData.role,
-            area_uuid: that.globalData.area_uuid,
-            asset_uuid: that.globalData.uuid,
-            group_uuid: that.globalData.group_uuid,
-            openId: that.globalData.openId
-          },
-          header: {
-            'content-type': 'application/json'
-          },
-          success: function (res) {
-            
-            wx.hideLoading();
-            res.data = that.getResData(res);
-            console.log(res.data);
-            if (res.data.code == 1) {
-              //验证通过，可以正常报修
-              if (that.globalData.area_uuid){
-                wx.redirectTo({
-                  url: '/pages/areaManual/areaManual',
-                })
-              } else if (that.globalData.group_uuid) {
-                wx.redirectTo({
-                  url: '/pages/groupManual/groupManual',
-                })
-              }else{
-                wx.redirectTo({
-                  url: '/pages/manual/manual',
-                })
-              }
-            } else if (res.data.code == 403) {
-              wx.showModal({
-                title: '提示',
-                content: res.data.message,
-                showCancel: false
-              });
-            } else if (res.data.code == 404) {
-              wx.showModal({
-                title: '提示',
-                content: res.data.message,
-                showCancel: false,
-                success: function (res) {
-                  if (res.confirm) {
-                    wx.redirectTo({
-                      url: "/pages/index/service/service"
-                    });
-                  }
-                }
-              })
-            } else if (res.data.code == 'system') {
-              wx.navigateTo({
-                url: "/pages/system/system"
-              });
-            } else {
-              wx.showModal({
-                title: '提示',
-                content: res.data.message,
-                showCancel: false,
-                success: function (res) {
-                  if (res.confirm) {
-                    wx.redirectTo({
-                      url: '/pages/index/service/service',
-                    });
-                  }
-                }
-              })
-            }
-          }
-        });
+        that.needValidation();
       }
     })
+  },
+
+
+  needValidation: function () {
+    let that = this;
+    wx.request({
+      url: that.globalData.url + 'wx/need_validation',
+      method: "POST",
+      data: {
+        role: that.globalData.role,
+        area_uuid: that.globalData.area_uuid,
+        asset_uuid: that.globalData.uuid,
+        group_uuid: that.globalData.group_uuid,
+        openId: that.globalData.openId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+
+        wx.hideLoading();
+        res.data = that.getResData(res);
+        console.log(res.data);
+        if (res.data.code == 1) {
+          //验证通过，可以正常报修
+          if (that.globalData.area_uuid) {
+            wx.redirectTo({
+              url: '/pages/areaManual/areaManual',
+            })
+          } else if (that.globalData.group_uuid) {
+            wx.redirectTo({
+              url: '/pages/groupManual/groupManual',
+            })
+          } else if (that.globalData.asset_uuid) {
+            wx.redirectTo({
+              url: '/pages/manual/manual',
+            })
+          } else {
+            wx.redirectTo({
+              url: '/pages/index/service/service',
+            })
+          }
+        } else if (res.data.code == 403) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false
+          });
+        } else if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: "/pages/index/service/service"
+                });
+              }
+            }
+          })
+        } else if (res.data.code == 'system') {
+          wx.navigateTo({
+            url: "/pages/system/system"
+          });
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                // wx.redirectTo({
+                //   url: '/pages/index/service/service',
+                // });
+              }
+            }
+          })
+        }
+      }
+    });
   },
 
   // 报修
@@ -544,4 +544,7 @@ App({
       url: '/pages/me/me',
     })
   }
+
+
+
 })

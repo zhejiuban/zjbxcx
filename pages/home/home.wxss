@@ -24,7 +24,6 @@
   height: 100rpx;
   line-height: 100rpx;
   top: 70%;
-  /* margin-top: -50rpx; */
   left: 50%;
   margin-left: -200rpx;
   background-color: #4898fa;

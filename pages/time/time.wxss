@@ -11,7 +11,6 @@ page{
 }
 
 .view-list{
-  /* width: 100%; */
   padding: 20rpx 40rpx;
   position: relative;
 }
@@ -25,11 +24,6 @@ page{
   position: absolute;
   left: -23rpx; 
   top: 30rpx;
-  /* width: 5rpx; */
-  /* height: 5rpx; */
-  /* border: 10rpx solid #4898fa; */
-  /* border-radius: 20rpx; */
-  /* background-color: red;  */
 }
 
 .view-item-dot image{

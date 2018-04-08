@@ -43,10 +43,6 @@
     <input type="text" name="user_phone"  placeholder="联系方式(选填)" />
   </view>
 
-  <!-- <view class="btn-area">
-     <button class='submitBtn' formType="submit">提交</button>
-  </view> -->
-
   <view class='tabBar'>
     <view class='tabBar_litem' catchtap='to_index' >
         取消
