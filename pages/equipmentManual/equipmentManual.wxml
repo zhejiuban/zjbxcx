@@ -1,4 +1,4 @@
-<!--pages/groupManual/groupManual.wxml-->
+<!--pages/equipmentManual/equipmentManual.wxml-->
 <form bindsubmit="formSubmit" bindreset="formReset">
 
   <view class="section">

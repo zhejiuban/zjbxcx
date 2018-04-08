@@ -3,6 +3,7 @@
     "pages/home/home",
     "pages/system/system",
     "pages/groupManual/groupManual",
+    "pages/equipmentManual/equipmentManual",
     "pages/time/time",
     "pages/login/login",
     "pages/phone/phone",

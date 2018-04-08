@@ -6,7 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    butName: '点我重新授权',
+    butName: '重新授权',
     btnShow: app.globalData.btnShow,
     btnLoading: false,
   },

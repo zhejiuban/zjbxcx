@@ -4,7 +4,7 @@
   <image class='logo' src='/images/logo.png' ></image>
   <text>系统认证</text>
   <form bindsubmit="formSubmit" bindreset="formReset">
-    <input class='phone' name="phone" placeholder='请输入手机号' ></input>
+    <input class='phone' name="phone" type='number' placeholder='请输入手机号' ></input>
     <button formType="submit">提 交</button>
   </form> 
 </view>

@@ -16,7 +16,7 @@ Page({
     app.network_state();
     wx.showLoading({
       mask:true,
-      title: '加载中...',
+      title: '加载中',
     })
     let that = this;
     wx.request({

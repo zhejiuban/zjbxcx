@@ -35,7 +35,9 @@ Page({
     app.network_state();
     let that = this;
     if (app.globalData.area_uuid){
-      that.getAreaInfo(app.globalData.area_uuid);
+      if (app.globalData.openId) {
+        that.getAreaInfo(app.globalData.area_uuid);
+      }
     }
   },
 

@@ -1,4 +1,4 @@
-// pages/groupManual/groupManual.js
+// pages/equipmentManual/equipmentManual.js
 let app = getApp();
 Page({
 
@@ -34,7 +34,7 @@ Page({
   onLoad: function (options) {
     app.network_state();
     let that = this;
-    if(app.globalData.group_uuid){
+    if (app.globalData.group_uuid) {
       console.log(app.globalData.group_uuid);
       if (app.globalData.openId) {
         that.getEquipment(app.globalData.group_uuid);
@@ -53,7 +53,7 @@ Page({
   getEquipment: function (group_uuid) {
     let that = this;
     wx.request({
-      url: app.globalData.url +'wx/find_equipment',
+      url: app.globalData.url + 'wx/find_equipment',
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -138,7 +138,7 @@ Page({
         let str = that.data.imgId;
         for (let i = 0; i < tempFilePaths.length; i++) {
           wx.uploadFile({
-            url: app.globalData.url +'file/img_file',
+            url: app.globalData.url + 'file/img_file',
             filePath: tempFilePaths[i],
             method: "POST",
             name: 'img',
@@ -242,7 +242,7 @@ Page({
         title: '正在提交中...',
       });
       wx.request({
-        url: app.globalData.url +'wx/repair/add',
+        url: app.globalData.url + 'wx/repair/add',
         method: "POST",
         data: {
           role: app.globalData.role,
@@ -322,5 +322,5 @@ Page({
     app.globalData.group_uuid = null;
     app.toIndex();
   }
-  
+
 })

@@ -38,7 +38,7 @@
     <textarea name="remarks" placeholder='问题描述' style='width:100%' ></textarea>
   </view>
   <view class="section">
-    <input type="text" name="user_phone"  placeholder="联系方式(选填)" />
+    <input type="number" name="user_phone"  placeholder="联系方式(选填)" />
   </view>
   <view class='section' style='border-bottom:none;'>
     <block wx:for="{{imgs}}" wx:key="property">

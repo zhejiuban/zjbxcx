@@ -39,7 +39,7 @@
   </view>
 
   <view class="section">
-    <input type="text" name="user_phone"  placeholder="联系方式(选填)" />
+    <input type="number" name="user_phone"  placeholder="联系方式(选填)" />
   </view>
 
   <view class='tabBar'>

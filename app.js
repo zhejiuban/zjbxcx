@@ -51,7 +51,7 @@ App({
             // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
             wx.showLoading({
               mask: true,
-              title: '登录中',
+              title: '加载中',
             });
             wx.getUserInfo({
               success: res => {
@@ -244,7 +244,7 @@ App({
                             if (!res.authSetting["scope.userInfo"] || !res.authSetting["scope.userLocation"]) {
                               wx.showLoading({
                                 mask: true,
-                                title: '登录中',
+                                title: '加载中',
                               });
                             } else {
                               // 拒绝授权用户信息，回到home页面进行授权
@@ -437,9 +437,9 @@ App({
             showCancel: false,
             success: function (res) {
               if (res.confirm) {
-                // wx.redirectTo({
-                //   url: '/pages/index/service/service',
-                // });
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                });
               }
             }
           })
