@@ -50,6 +50,7 @@ Page({
       if(app.globalData.openId){
         that.getAssetInfo(that.data.asset_uuid);
       }
+      wx.hideLoading();
     } else if (options.asset_uuid){
       console.log(options.asset_uuid);
       //小程序里面扫描二维码

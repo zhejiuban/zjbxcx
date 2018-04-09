@@ -7,6 +7,7 @@ Page({
    */
   data: {
     equipment_id: '',
+    equipment_uuid: '',
     org_name: '',
     org_id: '',
     area_name: '',
@@ -34,23 +35,38 @@ Page({
   onLoad: function (options) {
     app.network_state();
     let that = this;
-    if (app.globalData.group_uuid) {
-      console.log(app.globalData.group_uuid);
+    // 微信扫小程序获取的参数
+    if (app.globalData.equipment_uuid) {
+      wx.showLoading({
+        mask: true,
+        title: '加载中',
+      });
+      that.setData({
+        equipment_uuid: app.globalData.equipment_uuid
+      });
       if (app.globalData.openId) {
-        that.getEquipment(app.globalData.group_uuid);
+        that.getEquipment(that.data.equipment_uuid);
       }
-    }
+      wx.hideLoading();
+    } else if (options.equipment_uuid) {
+      console.log(options.equipment_uuid);
+      //小程序里面扫描二维码
+      wx.showLoading({
+        mask: true,
+        title: '加载中',
+      });
+      let equipment_uuid = options.equipment_uuid;
+      that.getEquipment(equipment_uuid);
+      app.globalData.equipment_uuid = equipment_uuid;
+      that.setData({
+        equipment_uuid: equipment_uuid
+      });
+      wx.hideLoading();
+    } 
+
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-  */
-  onUnload: function () {
-    console.log("onUnload");
-    app.globalData.area_uuid = null;
-  },
-
-  getEquipment: function (group_uuid) {
+  getEquipment: function (equipment_uuid) {
     let that = this;
     wx.request({
       url: app.globalData.url + 'wx/find_equipment',
@@ -58,7 +74,7 @@ Page({
       data: {
         role: app.globalData.role,
         openId: app.globalData.openId,
-        equipment_uuid: group_uuid
+        equipment_uuid: equipment_uuid
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -319,7 +335,7 @@ Page({
   to_index: function () {
     let that = this;
     that.data.equipment_id = null;
-    app.globalData.group_uuid = null;
+    app.globalData.equipment_uuid = null;
     app.toIndex();
   }
 

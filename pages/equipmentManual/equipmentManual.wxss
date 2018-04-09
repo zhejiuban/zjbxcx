@@ -110,20 +110,25 @@ button::after{
   white-space: nowrap;
   justify-content: space-between;
   bottom:0;
-  height:60rpx;
-  line-height: 60rpx;
-  padding: 20rpx 0;
+  height: 100rpx;
+  line-height: 100rpx;
   background-color: #4898fa;
   color: #fff;
 }
+.tabBar_left{
+  border-right: 2rpx solid #fcfcfc;
+}
+.tabBar_right{
+  border-left: 2rpx solid #fcfcfc;
+}
 .tabBar_litem{
-  width:50%;
-  height: 60rpx;
+  width:49%;
+  height: 100rpx;
   overflow: auto;
   font-size: 32rpx;
   display: inline-block; 
   text-align: center;
   color: #fff;
   background-color: #4898fa;
-  line-height: 60rpx;
+  line-height: 100rpx;
 }

@@ -52,9 +52,9 @@ Page({
                   wx.redirectTo({
                     url: '/pages/areaManual/areaManual',
                   })
-                } else if (app.globalData.group_uuid){
+                } else if (app.globalData.equipment_uuid){
                   wx.redirectTo({
-                    url: '/pages/groupManual/groupManual',
+                    url: '/pages/equipmentManual/equipmentManual',
                   })
                 }else{
                   wx.redirectTo({

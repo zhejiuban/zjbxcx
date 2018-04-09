@@ -2,7 +2,6 @@
   "pages": [
     "pages/home/home",
     "pages/system/system",
-    "pages/groupManual/groupManual",
     "pages/equipmentManual/equipmentManual",
     "pages/time/time",
     "pages/login/login",
@@ -14,7 +13,6 @@
     "pages/index/assess/assess",
     "pages/alldetails/alldetails",
     "pages/me/me",
-    "pages/details/details",
     "pages/manual/manual",
     "pages/evaluate/evaluate",
     "pages/complain/complain",

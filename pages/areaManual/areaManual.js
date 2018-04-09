@@ -22,6 +22,7 @@ Page({
 
     //场地
     area_id: '',
+    area_uuid: '',
     area_name: '',
     room_name:'',
 
@@ -34,11 +35,35 @@ Page({
   onLoad: function (options) {
     app.network_state();
     let that = this;
-    if (app.globalData.area_uuid){
+    // 微信扫小程序获取的参数
+    if (app.globalData.area_uuid) {
+      wx.showLoading({
+        mask: true,
+        title: '加载中',
+      });
+      that.setData({
+        area_uuid: app.globalData.area_uuid
+      });
       if (app.globalData.openId) {
-        that.getAreaInfo(app.globalData.area_uuid);
+        that.getAreaInfo(that.data.area_uuid);
       }
-    }
+      wx.hideLoading();
+    } else if (options.area_uuid) {
+      console.log(options.area_uuid);
+      //小程序里面扫描二维码
+      wx.showLoading({
+        mask: true,
+        title: '加载中',
+      });
+      let area_uuid = options.area_uuid;
+      that.getAreaInfo(area_uuid);
+      app.globalData.area_uuid = area_uuid;
+      that.setData({
+        area_uuid: area_uuid
+      });
+      wx.hideLoading();
+    } 
+
   },
 
   click_scan: function () {
@@ -100,6 +125,9 @@ Page({
           });
           that.get_classify(that.data.org_id);
         }
+      },
+      complete: function(){
+        wx.hideLoading();
       }
     })
   },
@@ -238,14 +266,6 @@ Page({
         urls: that.data.imgs // 需要预览的图片http链接列表
       })
     }
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-    console.log("onUnload");
-    app.globalData.area_uuid = null;
   },
 
   formSubmit: function (e) {

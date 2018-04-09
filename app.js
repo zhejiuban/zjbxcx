@@ -22,8 +22,8 @@ App({
         if (area_uuid){
           that.globalData.area_uuid = area_uuid;
         }else{
-          let group_uuid = that.getUrlParam(url, "group_uuid");
-          that.globalData.group_uuid = group_uuid;
+          let equipment_uuid = that.getUrlParam(url, "equipment_uuid");
+          that.globalData.equipment_uuid = equipment_uuid;
         }
       }
       if (!that.globalData.validate) {
@@ -100,7 +100,7 @@ App({
                           that.globalData.user_id = res.data.user_id;
                           that.globalData.validate = true;
                           console.log(that.globalData.validate);
-                          if (that.globalData.uuid || that.globalData.area_uuid || that.globalData.group_uuid){
+                          if (that.globalData.uuid || that.globalData.area_uuid || that.globalData.equipment_uuid){
                             that.needValidation();
                           } else {
                             wx.redirectTo({
@@ -114,7 +114,6 @@ App({
                            * 有资产id存在的话，去后台判断是否需要LDAP
                            * 如果没有资产存在的，直接授权手机号验证
                            * */
-                           console.log("暂未注册");
                           wx.request({
                             url: that.globalData.url + 'wx/add_user',
                             method: "POST",
@@ -137,7 +136,7 @@ App({
                                 that.globalData.user_id = res.data.user_id;
                                 //用户添加成功
                                 //判断此单位是如何验证用户的
-                                if (that.globalData.uuid || that.globalData.area_uuid || that.globalData.group_uuid) {
+                                if (that.globalData.uuid || that.globalData.area_uuid || that.globalData.equipment_uuid) {
                                   wx.request({
                                     url: that.globalData.url + 'wx/user_auth',
                                     method: "POST",
@@ -149,7 +148,7 @@ App({
                                       user_id: that.globalData.user_id,
                                       asset_uuid: that.globalData.uuid,
                                       area_uuid: that.globalData.area_uuid,
-                                      group_uuid: that.globalData.group_uuid
+                                      equipment_uuid: that.globalData.equipment_uuid
                                     },
                                     success: function (res) {
                                       res.data = that.getResData(res);
@@ -162,9 +161,9 @@ App({
                                           wx.redirectTo({
                                             url: '/pages/areaManual/areaManual',
                                           })
-                                        } else if (that.globalData.group_uuid){
+                                        } else if (that.globalData.equipment_uuid){
                                           wx.redirectTo({
-                                            url: '/pages/groupManual/groupManual',
+                                            url: '/pages/equipmentManual/equipmentManual',
                                           })
                                         }
                                       }else if(res.data.code==0){
@@ -322,7 +321,7 @@ App({
     firstLogin: 1,
     uuid: null,
     area_uuid:null,
-    group_uuid: null,
+    equipment_uuid: null,
     //是否已经授权手机号
     authorization:null,
     validate: false,
@@ -350,7 +349,7 @@ App({
         let url = res.result;
         let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
         let area_uuid = null;
-        let group_uuid = null;
+        let equipment_uuid = null;
         if (asset_uuid){
           that.globalData.uuid = asset_uuid;
         }else{
@@ -358,8 +357,10 @@ App({
           if (area_uuid){
             that.globalData.area_uuid = area_uuid;
           }else{
-            group_uuid = that.getUrlParam(url, "group_uuid");
-            that.globalData.group_uuid = group_uuid;
+            equipment_uuid = that.getUrlParam(url, "equipment_uuid");
+            if (equipment_uuid){
+              that.globalData.equipment_uuid = equipment_uuid;
+            }
           }
         }
         that.needValidation();
@@ -370,82 +371,97 @@ App({
 
   needValidation: function () {
     let that = this;
-    wx.request({
-      url: that.globalData.url + 'wx/need_validation',
-      method: "POST",
-      data: {
-        role: that.globalData.role,
-        area_uuid: that.globalData.area_uuid,
-        asset_uuid: that.globalData.uuid,
-        group_uuid: that.globalData.group_uuid,
-        openId: that.globalData.openId
-      },
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
+    if (that.globalData.area_uuid || that.globalData.uuid || that.globalData.equipment_uuid){
+      wx.request({
+        url: that.globalData.url + 'wx/need_validation',
+        method: "POST",
+        data: {
+          role: that.globalData.role,
+          area_uuid: that.globalData.area_uuid,
+          asset_uuid: that.globalData.uuid,
+          equipment_uuid: that.globalData.equipment_uuid,
+          openId: that.globalData.openId
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        success: function (res) {
 
-        wx.hideLoading();
-        res.data = that.getResData(res);
-        console.log(res.data);
-        if (res.data.code == 1) {
-          //验证通过，可以正常报修
-          if (that.globalData.area_uuid) {
-            wx.redirectTo({
-              url: '/pages/areaManual/areaManual',
+          wx.hideLoading();
+          res.data = that.getResData(res);
+          console.log(res.data);
+          if (res.data.code == 1) {
+            //验证通过，可以正常报修
+            if (that.globalData.area_uuid) {
+              wx.redirectTo({
+                url: '/pages/areaManual/areaManual',
+              })
+            } else if (that.globalData.equipment_uuid) {
+              wx.redirectTo({
+                url: '/pages/equipmentManual/equipmentManual',
+              })
+            } else if (that.globalData.asset_uuid) {
+              wx.redirectTo({
+                url: '/pages/manual/manual',
+              })
+            } else {
+              wx.redirectTo({
+                url: '/pages/index/service/service',
+              })
+            }
+          } else if (res.data.code == 403) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false
+            });
+          } else if (res.data.code == 404) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: "/pages/index/service/service"
+                  });
+                }
+              }
             })
-          } else if (that.globalData.group_uuid) {
-            wx.redirectTo({
-              url: '/pages/groupManual/groupManual',
-            })
-          } else if (that.globalData.asset_uuid) {
-            wx.redirectTo({
-              url: '/pages/manual/manual',
-            })
+          } else if (res.data.code == 'system') {
+            wx.navigateTo({
+              url: "/pages/system/system"
+            });
           } else {
-            wx.redirectTo({
-              url: '/pages/index/service/service',
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/index/service/service',
+                  });
+                }
+              }
             })
           }
-        } else if (res.data.code == 403) {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false
-          });
-        } else if (res.data.code == 404) {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.redirectTo({
-                  url: "/pages/index/service/service"
-                });
-              }
-            }
-          })
-        } else if (res.data.code == 'system') {
-          wx.navigateTo({
-            url: "/pages/system/system"
-          });
-        } else {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.redirectTo({
-                  url: '/pages/index/service/service',
-                });
-              }
-            }
-          })
         }
-      }
-    });
+      });
+    }else{
+      wx.showModal({
+        title: '提示',
+        content: '暂不支持此物品报修',
+        showCancel: false,
+        success: function (res) {
+          if (res.confirm) {
+            wx.redirectTo({
+              url: '/pages/index/service/service',
+            });
+          }
+        }
+      })
+    }
   },
 
   // 报修
