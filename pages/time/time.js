@@ -24,6 +24,7 @@ Page({
       method: 'POST',
       data: {
         role: app.globalData.role,
+        token: app.globalData.token,
         openId: app.globalData.openId,
         process_id: options.id
       },
@@ -66,6 +67,10 @@ Page({
         that.setData({
           logs:arr
         })
+      },
+      fail: function () {
+        wx.hideLoading();
+        app.requestError();
       },
       complete: function () {
         wx.hideLoading();

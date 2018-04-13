@@ -15,34 +15,48 @@
 
 .title{
   display: block;
-  color: #333;
-  font-size: 34rpx;
+  color: #999;
+  font-size: 32rpx;
 }
 
- text{
-  display: block;
-  text-align: center;
-  padding: 20rpx;
-} 
+.form-content{
+  width: 100%;
+  margin-top: 80rpx;
+  font-size: 28rpx;
+}
 
-.phone{
-  width: 500rpx;
-  border: 2rpx solid #cfcfcf;
-  text-align: center;
-  padding: 10rpx;
+.section{
+  display: flex;
+  width: 90%;
+  margin: 20rpx 10%;
+  padding: 10rpx 0rpx; 
+}
+.label{
+  display: inline-block;
+  width: 20%;
+  line-height: 70rpx;
   color: #666;
-  margin: 100rpx auto;
+  text-align: right;
+}
+.phone{
+  display: inline-block;
+  width: 80%;
+  border: 2rpx solid #cfcfcf;
+  padding: 10rpx 30rpx;
+  text-align: left;
+  color: #666;
+  border-radius: 10rpx;
 }
 
 
 button {
   color: #fff;
   background-color: #4898fa;
-  width: 300rpx;
-  height: 100rpx;
-  line-height: 100rpx;
+  width: 80%;
+  height: 80rpx;
+  line-height: 80rpx;
   border: none;
-  border-radius: 0;
+  border-radius: 10rpx;
 }
 
 button::after{

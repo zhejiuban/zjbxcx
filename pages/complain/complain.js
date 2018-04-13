@@ -30,6 +30,7 @@ Page({
       method: "POST",
       data: {
         role: app.globalData.role,
+        token: app.globalData.token,
         repair_id: repair_id,
         complain: complain,
         openId: app.globalData.openId
@@ -51,6 +52,8 @@ Page({
               }
             }
           })
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
         } else {
           wx.showModal({
             title: '提示',
@@ -65,6 +68,10 @@ Page({
             }
           })
         }
+      },
+      fail: function () {
+        wx.hideLoading();
+        app.requestError();
       }
     })
   }

@@ -112,12 +112,6 @@ button::after{
   background-color: #4898fa;
   color: #fff;
 }
-.tabBar_left{
-  border-right: 2rpx solid #fcfcfc;
-}
-.tabBar_right{
-  border-left: 2rpx solid #fcfcfc;
-}
 .tabBar_litem{
   width:49%;
   height: 100rpx;

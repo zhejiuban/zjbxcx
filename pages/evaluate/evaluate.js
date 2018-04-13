@@ -12,7 +12,8 @@ Page({
     halfSrc: '../../images/half.png',
     key: 0,//评分
 
-    repair_id:''
+    repair_id:'',
+    items: ''
   },
 
   //点击右边,半颗星
@@ -37,10 +38,88 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let that = this;
     app.network_state();
-    this.setData({
+    that.setData({
       repair_id: options.id
     });
+    wx.request({
+      url: app.globalData.url + 'wx/repair/repair_all_info',
+      method: "POST",
+      data: {
+        role: app.globalData.role,
+        token: app.globalData.token,
+        repair_id: options.id,
+        openId: app.globalData.openId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        if (res.data.code == 403) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.navigateBack({
+                  url: "/pages/home/home"
+                })
+              }
+            }
+          })
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
+        } else if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: "/pages/index/service/service"
+                })
+              }
+            }
+          })
+        } else {
+          that.setData({
+            items: res.data
+            // equipment_id: res.data.equipment_id ? res.data.equipment_id : '',
+            // equipment_name: res.data.equipment_name ? res.data.equipment_name : '',
+            // asset_name: res.data.asset_name,
+            // field_path: res.data.field_path,
+            // remarks: res.data.remarks,
+            // img_url: res.data.img_url,
+            // stars_key: res.data.stars_key,
+            // appraisal: res.data.appraisal ? res.data.appraisal : '',
+            // complain: res.data.complain,
+            // service_status: res.data.service_status,
+            // service_worker: res.data.service_worker,
+            // result: res.data.result,
+            // service_img_url: res.data.service_img_url,
+            // repair_status: res.data.repair_status,
+            // create_time: res.data.create_time,
+            // finish_time: res.data.finish_time,
+            // user_name: res.data.user_name,
+            // user_phone: res.data.user_phone,
+            // method: res.data.method,
+            // result_status: res.data.result_status,
+            // sign_date: res.data.sign_date,
+            // org_id: res.data.org_id,
+            // org_name: res.data.org_name
+          });
+        }
+      },
+      fail: function () {
+        app.requestError();
+      },
+      complete: function () {
+        wx.hideLoading();
+      }
+    })
   },
 
   // form表单提交
@@ -59,6 +138,7 @@ Page({
         method: "POST",
         data: {
           role: app.globalData.role,
+          token: app.globalData.token,
           openId: app.globalData.openId,
           repair_id: repair_id,
           score: score,
@@ -95,6 +175,8 @@ Page({
                 }
               }
             })
+          } else if (res.data.code == 1403) {
+            app.errorPrompt(res.data);
           } else {
             wx.showModal({
               title: '提示',
@@ -102,6 +184,10 @@ Page({
               showCancel: false,
             })
           }
+        },
+        fail: function () {
+          wx.hideLoading();
+          app.requestError();
         }
       })
     }else{

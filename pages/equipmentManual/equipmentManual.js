@@ -49,7 +49,6 @@ Page({
       }
       wx.hideLoading();
     } else if (options.equipment_uuid) {
-      console.log(options.equipment_uuid);
       //小程序里面扫描二维码
       wx.showLoading({
         mask: true,
@@ -73,6 +72,7 @@ Page({
       method: "POST",
       data: {
         role: app.globalData.role,
+        token: app.globalData.token,
         openId: app.globalData.openId,
         equipment_uuid: equipment_uuid
       },
@@ -110,6 +110,8 @@ Page({
               }
             }
           })
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
         } else {
           wx.showModal({
             title: '提示',
@@ -124,8 +126,11 @@ Page({
             }
           })
         }
-        console.log(that.data.asset_id);
         wx.hideLoading();
+      },
+      fail: function () {
+        wx.hideLoading();
+        app.requestError();
       }
     });
   },
@@ -140,7 +145,6 @@ Page({
       asset_uuid: asset_uuid,
       index: e.detail.value
     });
-    console.log(that.data.asset_id);
   },
 
   selectImg: function () {
@@ -262,6 +266,7 @@ Page({
         method: "POST",
         data: {
           role: app.globalData.role,
+          token: app.globalData.token,
           asset_uuid: that.data.asset_uuid,
           asset_id: that.data.asset_id,
           remarks: remarks,
@@ -316,6 +321,8 @@ Page({
                 }
               }
             })
+          } else if (res.data.code == 1403) {
+            app.errorPrompt(res.data);
           } else {
             wx.showModal({
               title: '提示',
@@ -325,6 +332,10 @@ Page({
               }
             })
           }
+        },
+        fail: function () {
+          wx.hideLoading();
+          app.requestError();
         },
         complete: function () {
           wx.hideLoading();

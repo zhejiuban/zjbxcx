@@ -8,3 +8,12 @@
   padding: 200rpx 0;
   box-sizing: border-box;
 } 
+button{
+   border-radius: 0; 
+}
+.tabBar_left{
+   border-right: 1rpx solid #4D9DFF; 
+}
+.tabBar_right{
+   /* border-left: 1rpx solid #408BE7;  */
+}

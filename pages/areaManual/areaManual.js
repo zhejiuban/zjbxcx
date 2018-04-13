@@ -49,7 +49,6 @@ Page({
       }
       wx.hideLoading();
     } else if (options.area_uuid) {
-      console.log(options.area_uuid);
       //小程序里面扫描二维码
       wx.showLoading({
         mask: true,
@@ -94,6 +93,7 @@ Page({
       },
       data: {
         role: app.globalData.role,
+        token: app.globalData.token,
         uuid: area_uuid,
         openId: app.globalData.openId
       },
@@ -111,20 +111,36 @@ Page({
               }
             }
           })
-        } else if (res.data.code==403) {
-          wx.redirectTo({
-            url: '/pages/index/service/service',
+        } else if (res.data.code == 403) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                })
+              }
+            }
           })
-        }else {
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
+        } else {
           that.setData({
             area_id: res.data.area_id,
             area_name: res.data.area_name,
             org_id: res.data.org_id,
             org_name: res.data.org_name,
-            room_name: res.data.room_name
+            room_name: res.data.room_name,
+            classifies: res.data.classifies
           });
-          that.get_classify(that.data.org_id);
+          that.get_classify(res.data.classifies);
         }
+      },
+      fail: function () {
+        wx.hideLoading();
+        app.requestError();
       },
       complete: function(){
         wx.hideLoading();
@@ -133,35 +149,25 @@ Page({
   },
 
   //获取所有报修项目
-  get_classify: function (orgId) {
+  get_classify: function (data) {
+    console.log(data);
     let that = this;
-    wx.request({
-      url: app.globalData.url +'wx/area/get_classify',
-      method: 'GET',
-      data: {
-        role: app.globalData.role,
-        openId: app.globalData.openId,
-        pid: 0,
-        org_id: orgId
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success: function (res) {
-        let data = res.data;
-        let arr = [];
-        for (let i = 0; i < data.length; i++) {
-          arr[i] = {
-            id: data[i].id,
-            name: data[i].name,
-          };
-        }
-        that.setData({
-          classify: arr,
-          classify_id: arr[0].id
-        });
+    let arr = [
+      {
+        id: '',
+        name: '请选择'
       }
-    })
+    ];
+    for (let i = 1; i <= data.length; i++) {
+      arr[i] = {
+        id: data[i-1].id,
+        name: data[i-1].name,
+      };
+    }
+    that.setData({
+      classify: arr,
+      classify_id: ''
+    });
   },
 
   //选择报修项目
@@ -289,6 +295,14 @@ Page({
         success: function (res) {
         }
       })
+    } else if (!that.data.classify_id) {
+      wx.showModal({
+        title: '提示',
+        content: '请选择所要报修项目',
+        showCancel: false,
+        success: function (res) {
+        }
+      })
     } else if (e.detail.value.remarks.length == 0) {
       wx.showModal({
         title: '提示',
@@ -308,6 +322,7 @@ Page({
         method: "POST",
         data: {
           role: app.globalData.role,
+          token: app.globalData.token,
           area_id: that.data.area_id,
           classify_id: that.data.classify_id,
           org_id: that.data.org_id,
@@ -348,6 +363,8 @@ Page({
                 }
               }
             })
+          } else if (res.data.code == 1403) {
+            app.errorPrompt(res.data);
           } else {
             wx.showModal({
               title: '提示',
@@ -357,6 +374,10 @@ Page({
               }
             })
           }
+        },
+        fail: function () {
+          wx.hideLoading();
+          app.requestError();
         },
         complete: function () {
           wx.hideLoading();

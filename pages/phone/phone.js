@@ -41,6 +41,7 @@ Page({
                 method: "POST",
                 data: {
                   role: 1,    //用户角色
+                  token: app.globalData.token,
                   code: code,
                   iv: iv,
                   encryptedData: encryptedData,
@@ -71,7 +72,9 @@ Page({
                         url: "/pages/index/service/service"
                       })
                     }
-                  }else{
+                  } else if (res.data.code == 1403) {
+                    app.errorPrompt(res.data);
+                  } else {
                     wx.showModal({
                       title: '提示',
                       content: res.data.message,
@@ -83,6 +86,10 @@ Page({
                       }
                     })
                   }
+                },
+                fail: function () {
+                  wx.hideLoading();
+                  app.requestError();
                 }
               })
             }

@@ -48,6 +48,7 @@ Page({
       method: "POST",
       data: {
         role: app.globalData.role,
+        token: app.globalData.token,
         status: that.data.status,
         openId: app.globalData.openId,
         page: 1
@@ -63,6 +64,8 @@ Page({
         } else if (res.data.code == 403) {
           app.globalData.openId = null;
           app.closeProgram(res);
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
         } else {
           let arr = [];
           let data = res.data;
@@ -74,6 +77,10 @@ Page({
             itemsLength: '1'
           })
         }
+      },
+      fail: function () {
+        wx.hideLoading();
+        app.requestError();
       },
       complete: function () {
         wx.hideLoading();
@@ -164,6 +171,7 @@ Page({
       method: "POST",
       data: {
         role: app.globalData.role,
+        token: app.globalData.token,
         status: that.data.status,
         openId: app.globalData.openId,
         page: 1
@@ -185,12 +193,18 @@ Page({
             page: 1,
             itemsLength: 1
           })
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
         } else {
           that.setData({
             // itemsLength: '0',
             page: 1
           })
         }
+      },
+      fail: function () {
+        wx.hideLoading();
+        app.requestError();
       }
     })
   },
@@ -206,6 +220,7 @@ Page({
         method: "POST",
         data: {
           role: app.globalData.role,
+          token: app.globalData.token,
           status: that.data.status,
           openId: app.globalData.openId,
           page: that.data.page + 1
@@ -226,6 +241,8 @@ Page({
               items: arrs,
               page: that.data.page + 1
             });
+          } else if (res.data.code == 1403) {
+            app.errorPrompt(res.data);
           }
           if (res.data.length < 10) {
             that.setData({
@@ -237,6 +254,10 @@ Page({
               content: '0'
             })
           }
+        },
+        fail: function () {
+          wx.hideLoading();
+          app.requestError();
         },
         complete: function () {
           wx.hideLoading();

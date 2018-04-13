@@ -52,7 +52,6 @@ Page({
       }
       wx.hideLoading();
     } else if (options.asset_uuid){
-      console.log(options.asset_uuid);
       //小程序里面扫描二维码
       wx.showLoading({
         mask: true,
@@ -71,7 +70,6 @@ Page({
 
   //获取资产信息
   getAssetInfo: function(asset_uuid){
-    console.log(app.globalData.uuid);
     let that = this;
     that.getAsset(asset_uuid);
   },
@@ -83,6 +81,7 @@ Page({
       method: "POST",
       data: {
         role: app.globalData.role,
+        token: app.globalData.token,
         openId: app.globalData.openId,
         asset_uuid: asset_uuid
       },
@@ -90,7 +89,6 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        console.log(res.data);
         if (res.data.code == 1) {
           wx.showModal({
             title: '提示',
@@ -114,8 +112,9 @@ Page({
               }
             }
           })
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
         } else {
-          console.log(res.data);
           that.setData({
             asset_name: res.data.name,
             asset_id: res.data.id,
@@ -131,6 +130,10 @@ Page({
           });
         }
         wx.hideLoading();
+      },
+      fail: function () {
+        wx.hideLoading();
+        app.requestError();
       }
     });
   },
@@ -198,6 +201,10 @@ Page({
           imgs: old_imgs,
           img_count: count
         });
+      },
+      fail: function () {
+        wx.hideLoading();
+        app.requestError();
       }
     })
   },
@@ -228,6 +235,7 @@ Page({
           //   method: "POST",
           //   data: {
           //     role: app.globalData.role,
+          //     token: app.globalData.token,
           //     openId: app.globalData.openId,
           //     id: img_ids[index]
           //   },
@@ -252,6 +260,10 @@ Page({
             img_ids: img_ids
           });
         }
+      },
+      fail: function () {
+        wx.hideLoading();
+        app.requestError();
       }
     })
   },
@@ -306,6 +318,7 @@ Page({
         method:"POST",
         data: {
           role: app.globalData.role,
+          token: app.globalData.token,
           asset_uuid: asset_uuid,
           asset_id: asset_id,
           remarks: remarks,
@@ -360,6 +373,8 @@ Page({
                 }
               }
             })
+          } else if (res.data.code == 1403) {
+            app.errorPrompt(res.data);
           } else {
             wx.showModal({
               title: '提示',
@@ -369,6 +384,10 @@ Page({
               }
             })
           }
+        },
+        fail: function () {
+          wx.hideLoading();
+          app.requestError();
         },
         complete: function () {
           wx.hideLoading();

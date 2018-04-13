@@ -10,7 +10,6 @@ App({
 
   onShow: function (e) {
     let that = this;
-    console.log("app.show");
     if (e.query.q) {
       //微信扫描二维码携带的参数
       let url = decodeURIComponent(e.query.q);
@@ -30,9 +29,7 @@ App({
         that.getUserInfo();
       }
     } else {
-      console.log(that.globalData.validate);
       if (!that.globalData.validate) {
-        console.log("执行");
         that.getUserInfo();
       }
     }
@@ -66,14 +63,13 @@ App({
                     'content-type': 'application/json' // 默认值
                   },
                   data: {
+                    token: that.globalData.token,
                     code: code,
                     iv: iv,
                     encryptedData: encryptedData
                   },
                   success: function (res) {
                     res.data = that.getResData(res);
-                    console.log(res.data);
-                    console.log("个人信息");
                     that.globalData.userInfo = res.data;
                     that.globalData.openId = res.data.openId;
                     that.globalData.unionid = res.data.unionId;
@@ -86,28 +82,29 @@ App({
                       },
                       data: {
                         role: 1,    //用户角色
+                        token: that.globalData.token,
                         openId: that.globalData.openId,
                         unionid: that.globalData.unionid
                       },
                       success: function (res) {
                         wx.hideLoading();
                         res.data = that.getResData(res);
-                        console.log(res.data);
-                        console.log("role");
                         if(res.data.code==1){
                           //验证过了
                           that.globalData.authorization=1;
                           that.globalData.user_id = res.data.user_id;
                           that.globalData.validate = true;
-                          console.log(that.globalData.validate);
                           if (that.globalData.uuid || that.globalData.area_uuid || that.globalData.equipment_uuid){
                             that.needValidation();
                           } else {
                             wx.redirectTo({
-                              url: "/pages/index/service/service"
+                              // url: "/pages/index/service/service"
+                              url: "/pages/system/system"
                             });
                           }
-                        }else{
+                        } else if (res.data.code == 1403) {
+                          that.errorPrompt(res.data);
+                        } else {
                           //未注册用户信息
                           /**
                            * 首先判断是否有资产uuid
@@ -122,6 +119,7 @@ App({
                             },
                             data: {
                               role: 1,    //用户角色
+                              token: that.globalData.token,
                               openId: that.globalData.openId,
                               unionid: that.globalData.unionid,
                               name: that.globalData.userInfo.nickName,
@@ -130,8 +128,6 @@ App({
                             success: function (res) {
                               res.data = that.getResData(res);
                               that.globalData.validate = true;
-                              console.log(res.data);
-                              console.log("add_user");
                               if (res.data.code == 1) {
                                 that.globalData.user_id = res.data.user_id;
                                 //用户添加成功
@@ -145,6 +141,7 @@ App({
                                     },
                                     data: {
                                       role: 1,    //用户角色
+                                      token: that.globalData.token,
                                       user_id: that.globalData.user_id,
                                       asset_uuid: that.globalData.uuid,
                                       area_uuid: that.globalData.area_uuid,
@@ -204,13 +201,21 @@ App({
                                     url: '/pages/index/service/service',
                                   })
                                 }
+                              } else if (res.data.code == 1403) {
+                                that.errorPrompt(res.data);
                               }
                             }
                           });
                           
                         }
+                      },
+                      fail: function () {
+                        that.requestError();
                       }
                     })
+                  },
+                  fail: function () {
+                    that.requestError();
                   }
                 });
                 // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
@@ -279,6 +284,7 @@ App({
       url: that.globalData.url + 'wx/asset_find',
       method: "POST",
       data: {
+        token: that.globalData.token,
         openId: that.globalData.openId,
         asset_uuid: asset_uuid
       },
@@ -305,6 +311,9 @@ App({
           });
         }
         wx.hideLoading();
+      },
+      fail: function () {
+        that.requestError();
       }
     });
   },
@@ -329,7 +338,8 @@ App({
     //角色
     role: 1,
     //全局变量 url
-    url: 'https://wx.zhejiuban.com/'
+    url: 'https://wx.zhejiuban.com/',
+    token: 'd3hfWmhlSml1QmFuKywuMjA0'
   },
   swichNav: function (url) {
     wx.redirectTo({
@@ -377,6 +387,7 @@ App({
         method: "POST",
         data: {
           role: that.globalData.role,
+          token: that.globalData.token,
           area_uuid: that.globalData.area_uuid,
           asset_uuid: that.globalData.uuid,
           equipment_uuid: that.globalData.equipment_uuid,
@@ -389,7 +400,6 @@ App({
 
           wx.hideLoading();
           res.data = that.getResData(res);
-          console.log(res.data);
           if (res.data.code == 1) {
             //验证通过，可以正常报修
             if (that.globalData.area_uuid) {
@@ -547,6 +557,21 @@ App({
     })
   },
 
+  requestError: function () {
+    wx.showModal({
+      title: '提示',
+      content: '网络请求超时，请稍后重试',
+      showCancel: false,
+      success: function (res) {
+        if (res.confirm) {
+          wx.redirectTo({
+            url: '/pages/index/service/service',
+          })
+        }
+      }
+    })
+  },
+
   //回到首页
   toIndex: function () {
     wx.redirectTo({
@@ -559,6 +584,23 @@ App({
     wx.navigateTo({
       url: '/pages/me/me',
     })
+  },
+
+  errorPrompt: function (data) {
+    if(data.code==1403){
+      wx.showModal({
+        title: '提示',
+        content: data.message,
+        showCancel: false,
+        success: function (res) {
+          if (res.confirm) {
+            wx.redirectTo({
+              url: "/pages/index/service/service"
+            })
+          }
+        }
+      })
+    }
   }
 
 

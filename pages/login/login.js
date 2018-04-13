@@ -29,6 +29,7 @@ Page({
       method: "POST",
       data: {
         role: 1,
+        token: app.globalData.token,
         job_number: job_number,
         password: password,
         openId: app.globalData.openId
@@ -58,6 +59,8 @@ Page({
               }
             }
           })
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
         } else {
           wx.showModal({
             title: '提示',
@@ -67,6 +70,10 @@ Page({
             }
           })
         }
+      },
+      fail: function () {
+        wx.hideLoading();
+        app.requestError();
       },
       complete: function () {
         wx.hideLoading();

@@ -1,10 +1,18 @@
 <!--pages/system/system.wxml-->
 <view class='content' >
-  
   <image class='logo' src='/images/logo.png' ></image>
-  <text>系统认证</text>
+  <text class='title' >欢迎登录</text>
   <form bindsubmit="formSubmit" bindreset="formReset">
-    <input class='phone' name="phone" type='number' placeholder='请输入手机号' ></input>
-    <button formType="submit">提 交</button>
+    <view class='form-content' >
+      <view class='section' >
+        <!-- <text class='label' >手机号：</text> -->
+        <input class='phone' name="phone" type='number' placeholder='手机号' ></input>
+      </view>
+      <view class='section' >
+        <!-- <text class='label' >密码：</text> -->
+        <input class='phone' name="password" type='password' placeholder='密码' ></input>
+      </view>
+    </view>
+    <button formType="submit">登录</button>
   </form> 
 </view>

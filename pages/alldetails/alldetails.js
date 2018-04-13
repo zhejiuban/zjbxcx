@@ -33,6 +33,9 @@ Page({
     user_name: '',
     user_phone: '',
     method: '',
+    sign_date: '',
+    org_id: '',
+    org_name: '',
     // appointment: ''
   },
   imgShow: function (e) {
@@ -90,6 +93,7 @@ Page({
       method: "POST",
       data: {
         role:app.globalData.role,
+        token: app.globalData.token,
         repair_id: repair_id,
         openId: app.globalData.openId
       },
@@ -106,6 +110,21 @@ Page({
               if (res.confirm) {
                 wx.navigateBack({
                   url: "/pages/home/home"
+                })
+              }
+            }
+          })
+        } else if (res.data.code == 1403){
+          app.errorPrompt(res.data);
+        } else if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: "/pages/index/service/service"
                 })
               }
             }
@@ -131,9 +150,100 @@ Page({
             user_name: res.data.user_name,
             user_phone: res.data.user_phone,
             method: res.data.method,
-            result_status: res.data.result_status
+            result_status: res.data.result_status,
+            sign_date: res.data.sign_date,
+            org_id: res.data.org_id,
+            org_name: res.data.org_name
           });
         }
+      },
+      fail: function () {
+        app.requestError();
+      },
+      complete: function () {
+        wx.hideLoading();
+      }
+    })
+  },
+
+  //下拉刷新
+  onPullDownRefresh: function () {
+    let that = this;
+    wx.showNavigationBarLoading() //在标题栏中显示加载
+
+    wx.request({
+      url: app.globalData.url + 'wx/repair/repair_all_info',
+      method: "POST",
+      data: {
+        role: app.globalData.role,
+        token: app.globalData.token,
+        repair_id: that.data.repair_id,
+        openId: app.globalData.openId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        wx.hideNavigationBarLoading() //完成停止加载
+        wx.stopPullDownRefresh() //停止下拉刷新
+        if (res.data.code == 403) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.navigateBack({
+                  url: "/pages/home/home"
+                })
+              }
+            }
+          })
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
+        } else if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: "/pages/index/service/service"
+                })
+              }
+            }
+          })
+        } else {
+          that.setData({
+            equipment_id: res.data.equipment_id ? res.data.equipment_id : '',
+            equipment_name: res.data.equipment_name ? res.data.equipment_name : '',
+            asset_name: res.data.asset_name,
+            field_path: res.data.field_path,
+            remarks: res.data.remarks,
+            img_url: res.data.img_url,
+            stars_key: res.data.stars_key,
+            appraisal: res.data.appraisal ? res.data.appraisal : '',
+            complain: res.data.complain,
+            service_status: res.data.service_status,
+            service_worker: res.data.service_worker,
+            result: res.data.result,
+            service_img_url: res.data.service_img_url,
+            repair_status: res.data.repair_status,
+            create_time: res.data.create_time,
+            finish_time: res.data.finish_time,
+            user_name: res.data.user_name,
+            user_phone: res.data.user_phone,
+            method: res.data.method,
+            result_status: res.data.result_status,
+            sign_date: res.data.sign_date,
+            org_id: res.data.org_id,
+            org_name: res.data.org_name
+          });
+        }
+      },
+      fail: function () {
+        app.requestError();
       },
       complete: function () {
         wx.hideLoading();
