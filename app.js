@@ -98,8 +98,8 @@ App({
                             that.needValidation();
                           } else {
                             wx.redirectTo({
-                              // url: "/pages/index/service/service"
-                              url: "/pages/system/system"
+                              url: "/pages/index/service/service"
+                              // url: "/pages/system/system"
                             });
                           }
                         } else if (res.data.code == 1403) {
