@@ -55,7 +55,7 @@ Page({
                   'content-type': 'application/json' // 默认值
                 },
                 success: function (res) {
-                  res.data = app.getResData(res);
+                  // res.data = app.getResData(res);
                   if(res.data.code==1){
                     app.globalData.authorization = 1;
                     app.globalData.validate = true;

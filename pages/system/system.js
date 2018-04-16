@@ -60,7 +60,7 @@ Page({
           'content-type': 'application/json'
         },
         success: function (res) {
-          res.data = app.getResData(res);
+          // res.data = app.getResData(res);
           if (res.data.code == 1) {
             wx.showModal({
               title: '提示',

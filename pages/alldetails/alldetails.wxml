@@ -15,7 +15,7 @@
     <text class='list_value'>{{equipment_name}}</text>
   </view>
   <view class='list'>
-    <text class='list_label'>报修资产：</text>
+    <text class='list_label'>故障设备：</text>
     <text class='list_value'>{{asset_name}}</text>
   </view>
   <view class='list'>
@@ -101,6 +101,10 @@
   <!--评价详情  -->
   <view wx:if="{{stars_key}}" >
     <view class='order_title' >评价详情</view>
+    <view class='list-bewrite'>
+      <view>评论时间：</view>
+      <text class='bewrite' name="evaluation_time" >{{evaluation_time}}</text>
+    </view>
     <view class='section'>
         <view class='section_title'>满意度:</view>
         <view class='stars'>

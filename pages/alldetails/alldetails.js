@@ -34,6 +34,7 @@ Page({
     user_phone: '',
     method: '',
     sign_date: '',
+    evaluation_time: '',
     org_id: '',
     org_name: '',
     // appointment: ''
@@ -152,6 +153,7 @@ Page({
             method: res.data.method,
             result_status: res.data.result_status,
             sign_date: res.data.sign_date,
+            evaluation_time: res.data.evaluation_time,
             org_id: res.data.org_id,
             org_name: res.data.org_name
           });

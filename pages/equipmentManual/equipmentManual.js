@@ -92,7 +92,7 @@ Page({
             asset_list: data.list,
             asset_id: data.list[0].asset_id,
             asset_uuid: data.list[0].asset_uuid
-          })
+          });
         } else if (res.data.code == 403) {
           wx.redirectTo({
             url: '/pages/index/service/service',
@@ -158,11 +158,12 @@ Page({
         let str = that.data.imgId;
         for (let i = 0; i < tempFilePaths.length; i++) {
           wx.uploadFile({
-            url: app.globalData.url + 'file/img_file',
+            url: app.globalData.url + 'wx/img_file',
             filePath: tempFilePaths[i],
             method: "POST",
             name: 'img',
             formData: {
+              token: app.globalData.token,
               openId: app.globalData.openId,
               org_id: that.data.org_id
             },
@@ -170,6 +171,9 @@ Page({
               'content-type': 'multipart/form-data' // 默认值
             },
             success: function (res) {
+              if (res.data.code == 1403) {
+                app.errorPrompt(res.data);
+              }
               let arrs1 = that.data.img_ids.concat(res.data);
               that.setData({
                 img_ids: arrs1

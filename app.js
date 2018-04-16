@@ -69,7 +69,8 @@ App({
                     encryptedData: encryptedData
                   },
                   success: function (res) {
-                    res.data = that.getResData(res);
+                    console.log(res);
+                    // res.data = that.getResData(res);
                     that.globalData.userInfo = res.data;
                     that.globalData.openId = res.data.openId;
                     that.globalData.unionid = res.data.unionId;
@@ -88,7 +89,7 @@ App({
                       },
                       success: function (res) {
                         wx.hideLoading();
-                        res.data = that.getResData(res);
+                        // res.data = that.getResData(res);
                         if(res.data.code==1){
                           //验证过了
                           that.globalData.authorization=1;
@@ -126,7 +127,7 @@ App({
                               avatar: that.globalData.userInfo.avatarUrl
                             },
                             success: function (res) {
-                              res.data = that.getResData(res);
+                              // res.data = that.getResData(res);
                               that.globalData.validate = true;
                               if (res.data.code == 1) {
                                 that.globalData.user_id = res.data.user_id;
@@ -148,7 +149,7 @@ App({
                                       equipment_uuid: that.globalData.equipment_uuid
                                     },
                                     success: function (res) {
-                                      res.data = that.getResData(res);
+                                      // res.data = that.getResData(res);
                                       if(res.data.code==1){
                                         if (that.globalData.uuid) {
                                           wx.redirectTo({
@@ -210,11 +211,13 @@ App({
                         }
                       },
                       fail: function () {
+                        wx.hideLoading();
                         that.requestError();
                       }
                     })
                   },
                   fail: function () {
+                    wx.hideLoading();
                     that.requestError();
                   }
                 });
@@ -313,6 +316,7 @@ App({
         wx.hideLoading();
       },
       fail: function () {
+        wx.hideLoading();
         that.requestError();
       }
     });
@@ -399,7 +403,7 @@ App({
         success: function (res) {
 
           wx.hideLoading();
-          res.data = that.getResData(res);
+          // res.data = that.getResData(res);
           if (res.data.code == 1) {
             //验证通过，可以正常报修
             if (that.globalData.area_uuid) {
@@ -558,6 +562,7 @@ App({
   },
 
   requestError: function () {
+    wx.hideLoading();
     wx.showModal({
       title: '提示',
       content: '网络请求超时，请稍后重试',

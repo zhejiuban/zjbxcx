@@ -240,6 +240,8 @@ Page({
         wx.stopPullDownRefresh() //停止下拉刷新
         if (res.data.code == 0) {
           that.setData({
+            itemsLength: '0',
+            content: '1',
             page: 1
           })
         } else if (res.data.code == 1403) {
@@ -253,7 +255,8 @@ Page({
           that.setData({
             items: arr,
             page: 1,
-            itemsLength: '1'
+            itemsLength: '1',
+            content: '1',
           })
         }
       },

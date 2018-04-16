@@ -144,7 +144,16 @@ Page({
       success: function (res) {
         wx.hideNavigationBarLoading() //完成停止加载
         wx.stopPullDownRefresh() //停止下拉刷新
-        if (res.data.length != '0') {
+        if (res.data.code == 0) {
+          that.setData({
+            itemsLength: '0',
+            content: '1',
+            page: 1
+          })
+         
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
+        } else {
           let arr = [];
           let data = res.data;
           for (var i = 0; i < data.length; i++) {
@@ -153,14 +162,8 @@ Page({
           that.setData({
             items: arr,
             page: 1,
-            itemsLength: 1
-          })
-        } else if (res.data.code == 1403) {
-          app.errorPrompt(res.data);
-        } else {
-          that.setData({
-            // itemsLength: '0',
-            page: 1
+            itemsLength: 1,
+            content: '1',
           })
         }
       },

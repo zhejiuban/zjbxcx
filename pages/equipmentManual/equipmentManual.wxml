@@ -17,7 +17,7 @@
   </view>
 
   <view class="section">
-    <view class="section_title">选择资产：</view>
+    <view class="section_title">故障设备：</view>
     <picker bindchange="bindAssetChange" value="{{index}}" range="{{asset_list}}" range-key="{{'asset_name'}}"> 
       <view class="picker">
         {{asset_list[index].asset_name}}
