@@ -108,10 +108,10 @@
     <view class='section'>
         <view class='section_title'>满意度:</view>
         <view class='stars'>
-          <block wx:for="{{stars}}">
-            <image class="star-image" mode='aspectFit' style="left: {{item*100}}rpx" src="{{stars_key > item ?(stars_key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
-              <view class="item" style="left:0rpx" data-key="{{item+0.5}}"></view>
-              <view class="item" style="left:75rpx" data-key="{{item+1}}" ></view>
+          <block wx:for="{{stars}}" wx:key="property">
+            <image class="star-image" mode='aspectFit' style="left: {{item*80}}rpx" src="{{stars_key > item ?(stars_key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
+              <view class="item" data-key="{{item+1}}"></view>
+              <view class="item" data-key="{{item+1}}" ></view>
             </image>
           </block>
         </view>

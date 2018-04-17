@@ -1,4 +1,5 @@
 <import src="/pages/index/config/config.wxml" />
+
 <view class='top_title' >
   <template is="navTop" data="{{currentTab}}" />
   <swiper class="tab-content" current="0" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx">
@@ -24,4 +25,4 @@
     </swiper-item>
   </swiper>
 </view>
-<template is="tabBar" />
+ <template is="tabBar" /> 

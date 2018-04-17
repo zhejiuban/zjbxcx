@@ -27,7 +27,7 @@
 
 .item-ans {
   width: 100%;
-  display: flex; 
+  display: flex;
   flex-grow: row no-wrap;
   justify-content: space-between;
   padding: 30rpx;
@@ -37,16 +37,16 @@
   border-bottom: 2rpx solid #f2f2f2;
 }
 
-.item-list{
+.item-list {
   width: 100%;
   height: 100rpx;
-  line-height: 70rpx;
+  line-height: 80rpx;
   text-align: center;
   font-size: 28rpx;
   color: #9c9c9c;
 }
 
-.item-none{
+.item-none {
   width: 100%;
   height: 100rpx;
   line-height: 100rpx;
@@ -54,7 +54,6 @@
   font-size: 38rpx;
   color: #9c9c9c;
 }
-
 
 .avatar {
   width: 130rpx;
@@ -80,9 +79,9 @@
 
 .expertInfo .name {
   font-size: 34rpx;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  overflow:hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   color: #000;
   margin-bottom: 10rpx;
 }
@@ -90,21 +89,21 @@
 .expertInfo .wait_name {
   width: 75%;
 }
-.expertInfo .tag{
+
+.expertInfo .tag {
   margin-top: 50rpx;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  overflow:hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
+
 .expertInfo .wait_tag {
   width: 75%;
   margin-top: 50rpx;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  overflow:hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
-
-
 
 .tab-content {
   margin-top: 90rpx;
@@ -127,29 +126,33 @@
   border-radius: 0;
 }
 
-.complain_btn{
+.complain_btn {
   background-color: #e64340;
 }
 
 /*底部tabBar  */
-.tabBar{
-  width:100%;
-  position:absolute;
-  bottom:0;
-  height:100rpx;
+
+.tabBar {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  height: 100rpx;
   line-height: 100rpx;
-  /* padding: 20rpx 0; */
   background-color: #4898fa;
   color: #fff;
 }
-.tabBar_litem{
-  width:49%;
+
+.tabBar_litem {
+  position: absolute;
+  bottom: 0rpx;
+  width: 49%;
   height: 100rpx;
   display: inline-block;
   text-align: center;
+  overflow: hidden;
 }
 
-.item_icon{
+.item_icon {
   width: 100%;
   height: 100rpx;
   display: block;
@@ -157,11 +160,12 @@
   overflow: auto;
   position: relative;
 }
-.item_icon image{
+
+.item_icon image {
   width: 50rpx;
   height: 50rpx;
   position: absolute;
   left: 50%;
   margin-left: -25rpx;
-  top: 25rpx;  
+  top: 25rpx;
 }

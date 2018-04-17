@@ -180,6 +180,12 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
+        that.setData({
+          items: [],
+          page: 1,
+          itemsLength: '1',
+          content: '1',
+        });
         wx.hideNavigationBarLoading() //完成停止加载
         wx.stopPullDownRefresh() //停止下拉刷新
         if (res.data.code == 0) {

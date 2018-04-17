@@ -61,6 +61,10 @@ text{
   border: 1rpx solid #ccc;
 }
 
+picker{
+  width: 70%;
+}
+
 .scanBtn{
   position: absolute;
   right: 10rpx;

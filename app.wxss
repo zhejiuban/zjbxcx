@@ -12,8 +12,10 @@ button{
    border-radius: 0; 
 }
 .tabBar_left{
-   border-right: 1rpx solid #4D9DFF; 
+  left:0rpx;
+  border-right: 1rpx solid #4D9DFF; 
 }
 .tabBar_right{
+  right:0rpx;
    /* border-left: 1rpx solid #408BE7;  */
 }
