@@ -1,3 +1,5 @@
+const config = require('../../config')
+
 // pages/login/login.js
 let app = getApp();
 Page({
@@ -25,7 +27,8 @@ Page({
     let job_number = e.detail.value.number;
     let password = e.detail.value.password;
     wx.request({
-      url: app.globalData.url + 'wx/job_number',
+      // url: app.globalData.url + 'wx/job_number',
+      url: config.jobNumberUrl,
       method: "POST",
       data: {
         role: 1,

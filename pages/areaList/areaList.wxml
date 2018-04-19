@@ -1,0 +1,26 @@
+<!--pages/areaList/areaList.wxml-->
+<form bindsubmit="formSubmit" bindreset="formReset">
+<view class='content' >
+  <radio-group class="radio-group" bindchange="radioChange">
+    <label class="radio" wx:for="{{items}}" wx:key="property">
+      <view class='list'>
+        <radio name="area_id" value="{{item.area_id}}"/>
+        <text class='list_value'>{{item.name}}</text>
+        <block wx:if="{{item.next_show}}" >
+          <view class='next_area' catchtap='next_area' data-area-id='{{item.area_id}}' data-pid='{{item.area_id}}' data-org-id='{{org_id}}' >下一级</view>
+        </block>
+      </view>
+    </label>
+  </radio-group>
+
+  <view class='tabBar'>
+    <view class='tabBar_litem tabBar_left ' catchtap='to_areaRepair' >
+        取 消
+    </view>
+    <button class='tabBar_litem tabBar_right submitBtn' formType="submit">
+        确 认
+    </button>
+  </view>
+
+</view>
+</form>

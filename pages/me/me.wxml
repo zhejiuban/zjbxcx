@@ -12,12 +12,12 @@
     <image class='item_icon' src='/images/jifen.png'></image>
     <view class='item_title'>会员积分</view>
     <image class='item_more' src='/images/more.png'></image>
-  </view>
+  </view> -->
   <view class='list_item' catchtap='toArea'>
     <image class='item_icon' src='/images/jifen.png'></image>
     <view class='item_title'>场地报修</view>
     <image class='item_more' src='/images/more.png'></image>
-  </view> -->
+  </view>
 
   <button class='list_item contact_btn' open-type="contact">
     <image class='item_icon' src='/images/kefu.png'></image>

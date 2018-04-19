@@ -25,7 +25,7 @@ Page({
 
   toArea: function (){
     wx.navigateTo({
-      url: '/pages/areaManual/areaManual',
+      url: '/pages/areaRepair/areaRepair',
     })
   },
 

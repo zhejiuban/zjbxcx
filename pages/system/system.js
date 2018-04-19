@@ -1,3 +1,5 @@
+const config = require('../../config')
+
 // pages/system/system.js
 let app = getApp();
 Page({
@@ -27,7 +29,6 @@ Page({
         showCancel: false,
         success: function (res) {
           if (res.confirm) {
-            console.log('用户点击确定')
           }
         }
       })
@@ -38,13 +39,13 @@ Page({
         showCancel: false,
         success: function (res) {
           if (res.confirm) {
-            console.log('用户点击确定')
           }
         }
       })
     }else{
       wx.request({
-        url: app.globalData.url + 'wx/system_auth',
+        // url: app.globalData.url + 'wx/system_auth',
+        url: config.systemAuthUrl,
         method: "POST",
         data: {
           role: app.globalData.role,

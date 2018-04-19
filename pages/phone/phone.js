@@ -1,3 +1,5 @@
+const config = require('../../config')
+
 // pages/phone/phone.js
 let app = getApp();
 Page({
@@ -37,7 +39,8 @@ Page({
             success: res => {
               //发起网络请求
               wx.request({
-                url: app.globalData.url + 'wx/find_phone', //仅为示例，并非真实的接口地址
+                // url: app.globalData.url + 'wx/find_phone', //仅为示例，并非真实的接口地址
+                url: config.findPhoneUrl,
                 method: "POST",
                 data: {
                   role: 1,    //用户角色
@@ -81,7 +84,6 @@ Page({
                       showCancel: false,
                       success: function (res) {
                         if (res.confirm) {
-                          console.log("不是报修人员");
                         }
                       }
                     })

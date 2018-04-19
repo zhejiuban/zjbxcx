@@ -1,3 +1,5 @@
+const config = require('config')
+
 //app.js
 App({
   onLaunch: function (e) {
@@ -13,15 +15,15 @@ App({
     if (e.query.q) {
       //微信扫描二维码携带的参数
       let url = decodeURIComponent(e.query.q);
-      let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
+      let asset_uuid = that.getUrlParam(url, that.globalData.assets);
       if(asset_uuid){
-        that.globalData.uuid = asset_uuid;
+        that.globalData.asset_uuid = asset_uuid;
       }else{
-        let area_uuid = that.getUrlParam(url, "uuid");
+        let area_uuid = that.getUrlParam(url, that.globalData.areas);
         if (area_uuid){
           that.globalData.area_uuid = area_uuid;
         }else{
-          let equipment_uuid = that.getUrlParam(url, "equipment_uuid");
+          let equipment_uuid = that.getUrlParam(url, that.globalData.equipments);
           that.globalData.equipment_uuid = equipment_uuid;
         }
       }
@@ -57,7 +59,8 @@ App({
                 //发起网络请求
                 //登录授权
                 wx.request({
-                  url: that.globalData.url + 'wx/login',
+                  // url: that.globalData.url + 'wx/login',
+                  url: config.loginUrl,
                   method: "POST",
                   header: {
                     'content-type': 'application/json' // 默认值
@@ -69,14 +72,14 @@ App({
                     encryptedData: encryptedData
                   },
                   success: function (res) {
-                    console.log(res);
                     // res.data = that.getResData(res);
                     that.globalData.userInfo = res.data;
                     that.globalData.openId = res.data.openId;
                     that.globalData.unionid = res.data.unionId;
                     //判断有没有验证身份(判断是否注册)
                     wx.request({
-                      url: that.globalData.url + 'wx/authentication',
+                      // url: that.globalData.url + 'wx/authentication',
+                      url: config.authenticationUrl,
                       method: "POST",
                       header: {
                         'content-type': 'application/json' // 默认值
@@ -95,12 +98,12 @@ App({
                           that.globalData.authorization=1;
                           that.globalData.user_id = res.data.user_id;
                           that.globalData.validate = true;
-                          if (that.globalData.uuid || that.globalData.area_uuid || that.globalData.equipment_uuid){
+                          if (that.globalData.asset_uuid || that.globalData.area_uuid || that.globalData.equipment_uuid){
                             that.needValidation();
                           } else {
                             wx.redirectTo({
                               url: "/pages/index/service/service"
-                              // url: "/pages/system/system"
+                              // url: "/pages/areaRepair/areaRepair"
                             });
                           }
                         } else if (res.data.code == 1403) {
@@ -113,7 +116,8 @@ App({
                            * 如果没有资产存在的，直接授权手机号验证
                            * */
                           wx.request({
-                            url: that.globalData.url + 'wx/add_user',
+                            // url: that.globalData.url + 'wx/add_user',
+                            url: config.addUserUrl,
                             method: "POST",
                             header: {
                               'content-type': 'application/json' // 默认值
@@ -133,9 +137,10 @@ App({
                                 that.globalData.user_id = res.data.user_id;
                                 //用户添加成功
                                 //判断此单位是如何验证用户的
-                                if (that.globalData.uuid || that.globalData.area_uuid || that.globalData.equipment_uuid) {
+                                if (that.globalData.asset_uuid || that.globalData.area_uuid || that.globalData.equipment_uuid) {
                                   wx.request({
-                                    url: that.globalData.url + 'wx/user_auth',
+                                    // url: that.globalData.url + 'wx/user_auth',
+                                    url: config.userAuthUrl,
                                     method: "POST",
                                     header: {
                                       'content-type': 'application/json' // 默认值
@@ -144,14 +149,14 @@ App({
                                       role: 1,    //用户角色
                                       token: that.globalData.token,
                                       user_id: that.globalData.user_id,
-                                      asset_uuid: that.globalData.uuid,
+                                      asset_uuid: that.globalData.asset_uuid,
                                       area_uuid: that.globalData.area_uuid,
                                       equipment_uuid: that.globalData.equipment_uuid
                                     },
                                     success: function (res) {
                                       // res.data = that.getResData(res);
                                       if(res.data.code==1){
-                                        if (that.globalData.uuid) {
+                                        if (that.globalData.asset_uuid) {
                                           wx.redirectTo({
                                             url: '/pages/manual/manual',
                                           })
@@ -284,7 +289,8 @@ App({
   getAssetInfo: function (asset_uuid) {
     let that = this;
     wx.request({
-      url: that.globalData.url + 'wx/asset_find',
+      // url: that.globalData.url + 'wx/asset_find',
+      url: config.assetFindUrl,
       method: "POST",
       data: {
         token: that.globalData.token,
@@ -328,11 +334,16 @@ App({
     unionid: null,
     user_id: null,
     //二维码资产参数key
-    asset_uuid: 'id',
+    assets: 'assets',
+    areas: 'areas',
+    equipments: 'groups',
+
+    uuid: 'uuid',
+
     btnShow: false,
     showLoad: false,
     firstLogin: 1,
-    uuid: null,
+    asset_uuid: null,
     area_uuid:null,
     equipment_uuid: null,
     //是否已经授权手机号
@@ -361,19 +372,19 @@ App({
     wx.scanCode({
       success: (res) => {
         let url = res.result;
-        let asset_uuid = that.getUrlParam(url, that.globalData.asset_uuid);
-        let area_uuid = null;
-        let equipment_uuid = null;
+        let asset_uuid = that.getUrlParam(url, that.globalData.assets);
+        let areas_uuid = null;
+        let equip_uuid = null;
         if (asset_uuid){
-          that.globalData.uuid = asset_uuid;
+          that.globalData.asset_uuid = asset_uuid;
         }else{
-          area_uuid = that.getUrlParam(url, "uuid");
-          if (area_uuid){
-            that.globalData.area_uuid = area_uuid;
+          areas_uuid = that.getUrlParam(url, that.globalData.areas);
+          if (areas_uuid){
+            that.globalData.area_uuid = areas_uuid;
           }else{
-            equipment_uuid = that.getUrlParam(url, "equipment_uuid");
-            if (equipment_uuid){
-              that.globalData.equipment_uuid = equipment_uuid;
+            equip_uuid = that.getUrlParam(url, that.globalData.equipments);
+            if (equip_uuid){
+              that.globalData.equipment_uuid = equip_uuid;
             }
           }
         }
@@ -385,15 +396,16 @@ App({
 
   needValidation: function () {
     let that = this;
-    if (that.globalData.area_uuid || that.globalData.uuid || that.globalData.equipment_uuid){
+    if (that.globalData.area_uuid || that.globalData.asset_uuid || that.globalData.equipment_uuid){
       wx.request({
-        url: that.globalData.url + 'wx/need_validation',
+        // url: that.globalData.url + 'wx/need_validation',
+        url: config.needValidationUrl,
         method: "POST",
         data: {
           role: that.globalData.role,
           token: that.globalData.token,
           area_uuid: that.globalData.area_uuid,
-          asset_uuid: that.globalData.uuid,
+          asset_uuid: that.globalData.asset_uuid,
           equipment_uuid: that.globalData.equipment_uuid,
           openId: that.globalData.openId
         },
@@ -485,22 +497,39 @@ App({
     })
   },
 
-  getUrlParam: function (url, ref) {
+  // getUrlParam: function (url, ref, type) {
+  //   let str = "";
+  //   // 如果不包括此参数
+  //   if (url.indexOf(ref) == -1) {
+  //     return "";
+  //   } 
+  //   str = url.substr(url.indexOf('?') + 1);
+  //   let arr = str.split("&");
+  //   let site = '';
+  //   for (let i in arr) {
+  //     let paired = arr[i].split('=');
+  //     if (i==0 && paired[1]==type){
+  //       site=type;
+  //     }
+  //     if (i==1 && site==type){
+  //       return paired[1];
+  //     }
+  //   }
+  //   return "";
+  // },
+
+
+  getUrlParam: function (url, type) {
     let str = "";
-    // 如果不包括此参数
-    if (url.indexOf(ref) == -1) {
-      return "";
-    }
-    str = url.substr(url.indexOf('?') + 1);
-    let arr = str.split("&");
-    for (let i in arr) {
-      let paired = arr[i].split('=');
-      if (paired[0] == ref) {
-        return paired[1];
-      }
+    let arr = url.split("/");
+    let repairType = arr[arr.length-2];
+
+    if(type==repairType){
+      return arr[arr.length-1];
     }
     return "";
   },
+
 
   getResData: function (res) {
     let jsonStr = res.data;

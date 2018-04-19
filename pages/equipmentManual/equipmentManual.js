@@ -1,4 +1,7 @@
 // pages/equipmentManual/equipmentManual.js
+
+const config = require('../../config')
+
 let app = getApp();
 Page({
 
@@ -68,7 +71,8 @@ Page({
   getEquipment: function (equipment_uuid) {
     let that = this;
     wx.request({
-      url: app.globalData.url + 'wx/find_equipment',
+      // url: app.globalData.url + 'wx/find_equipment',
+      url: config.findEquipmentUrl,
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -158,7 +162,8 @@ Page({
         let str = that.data.imgId;
         for (let i = 0; i < tempFilePaths.length; i++) {
           wx.uploadFile({
-            url: app.globalData.url + 'wx/img_file',
+            // url: app.globalData.url + 'wx/img_file',
+            url: config.imgFileUrl,
             filePath: tempFilePaths[i],
             method: "POST",
             name: 'img',
@@ -255,6 +260,14 @@ Page({
         success: function (res) {
         }
       });
+    } else if (e.detail.value.user_phone.length == 0) {
+      wx.showModal({
+        title: '提示',
+        content: '联系方式不能为空',
+        showCancel: false,
+        success: function (res) {
+        }
+      })
     } else {
       let user_phone = null;
       if (e.detail.value.user_phone) {
@@ -266,7 +279,8 @@ Page({
         title: '正在提交中...',
       });
       wx.request({
-        url: app.globalData.url + 'wx/repair/add',
+        // url: app.globalData.url + 'wx/repair/add',
+        url: config.addUrl,
         method: "POST",
         data: {
           role: app.globalData.role,

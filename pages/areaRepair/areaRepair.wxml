@@ -1,0 +1,66 @@
+<!--pages/areaRepair/areaRepair.wxml-->
+<form bindsubmit="formSubmit" bindreset="formReset">
+
+  <view class="section">
+    <view class="section_title">报修单位：</view>
+    <picker bindchange="bindOrgChange" value="{{orgIndex}}" range="{{orgs}}" range-key="{{'name'}}"> 
+      <view class="picker">
+        {{orgs[orgIndex].name}}
+      </view>
+    </picker>
+  </view>
+
+  <view class="section">
+    <view class="section_title">所属场地：</view>
+    <block wx:if="{{room_name}}" >
+      <text class='area'  wx:if="{{area_name}}">{{area_name}}({{room_name}})</text>
+    </block>
+    <block wx:else>
+      <text class='area' wx:if="{{area_name}}">{{area_name}}</text>
+    </block>
+
+    <view class='select_area' catchtap='select_area' data-pid='0' >
+      选择场地
+    </view>
+
+  </view>
+
+  
+
+  <view class="section">
+    <view class="section_title">报修项目：</view>
+    <picker bindchange="bindClassifyChange" value="{{index}}" range="{{classify}}" range-key="{{'name'}}"> 
+      <view class="picker">
+        {{classify[index].name}}
+      </view>
+    </picker> 
+   </view> 
+
+  <view class="textarea_view">
+    <textarea name="remarks" placeholder='问题描述' ></textarea>
+  </view>
+
+  <view class='section1' >
+    <block wx:for="{{imgs}}" wx:key="property">
+      <image src="{{item}}" class='uploader_imgs' bindtap='imgShow' data-src="{{item}}" data-img-id="{{img_ids[index]}}" bindlongtap="longTap" bindtouchstart="touchStart" bindtouchend="touchEnd" data-index="{{index}}"></image>
+    </block>
+    <view class='uploaderBtn' bindtap='selectImg'>
+      <image wx:if="{{imgs.length<3}}" src='{{uploaderImg}}'></image>
+    </view>
+    <text class='prompt'>上传图片\n最多三张,长按删除</text>
+  </view>
+
+  <view class="section">
+    <input type="number" name="user_phone"  placeholder="联系方式(选填)" />
+  </view>
+
+  <view class='tabBar'>
+    <view class='tabBar_litem tabBar_left ' catchtap='to_index' >
+        取 消
+    </view>
+    <button class='tabBar_litem tabBar_right submitBtn' formType="submit">
+        提 交
+    </button>
+  </view>
+
+</form>

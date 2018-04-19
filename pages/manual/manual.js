@@ -1,3 +1,5 @@
+const config = require('../../config')
+
 let app = getApp();
 Page({
 
@@ -39,13 +41,13 @@ Page({
     //微信扫描二维码链接携带的参数
     
     // 微信扫小程序获取的参数
-    if(app.globalData.uuid){
+    if(app.globalData.asset_uuid){
       wx.showLoading({
         mask: true,
         title: '加载中',
       });
       that.setData({
-        asset_uuid: app.globalData.uuid
+        asset_uuid: app.globalData.asset_uuid
       });
       if(app.globalData.openId){
         that.getAssetInfo(that.data.asset_uuid);
@@ -59,7 +61,7 @@ Page({
       });
       let asset_uuid = options.asset_uuid;
       that.getAssetInfo(asset_uuid);
-      app.globalData.uuid = asset_uuid;
+      app.globalData.asset_uuid = asset_uuid;
       that.setData({
         asset_uuid: asset_uuid
       });
@@ -77,7 +79,8 @@ Page({
   getAsset: function (asset_uuid) {
     let that = this;
     wx.request({
-      url: app.globalData.url + 'wx/asset_find',
+      // url: app.globalData.url + 'wx/asset_find',
+      url: config.assetFindUrl,
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -159,7 +162,7 @@ Page({
       success: (res) => {
         let str = decodeURIComponent(res.result);
         let url = res.result;
-        let asset_uuid = app.getUrlParam(url, app.globalData.asset_uuid);
+        let asset_uuid = app.getUrlParam(url, app.globalData.assets);
         that.getAssetInfo(asset_uuid);
       }
     });
@@ -176,7 +179,8 @@ Page({
         let str = that.data.imgId;
         for (let i = 0; i < tempFilePaths.length; i++) {
           wx.uploadFile({
-            url: app.globalData.url + 'wx/img_file',
+            // url: app.globalData.url + 'wx/img_file',
+            url: config.imgFileUrl,
             filePath: tempFilePaths[i],
             method: "POST",
             name: 'img',
@@ -233,30 +237,6 @@ Page({
           let img_ids = that.data.img_ids;
           //数组下标
           let index = e.currentTarget.dataset.index;
-
-          // wx.request({
-          //   url: app.globalData.url + 'file/delete_img_file',
-          //   method: "POST",
-          //   data: {
-          //     role: app.globalData.role,
-          //     token: app.globalData.token,
-          //     openId: app.globalData.openId,
-          //     id: img_ids[index]
-          //   },
-          //   header: {
-          //     'content-type': 'application/json'
-          //   },
-          //   success: function (res) {
-          //     if(res.data.code==1){
-          //       wx.showToast({
-          //         title: '成功',
-          //         icon: 'success',
-          //         duration: 2000
-          //       })
-          //     }
-          //   }
-          // });
-
           imgs.splice(index, 1);
           img_ids.splice(index, 1);
           that.setData({
@@ -271,6 +251,7 @@ Page({
       }
     })
   },
+  
   //图片预览  单击事件
   imgShow: function (e) {
     let that = this;
@@ -307,7 +288,15 @@ Page({
         success: function (res) {
         }
       });
-    }else{
+    } else if (e.detail.value.user_phone.length == 0) {
+      wx.showModal({
+        title: '提示',
+        content: '联系方式不能为空',
+        showCancel: false,
+        success: function (res) {
+        }
+      })
+    } else {
       let user_phone = null;
       if (e.detail.value.user_phone) {
         user_phone = e.detail.value.user_phone;
@@ -318,7 +307,8 @@ Page({
         title: '正在提交中...',
       });
       wx.request({
-        url: app.globalData.url + 'wx/repair/add', 
+        // url: app.globalData.url + 'wx/repair/add', 
+        url: config.addUrl, 
         method:"POST",
         data: {
           role: app.globalData.role,
@@ -403,7 +393,7 @@ Page({
     let that = this;
     that.data.asset_uuid = null;
     that.data.asset_id = null;
-    app.globalData.uuid = null;
+    app.globalData.asset_uuid = null;
     app.toIndex();
   }
 })

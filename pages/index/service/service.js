@@ -1,3 +1,5 @@
+const config = require('../../../config')
+
 let app = getApp();
 Page({
   data: {
@@ -43,7 +45,8 @@ Page({
             success: res => {
               //发起网络请求
               wx.request({
-                url: app.globalData.url + 'login/find_phone', //仅为示例，并非真实的接口地址
+                // url: app.globalData.url + 'login/find_phone', //仅为示例，并非真实的接口地址
+                url: config.findPhoneUrl,
                 method: "POST",
                 data: {
                   role: app.globalData.role,
@@ -90,7 +93,8 @@ Page({
       }
     });
     wx.request({
-      url: app.globalData.url + 'wx/repair/repair_list',
+      // url: app.globalData.url + 'wx/repair/repair_list',
+      url: config.repairListUrl,
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -223,7 +227,8 @@ Page({
     wx.showNavigationBarLoading(); //在标题栏中显示加载
     let that = this;
     wx.request({
-      url: app.globalData.url +'wx/repair/repair_list', //仅为示例，并非真实的接口地址
+      // url: app.globalData.url +'wx/repair/repair_list', //仅为示例，并非真实的接口地址
+      url: config.repairListUrl,
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -280,7 +285,8 @@ Page({
     if (that.data.content!='0'){
       wx.showLoading();
       wx.request({
-        url: app.globalData.url + 'wx/repair/repair_list',
+        // url: app.globalData.url + 'wx/repair/repair_list',
+        url: config.repairListUrl,
         method: "POST",
         data: {
           role: app.globalData.role,
@@ -334,7 +340,6 @@ Page({
   onShareAppMessage: function (res) {
     if (res.from === 'button') {
       // 来自页面内转发按钮
-      console.log(res.target)
     }
     return {
       title: '这就办维修平台',

@@ -1,3 +1,6 @@
+
+const config = require('../../../config')
+
 let app = getApp();
 Page({
   data: {
@@ -45,7 +48,8 @@ Page({
     });
 
     wx.request({
-      url: app.globalData.url +'wx/repair/repair_list',
+      // url: app.globalData.url +'wx/repair/repair_list',
+      url: config.repairListUrl,
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -168,7 +172,8 @@ Page({
     let that = this;
     wx.showNavigationBarLoading();
     wx.request({
-      url: app.globalData.url +'wx/repair/repair_list',
+      // url: app.globalData.url +'wx/repair/repair_list',
+      url: config.repairListUrl,
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -189,7 +194,6 @@ Page({
         });
         wx.hideNavigationBarLoading() //完成停止加载
         wx.stopPullDownRefresh() //停止下拉刷新
-        console.log(res.data);
         if (res.data.code == 0) {
           that.setData({
             itemsLength: '0',
@@ -226,7 +230,8 @@ Page({
     if (that.data.content != '0') {
       wx.showLoading();
       wx.request({
-        url: app.globalData.url +'wx/repair/repair_list',
+        // url: app.globalData.url +'wx/repair/repair_list',
+        url: config.repairListUrl,
         method: "POST",
         data: {
           role: app.globalData.role,
@@ -281,7 +286,6 @@ Page({
   onShareAppMessage: function (res) {
     if (res.from === 'button') {
       // 来自页面内转发按钮
-      console.log(res.target)
     }
     return {
       title: '这就办维修平台',

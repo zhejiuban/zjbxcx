@@ -1,3 +1,5 @@
+const config = require('../../../config')
+
 let app = getApp();
 Page({
   data: {
@@ -44,7 +46,8 @@ Page({
       }
     });
     wx.request({
-      url: app.globalData.url +'wx/repair/repair_list',
+      // url: app.globalData.url +'wx/repair/repair_list',
+      url: config.repairListUrl,
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -167,7 +170,8 @@ Page({
     let that = this;
     wx.showNavigationBarLoading() //在标题栏中显示加载
     wx.request({
-      url: app.globalData.url +'wx/repair/repair_list',
+      // url: app.globalData.url +'wx/repair/repair_list',
+      url: config.repairListUrl,
       method: "POST",
       data: {
         role: app.globalData.role,
@@ -224,7 +228,8 @@ Page({
     if (that.data.content != '0') {
       wx.showLoading();
       wx.request({
-        url: app.globalData.url + 'wx/repair/repair_list',
+        // url: app.globalData.url + 'wx/repair/repair_list',
+        url: config.repairListUrl,
         method: "POST",
         data: {
           role: app.globalData.role,
@@ -278,7 +283,6 @@ Page({
   onShareAppMessage: function (res) {
     if (res.from === 'button') {
       // 来自页面内转发按钮
-      console.log(res.target)
     }
     return {
       title: '这就办维修平台',

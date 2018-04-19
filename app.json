@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/areaRepair/areaRepair",
+    "pages/areaList/areaList",
     "pages/system/system",
     "pages/equipmentManual/equipmentManual",
     "pages/time/time",
@@ -16,7 +18,6 @@
     "pages/manual/manual",
     "pages/evaluate/evaluate",
     "pages/complain/complain",
-    "pages/danger/danger",
     "pages/logs/logs",
     "pages/index/config/config"
   ],

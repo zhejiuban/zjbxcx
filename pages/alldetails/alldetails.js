@@ -1,4 +1,7 @@
 // pages/details/details.js
+
+const config = require('../../config')
+
 let app = getApp();
 Page({
 
@@ -90,7 +93,8 @@ Page({
       repair_id: repair_id
     });
     wx.request({
-      url: app.globalData.url+'wx/repair/repair_all_info',
+      // url: app.globalData.url+'wx/repair/repair_all_info',
+      url: config.repairAllInfoUrl,
       method: "POST",
       data: {
         role:app.globalData.role,
@@ -174,7 +178,8 @@ Page({
     wx.showNavigationBarLoading() //在标题栏中显示加载
 
     wx.request({
-      url: app.globalData.url + 'wx/repair/repair_all_info',
+      // url: app.globalData.url + 'wx/repair/repair_all_info',
+      url: config.repairAllInfoUrl,
       method: "POST",
       data: {
         role: app.globalData.role,

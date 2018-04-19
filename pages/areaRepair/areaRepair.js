@@ -1,4 +1,4 @@
-// pages/areaManual/areaManual.js
+// pages/areaRepair/areaRepair.js
 
 const config = require('../../config')
 
@@ -9,167 +9,177 @@ Page({
    * 页面的初始数据
    */
   data: {
+
     imgs: [],             //上传图片的url路径
     img_ids: [],          //上传图片的id
     img_count: 3,         //目前可以上传图片的数量
-    //报修项目
-    classify:[],
-    index: 0,
+
     uploaderImg: "/images/upload.png",
-    classify_id: '',
-    org_id: '',
+
     isSubmit: true,       // 是否可以点击提交
     //长按事件
     touchStartTime: 0,    // 触摸开始时间
     touchEndTime: 0,      // 触摸结束时间
 
-    //场地
+    orgs: '',
+    orgIndex: 0,
+    org_id: '',
     area_id: '',
-    area_uuid: '',
     area_name: '',
-    room_name:'',
-
-    org_name: ''
+    room_name: '',
+    classify: '',
+    classify_id: '',
+    index: 0
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    app.network_state();
     let that = this;
-    // 微信扫小程序获取的参数
-    if (app.globalData.area_uuid) {
-      wx.showLoading({
-        mask: true,
-        title: '加载中',
-      });
+    if (JSON.stringify(options) != "{}"){
+
       that.setData({
-        area_uuid: app.globalData.area_uuid
-      });
-      if (app.globalData.openId) {
-        that.getAreaInfo(that.data.area_uuid);
-      }
-      wx.hideLoading();
-    } else if (options.area_uuid) {
-      //小程序里面扫描二维码
-      wx.showLoading({
-        mask: true,
-        title: '加载中',
-      });
-      let area_uuid = options.area_uuid;
-      that.getAreaInfo(area_uuid);
-      app.globalData.area_uuid = area_uuid;
-      that.setData({
-        area_uuid: area_uuid
-      });
-      wx.hideLoading();
-    } 
-
+        org_id: options.org_id,
+        area_id: options.area_id,
+        orgIndex: options.org_index,
+      })
+      that.get_org();
+      //场地信息
+      that.get_area(that.data.area_id);
+    }else{
+      that.get_org();
+    }
   },
 
-  click_scan: function () {
-    // 允许从相机和相册扫码
-    let that = this;
-    wx.scanCode({
-      success: (res) => {
-        let str = decodeURIComponent(res.result);
-        let url = res.result;
-        let uuid = app.getUrlParam(url, app.globalData.uuid, app.globalData.areas);
-        that.getAreaInfo(uuid);
-      }
-    });
-  },
-
-  getAreaInfo: function (area_uuid) {
-    let that = this;
-    that.getArea(area_uuid);
-  },
-
-  getArea:function(area_uuid) {
+  get_org: function(){
     let that = this;
     wx.request({
-      // url: app.globalData.url +'wx/area/find_area',
-      url: config.findAreaUrl,
-      method: "post",
+      // url: app.globalData.url + 'wx/area/get_org',
+      url: config.getOrgUrl,
+      method: "POST",
       header: {
         'content-type': 'application/json' // 默认值
       },
       data: {
-        role: app.globalData.role,
         token: app.globalData.token,
-        uuid: area_uuid,
-        openId: app.globalData.openId
+        role: app.globalData.role,
+        user_id: app.globalData.user_id
       },
       success: function (res) {
-        if (res.data.code == 404){
+        if (res.data.code == 403) {
           wx.showModal({
             title: '提示',
             content: res.data.message,
             showCancel: false,
             success: function (res) {
               if (res.confirm) {
-                wx.redirectTo({
-                  url: '/pages/index/service/service',
-                })
-              }
-            }
-          })
-        } else if (res.data.code == 403) {
-          wx.showModal({
-            title: '提示',
-            content: res.data.message,
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.redirectTo({
-                  url: '/pages/index/service/service',
+                wx.navigateBack({
+                  url: "/pages/home/home"
                 })
               }
             }
           })
         } else if (res.data.code == 1403) {
           app.errorPrompt(res.data);
+        } else if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: "/pages/index/service/service"
+                })
+              }
+            }
+          })
         } else {
           that.setData({
-            area_id: res.data.area_id,
-            area_name: res.data.area_name,
-            org_id: res.data.org_id,
-            org_name: res.data.org_name,
-            room_name: res.data.room_name,
-            classifies: res.data.classifies
+            orgs: res.data
           });
-          that.get_classify(res.data.classifies);
         }
-      },
-      fail: function () {
-        wx.hideLoading();
-        app.requestError();
-      },
-      complete: function(){
-        wx.hideLoading();
       }
     })
   },
 
-  //获取所有报修项目
-  get_classify: function (data) {
+  get_area: function (area_id){
     let that = this;
-    let arr = [
-      {
-        id: '',
-        name: '请选择'
+    wx.request({
+      // url: app.globalData.url + 'wx/area/find_area',
+      url: config.findAreaUrl,
+      method: "POST",
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      data: {
+        token: app.globalData.token,
+        role: app.globalData.role,
+        area_id: area_id,
+        openId: app.globalData.openId,
+        user_id: app.globalData.user_id
+      },
+      success: function (res) {
+        if (res.data.code == 403) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.navigateBack({
+                  url: "/pages/home/home"
+                })
+              }
+            }
+          })
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
+        } else if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: "/pages/index/service/service"
+                })
+              }
+            }
+          })
+        } else {
+          that.setData({
+            area_id: res.data.area_id,
+            area_name: res.data.area_name,
+            room_name: res.data.room_name,
+            org_id: res.data.org_id,
+          
+            classify: res.data.classifies,
+            classify_id: '',
+            index: 0
+          })
+        }
       }
-    ];
-    for (let i = 1; i <= data.length; i++) {
-      arr[i] = {
-        id: data[i-1].id,
-        name: data[i-1].name,
-      };
-    }
+    })
+  },
+
+  bindOrgChange: function (e) {
+    let that = this;
+    let org_id = that.data.orgs[e.detail.value].id;
     that.setData({
-      classify: arr,
-      classify_id: ''
+      org_id: org_id,
+      orgIndex: e.detail.value,
+      //重置
+      imgs: [],
+      img_ids: [],
+      area_id: '',
+      area_name: '',
+      room_name: '',
+      classify: '',
+      classify_id: '',
+      index: 0
     });
   },
 
@@ -182,6 +192,35 @@ Page({
       index: e.detail.value
     })
   },
+
+  select_area: function (e) {
+    let that = this;
+    let pid = e.currentTarget.dataset.pid;
+    let org_id = that.data.org_id;
+    let orgIndex = that.data.orgIndex;
+    if (org_id){
+      that.setData({
+        area_id: '',
+        area_name: '',
+        room_name: '',
+        classify: '',
+        classify_id: '',
+        index: 0,
+        imgs: [],
+        img_ids: []
+      });
+      wx.navigateTo({
+        url: '/pages/areaList/areaList?org_id=' + org_id + '&pid=' + pid + '&org_index=' + orgIndex,
+      })
+    }else{
+      wx.showModal({
+        title: '提示',
+        content: '请先选择报修单位',
+        showCancel: false
+      })
+    }
+  },
+
 
   selectImg: function () {
     let that = this;
@@ -214,7 +253,7 @@ Page({
                 'content-type': 'multipart/form-data' // 默认值
               },
               success: function (res) {
-                if(res.data.code == 1403){
+                if (res.data.code == 1403) {
                   app.errorPrompt(res.data);
                 }
                 let arrs1 = that.data.img_ids.concat(res.data);
@@ -282,16 +321,16 @@ Page({
     }
   },
 
-  formSubmit: function (e) {
+  formSubmit: function(e){
     let that = this;
     e.detail.value['img'] = that.data.img;
     let remarks = e.detail.value.remarks;
     let user_phone = null;
-    if (e.detail.value.user_phone){
+    if (e.detail.value.user_phone) {
       user_phone = e.detail.value.user_phone;
     }
     let img_id = null;
-    if(that.data.img_ids.length>0){
+    if (that.data.img_ids.length > 0) {
       img_id = that.data.img_ids.join(",");
     }
 
@@ -401,13 +440,6 @@ Page({
         }
       })
     }
-  },
-
-  to_index:function () {
-    let that = this;
-    app.globalData.area_uuid = null;
-    that.data.area_id = null;
-    app.toIndex();
   }
 
 })

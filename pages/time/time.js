@@ -1,3 +1,5 @@
+const config = require('../../config')
+
 // pages/time/time.js
 let app = getApp();
 Page({
@@ -20,7 +22,8 @@ Page({
     })
     let that = this;
     wx.request({
-      url: app.globalData.url + 'wx/repair/process_log', //仅为示例，并非真实的接口地址
+      // url: app.globalData.url + 'wx/repair/process_log', //仅为示例，并非真实的接口地址
+      url: config.processLogUrl,
       method: 'POST',
       data: {
         role: app.globalData.role,
@@ -32,7 +35,6 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success: function (res) {
-        console.log(res.data);
         let data = res.data;
         let arr = [];
         for(let i=0;i<data.length;i++){

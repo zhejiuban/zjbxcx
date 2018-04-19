@@ -14,12 +14,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
     let that = this;
     if(options.type!=1){
       app.globalData.firstLogin=2;
     };
-    console.log(that.data);
   },
 
   onShow: function () {

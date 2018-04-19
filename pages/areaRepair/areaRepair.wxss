@@ -1,0 +1,157 @@
+/* pages/areaRepair/areaRepair.wxss */
+.page {
+  position: relative;
+}
+text{
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+}
+.section {
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 15rpx 40rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 28rpx;
+  position: relative;
+  color: #333;
+  border-bottom: 1rpx solid #eee;
+}
+
+.section1 {
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 15rpx 40rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 28rpx;
+  position: relative;
+  color: #333;
+  border-bottom: 1rpx solid #eee;
+}
+
+.select_area{
+  position: absolute;
+  right: 10rpx;
+  color: #4898fa;
+}
+
+.textarea_view {
+  border-bottom: 1rpx solid #eee;
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 15rpx 40rpx;
+  font-size: 14px;
+  position: relative;
+  color: #333;
+}
+
+.textarea_view textarea {
+  border: 1px solid #eee;
+  border-radius: 10rpx;
+  width: 700rpx;
+  height: 200rpx;
+  padding: 10rpx;
+}
+.reset{
+  position: absolute;
+  right: 10rpx;
+  top:20rpx;
+  font-size: 24rpx;
+  width: 80rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: center;
+  color: #09BB07;
+  border: 1rpx solid #ccc;
+}
+
+picker{
+  width: 70%;
+}
+
+.area{
+  width: 65%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.scanBtn{
+  position: absolute;
+  right: 10rpx;
+}
+
+.section input {
+  width: 600rpx;
+  padding: 10rpx;
+}
+.section .mult {
+  width: 90%;
+}
+.section1 .uploader_imgs{
+  width:100rpx;
+  height:100rpx;
+  padding: 0 10rpx;  
+}
+
+.section .picker {
+  width: 100%;
+}
+.uploaderBtn image {
+  width: 100rpx;
+  height: 100rpx;
+}
+
+.btn-area{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.btn-area>button {
+  color: #fff;
+  background-color: #4898fa;
+  height: 100rpx;
+  line-height: 100rpx;
+  border: none;
+  border-radius: 0;
+}
+button::after{
+  border: none;
+}
+.prompt{
+  margin-top: 15rpx; 
+  overflow:auto;
+  height:70rpx;
+  padding: 10rpx;
+  line-height: 35rpx;
+  color: #999;
+}
+
+.section .org-name{
+  width: 500rpx;
+}
+
+/*底部tabBar  */
+.tabBar{
+  width:100%;
+  position: fixed;
+  white-space: nowrap;
+  justify-content: space-between;
+  bottom:0;
+  height:100rpx;
+  line-height: 100rpx;
+  background-color: #4898fa;
+  color: #fff;
+}
+.tabBar_litem{
+  width:49%;
+  height: 100rpx;
+  display: inline-block;
+  text-align: center;
+  overflow: auto;
+  font-size: 32rpx;
+  color: #fff;
+  background-color: #4898fa;
+  line-height: 100rpx;
+}
