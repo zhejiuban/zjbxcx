@@ -41,7 +41,7 @@
     </view>
     <view class='list' wx:if="{{items.service_img_url.length>0}}">
       <text class='list_label'>反馈图片：</text>
-      <view wx:for="{{items.service_img_url}}">
+      <view wx:for="{{items.service_img_url}}" wx:key="property">
         <image src='{{item}}' data-url='{{item}}' bindtap='serviceImgShow' mode='aspectFill'></image>
       </view>
     </view>

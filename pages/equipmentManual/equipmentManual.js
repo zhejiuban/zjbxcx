@@ -280,7 +280,7 @@ Page({
       });
       wx.request({
         // url: app.globalData.url + 'wx/repair/add',
-        url: config.addUrl,
+        url: config.repairAddUrl,
         method: "POST",
         data: {
           role: app.globalData.role,

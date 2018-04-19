@@ -96,9 +96,20 @@ Page({
             }
           })
         } else {
-          that.setData({
-            orgs: res.data
-          });
+          if(res.data.code==1){
+            //只关联一个单位
+            that.setData({
+              orgs: [{
+                 id: res.data.id,
+                 name: res.data.name
+                 }],
+              org_id: res.data.id
+            })
+          }else{
+            that.setData({
+              orgs: res.data
+            });
+          }
         }
       }
     })
@@ -197,6 +208,7 @@ Page({
     let that = this;
     let pid = e.currentTarget.dataset.pid;
     let org_id = that.data.org_id;
+    console.log(org_id);
     let orgIndex = that.data.orgIndex;
     if (org_id){
       that.setData({

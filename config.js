@@ -109,7 +109,7 @@ var config = {
   getClassifyUrl: `https://${host}/area/get_classify`,
 
   //获取所属单位接口
-  getOrgUrl: `https://${host}/area/area/get_org`,
+  getOrgUrl: `https://${host}/area/get_org`,
 
   //获取场地详情接口
   getAreaUrl: `https://${host}/area/get_area`,

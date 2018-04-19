@@ -98,6 +98,7 @@ App({
                           that.globalData.authorization=1;
                           that.globalData.user_id = res.data.user_id;
                           that.globalData.validate = true;
+                          
                           if (that.globalData.asset_uuid || that.globalData.area_uuid || that.globalData.equipment_uuid){
                             that.needValidation();
                           } else {
