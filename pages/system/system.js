@@ -44,7 +44,6 @@ Page({
       })
     }else{
       wx.request({
-        // url: app.globalData.url + 'wx/system_auth',
         url: config.systemAuthUrl,
         method: "POST",
         data: {

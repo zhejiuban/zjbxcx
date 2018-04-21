@@ -48,7 +48,6 @@ Page({
     });
 
     wx.request({
-      // url: app.globalData.url +'wx/repair/repair_list',
       url: config.repairListUrl,
       method: "POST",
       data: {
@@ -172,7 +171,6 @@ Page({
     let that = this;
     wx.showNavigationBarLoading();
     wx.request({
-      // url: app.globalData.url +'wx/repair/repair_list',
       url: config.repairListUrl,
       method: "POST",
       data: {
@@ -230,7 +228,6 @@ Page({
     if (that.data.content != '0') {
       wx.showLoading();
       wx.request({
-        // url: app.globalData.url +'wx/repair/repair_list',
         url: config.repairListUrl,
         method: "POST",
         data: {

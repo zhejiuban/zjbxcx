@@ -2,9 +2,13 @@
 
 <view class='content' >
   <view class='order_title' >工单详情</view>
-  <view class='list'>
+  <view class='list' wx:if="{{repair_no}}" >
     <text class='list_label'>工单状态：</text>
     <text class='list_value'>{{repair_status}}</text>
+  </view>
+  <view class='list'>
+    <text class='list_label'>工单编号：</text>
+    <text class='list_value'>{{repair_no}}</text>
   </view>
   <view class='list'>
     <text class='list_label'>创建时间：</text>
@@ -61,6 +65,12 @@
       <view class='list'>
         <text class='list_label'>维修方式：</text>
         <text class='list_value'>{{method==2?'远程协助维修':'上门维修'}}</text>
+      </view>
+    </block>
+    <block wx:if="{{appointment}}" >
+      <view class='list'>
+        <text class='list_label'>预计服务时间：</text>
+        <text class='list_value'>{{appointment}}</text>
       </view>
     </block>
     <block wx:if="{{sign_date}}" >

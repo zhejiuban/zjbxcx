@@ -24,15 +24,12 @@ Page({
   },
 
   toArea: function (){
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/areaRepair/areaRepair',
     })
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+  to_index: function () {
+    let that = this;
+    app.toIndex();
   }
 })

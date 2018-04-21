@@ -16,6 +16,7 @@ Page({
 
     //工单详情
     repair_id: '',
+    repair_no: '',
     asset_name: '',
     equipment_id: '',
     equipment_name: '',
@@ -36,6 +37,7 @@ Page({
     user_name: '',
     user_phone: '',
     method: '',
+    appointment: '',
     sign_date: '',
     evaluation_time: '',
     org_id: '',
@@ -93,7 +95,6 @@ Page({
       repair_id: repair_id
     });
     wx.request({
-      // url: app.globalData.url+'wx/repair/repair_all_info',
       url: config.repairAllInfoUrl,
       method: "POST",
       data: {
@@ -135,31 +136,34 @@ Page({
             }
           })
         }else{
+          let data = res.data;
           that.setData({
-            equipment_id: res.data.equipment_id ? res.data.equipment_id : '',
-            equipment_name: res.data.equipment_name ? res.data.equipment_name : '',
-            asset_name: res.data.asset_name,
-            field_path: res.data.field_path,
-            remarks: res.data.remarks,
-            img_url: res.data.img_url,
-            stars_key: res.data.stars_key,
-            appraisal: res.data.appraisal ? res.data.appraisal: '',
-            complain: res.data.complain,
-            service_status: res.data.service_status,
-            service_worker: res.data.service_worker,
-            result: res.data.result,
-            service_img_url: res.data.service_img_url,
-            repair_status: res.data.repair_status,
-            create_time: res.data.create_time,
-            finish_time: res.data.finish_time,
-            user_name: res.data.user_name,
-            user_phone: res.data.user_phone,
-            method: res.data.method,
-            result_status: res.data.result_status,
-            sign_date: res.data.sign_date,
-            evaluation_time: res.data.evaluation_time,
-            org_id: res.data.org_id,
-            org_name: res.data.org_name
+            equipment_id: data.equipment_id ? data.equipment_id : '',
+            equipment_name: data.equipment_name ? data.equipment_name : '',
+            repair_no: data.repair_no ? data.repair_no : '',
+            asset_name: data.asset_name,
+            field_path: data.field_path,
+            remarks: data.remarks,
+            img_url: data.img_url,
+            stars_key: data.stars_key,
+            appraisal: data.appraisal ? data.appraisal: '',
+            complain: data.complain,
+            service_status: data.service_status,
+            service_worker: data.service_worker,
+            result: data.result,
+            service_img_url: data.service_img_url,
+            repair_status: data.repair_status,
+            create_time: data.create_time,
+            finish_time: data.finish_time,
+            user_name: data.user_name,
+            user_phone: data.user_phone,
+            method: data.method,
+            appointment: data.appointment,
+            result_status: data.result_status,
+            sign_date: data.sign_date,
+            evaluation_time: data.evaluation_time,
+            org_id: data.org_id,
+            org_name: data.org_name
           });
         }
       },
@@ -178,7 +182,6 @@ Page({
     wx.showNavigationBarLoading() //在标题栏中显示加载
 
     wx.request({
-      // url: app.globalData.url + 'wx/repair/repair_all_info',
       url: config.repairAllInfoUrl,
       method: "POST",
       data: {
@@ -222,30 +225,33 @@ Page({
             }
           })
         } else {
+          let data = res.data;
           that.setData({
-            equipment_id: res.data.equipment_id ? res.data.equipment_id : '',
-            equipment_name: res.data.equipment_name ? res.data.equipment_name : '',
-            asset_name: res.data.asset_name,
-            field_path: res.data.field_path,
-            remarks: res.data.remarks,
-            img_url: res.data.img_url,
-            stars_key: res.data.stars_key,
-            appraisal: res.data.appraisal ? res.data.appraisal : '',
-            complain: res.data.complain,
-            service_status: res.data.service_status,
-            service_worker: res.data.service_worker,
-            result: res.data.result,
-            service_img_url: res.data.service_img_url,
-            repair_status: res.data.repair_status,
-            create_time: res.data.create_time,
-            finish_time: res.data.finish_time,
-            user_name: res.data.user_name,
-            user_phone: res.data.user_phone,
-            method: res.data.method,
-            result_status: res.data.result_status,
-            sign_date: res.data.sign_date,
-            org_id: res.data.org_id,
-            org_name: res.data.org_name
+            equipment_id: data.equipment_id ? data.equipment_id : '',
+            equipment_name: data.equipment_name ? data.equipment_name : '',
+            repair_no: data.repair_no ? data.repair_no : '',
+            asset_name: data.asset_name,
+            field_path: data.field_path,
+            remarks: data.remarks,
+            img_url: data.img_url,
+            stars_key: data.stars_key,
+            appraisal: data.appraisal ? data.appraisal : '',
+            complain: data.complain,
+            service_status: data.service_status,
+            service_worker: data.service_worker,
+            result: data.result,
+            service_img_url: data.service_img_url,
+            repair_status: data.repair_status,
+            create_time: data.create_time,
+            finish_time: data.finish_time,
+            user_name: data.user_name,
+            user_phone: data.user_phone,
+            method: data.method,
+            appointment: data.appointment,
+            result_status: data.result_status,
+            sign_date: data.sign_date,
+            org_id: data.org_id,
+            org_name: data.org_name
           });
         }
       },

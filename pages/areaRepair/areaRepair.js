@@ -55,7 +55,6 @@ Page({
   get_org: function(){
     let that = this;
     wx.request({
-      // url: app.globalData.url + 'wx/area/get_org',
       url: config.getOrgUrl,
       method: "POST",
       header: {
@@ -118,7 +117,6 @@ Page({
   get_area: function (area_id){
     let that = this;
     wx.request({
-      // url: app.globalData.url + 'wx/area/find_area',
       url: config.findAreaUrl,
       method: "POST",
       header: {
@@ -385,7 +383,6 @@ Page({
         title: '正在提交中...',
       })
       wx.request({
-        // url: app.globalData.url +'wx/repair/area_repair',
         url: config.areaRepairUrl,
         method: "POST",
         data: {

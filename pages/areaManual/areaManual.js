@@ -89,7 +89,6 @@ Page({
   getArea:function(area_uuid) {
     let that = this;
     wx.request({
-      // url: app.globalData.url +'wx/area/find_area',
       url: config.findAreaUrl,
       method: "post",
       header: {
@@ -334,7 +333,6 @@ Page({
         title: '正在提交中...',
       })
       wx.request({
-        // url: app.globalData.url +'wx/repair/area_repair',
         url: config.areaRepairUrl,
         method: "POST",
         data: {

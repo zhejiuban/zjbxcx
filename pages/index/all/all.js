@@ -131,7 +131,6 @@ Page({
     wx.showNavigationBarLoading() //在标题栏中显示加载
 
     wx.request({
-      // url: app.globalData.url +'wx/repair/repair_list', //仅为示例，并非真实的接口地址
       url: config.repairListUrl,
       method: "POST",
       data: {
@@ -190,7 +189,6 @@ Page({
     if (that.data.content != '0') {
       wx.showLoading();
       wx.request({
-        // url: app.globalData.url +'wx/repair/repair_list',
         url: config.repairListUrl,
         method: "POST",
         data: {
@@ -262,7 +260,6 @@ Page({
     });
 
     wx.request({
-      // url: app.globalData.url +'wx/repair/repair_list', //仅为示例，并非真实的接口地址
       url: config.repairListUrl,
       method: "POST",
       data: {

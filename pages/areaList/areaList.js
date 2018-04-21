@@ -28,7 +28,6 @@ Page({
       org_index: org_index
     });
     wx.request({
-      // url: app.globalData.url + 'wx/area/get_area',
       url: config.getAreaUrl,
       method: "POST",
       header: {

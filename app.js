@@ -59,7 +59,6 @@ App({
                 //发起网络请求
                 //登录授权
                 wx.request({
-                  // url: that.globalData.url + 'wx/login',
                   url: config.loginUrl,
                   method: "POST",
                   header: {
@@ -78,7 +77,6 @@ App({
                     that.globalData.unionid = res.data.unionId;
                     //判断有没有验证身份(判断是否注册)
                     wx.request({
-                      // url: that.globalData.url + 'wx/authentication',
                       url: config.authenticationUrl,
                       method: "POST",
                       header: {
@@ -117,7 +115,6 @@ App({
                            * 如果没有资产存在的，直接授权手机号验证
                            * */
                           wx.request({
-                            // url: that.globalData.url + 'wx/add_user',
                             url: config.addUserUrl,
                             method: "POST",
                             header: {
@@ -140,7 +137,6 @@ App({
                                 //判断此单位是如何验证用户的
                                 if (that.globalData.asset_uuid || that.globalData.area_uuid || that.globalData.equipment_uuid) {
                                   wx.request({
-                                    // url: that.globalData.url + 'wx/user_auth',
                                     url: config.userAuthUrl,
                                     method: "POST",
                                     header: {
@@ -290,7 +286,6 @@ App({
   getAssetInfo: function (asset_uuid) {
     let that = this;
     wx.request({
-      // url: that.globalData.url + 'wx/asset_find',
       url: config.assetFindUrl,
       method: "POST",
       data: {
@@ -399,7 +394,6 @@ App({
     let that = this;
     if (that.globalData.area_uuid || that.globalData.asset_uuid || that.globalData.equipment_uuid){
       wx.request({
-        // url: that.globalData.url + 'wx/need_validation',
         url: config.needValidationUrl,
         method: "POST",
         data: {

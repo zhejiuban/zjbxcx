@@ -47,7 +47,6 @@ Page({
       repair_id: options.id
     });
     wx.request({
-      // url: app.globalData.url + 'wx/repair/repair_all_info',
       url: config.repairAllInfoUrl,
       method: "POST",
       data: {
@@ -138,7 +137,6 @@ Page({
       let appraisal = e.detail.value.appraisal;
       let repair_id = that.data.repair_id;
       wx.request({
-        // url: app.globalData.url +'wx/repair/evaluate',
         url: config.evaluateUrl,
         method: "POST",
         data: {

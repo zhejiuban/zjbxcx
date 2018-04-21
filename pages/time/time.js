@@ -22,7 +22,6 @@ Page({
     })
     let that = this;
     wx.request({
-      // url: app.globalData.url + 'wx/repair/process_log', //仅为示例，并非真实的接口地址
       url: config.processLogUrl,
       method: 'POST',
       data: {

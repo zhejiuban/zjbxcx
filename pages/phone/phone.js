@@ -39,7 +39,6 @@ Page({
             success: res => {
               //发起网络请求
               wx.request({
-                // url: app.globalData.url + 'wx/find_phone', //仅为示例，并非真实的接口地址
                 url: config.findPhoneUrl,
                 method: "POST",
                 data: {

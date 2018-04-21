@@ -27,7 +27,6 @@ Page({
     let job_number = e.detail.value.number;
     let password = e.detail.value.password;
     wx.request({
-      // url: app.globalData.url + 'wx/job_number',
       url: config.jobNumberUrl,
       method: "POST",
       data: {

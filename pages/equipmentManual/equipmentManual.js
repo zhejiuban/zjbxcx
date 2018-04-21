@@ -71,7 +71,6 @@ Page({
   getEquipment: function (equipment_uuid) {
     let that = this;
     wx.request({
-      // url: app.globalData.url + 'wx/find_equipment',
       url: config.findEquipmentUrl,
       method: "POST",
       data: {
@@ -279,7 +278,6 @@ Page({
         title: '正在提交中...',
       });
       wx.request({
-        // url: app.globalData.url + 'wx/repair/add',
         url: config.repairAddUrl,
         method: "POST",
         data: {

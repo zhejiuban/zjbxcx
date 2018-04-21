@@ -79,7 +79,6 @@ Page({
   getAsset: function (asset_uuid) {
     let that = this;
     wx.request({
-      // url: app.globalData.url + 'wx/asset_find',
       url: config.assetFindUrl,
       method: "POST",
       data: {
@@ -307,7 +306,6 @@ Page({
         title: '正在提交中...',
       });
       wx.request({
-        // url: app.globalData.url + 'wx/repair/add', 
         url: config.repairAddUrl, 
         method:"POST",
         data: {
