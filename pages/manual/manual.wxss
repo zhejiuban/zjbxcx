@@ -15,6 +15,18 @@
   border-bottom: 1rpx solid #eee;
 }
 
+.section1 {
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 15rpx 20rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 28rpx;
+  position: relative;
+  color: #333;
+  border-bottom: 1rpx solid #eee;
+}
+
 .section_title{
   width: 25%;
   text-align: center;
@@ -72,7 +84,7 @@
 .section .mult {
   width: 90%;
 }
-.section .uploader_imgs{
+.section1 .uploader_imgs{
   width:100rpx;
   height:100rpx;
   padding: 0 10rpx;  
@@ -98,6 +110,23 @@ button::after{
   padding: 10rpx;
   line-height: 35rpx;
   color: #999;
+}
+
+.list {
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 15rpx 20rpx;
+  color: #666;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.list_label {
+  line-height: 70rpx;
+}
+
+.list_value {
+  line-height: 70rpx;
 }
 
 /*底部tabBar  */

@@ -237,7 +237,8 @@ App({
                   that.globalData.firstLogin = 2;
                 }
                 if (that.globalData.firstLogin==1){
-                  wx.navigateTo({
+                  
+                  wx.redirectTo({
                     url: '/pages/home/home?type=1',
                   });
                 }else{
@@ -256,6 +257,7 @@ App({
                                 title: '加载中',
                               });
                             } else {
+                              
                               // 拒绝授权用户信息，回到home页面进行授权
                               wx.redirectTo({
                                 url: '/pages/home/home',
@@ -265,9 +267,8 @@ App({
                         })
                       } else if (res.cancel) {
                         that.globalData.showLoad = false;
-                        that.globalData.btnShow = true;
                         //拒绝授权用户信息，回到home页面进行授权
-                        wx.redirectTo({
+                        wx.navigateTo({
                           url: '/pages/home/home?type=1',
                         })
                       }
@@ -345,7 +346,6 @@ App({
     //是否已经授权手机号
     authorization:null,
     validate: false,
-    btnShow: false,
     //角色
     role: 1,
     //全局变量 url

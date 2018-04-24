@@ -37,10 +37,8 @@
   <view class="textarea_view">
     <textarea name="remarks" placeholder='问题描述' style='width:100%' ></textarea>
   </view>
-  <view class="section">
-    <input type="number" name="user_phone"  placeholder="联系方式(选填)" />
-  </view>
-  <view class='section' style='border-bottom:none;'>
+  
+  <view class='section1'>
     <block wx:for="{{imgs}}" wx:key="property">
       <image src="{{item}}" class='uploader_imgs' bindtap='imgShow' data-src="{{item}}" data-img-id="{{img_ids[index]}}" bindlongtap="longTap" bindtouchstart="touchStart" bindtouchend="touchEnd" data-index="{{index}}"></image>
     </block>
@@ -49,7 +47,24 @@
     </view>
     <text class='prompt'>上传图片\n最多三张,长按删除</text>
   </view>
-   <view class='tabBar'>
+  <view class="section">
+    <input type="text" name="user_name"  placeholder="联系人(选填)" />
+  </view>
+  <view class="section">
+    <input type="number" name="user_phone"  placeholder="联系方式(必填)" />
+  </view>
+
+  <view class='list'>
+    <text class='list_label'>预约服务时间：</text> 
+    <picker class='list_value' mode="date" value="{{date}}" start="2018-04-01" end="2050-12-30" bindchange="bindDateChange">
+      <view class="picker">{{date}} </view>
+    </picker>
+    <picker mode="time" class='list_value' style="margin-left:15rpx;" value="{{time}}" start="00:00" end="23:59" bindchange="bindTimeChange">
+      <view class="picker">{{time}}</view>
+    </picker>
+  </view>
+
+  <view class='tabBar'>
     <view class='tabBar_litem tabBar_left' catchtap='to_index' >
         取 消
     </view>

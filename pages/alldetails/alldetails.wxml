@@ -53,6 +53,10 @@
     <text class='list_label'>联系方式：</text>
     <text catchtap='phoneCall' data-phone='{{user_phone}}' class='list_value'>{{user_phone}}</text>
   </view>
+  <view class='list' wx:if="{{appointment}}">
+    <text class='list_label'>预约服务时间：</text>
+    <text class='list_value'>{{appointment}}</text>
+  </view>
 
   <!--维修人员信息  -->
   <view wx:if="{{service_worker}}">
@@ -65,12 +69,6 @@
       <view class='list'>
         <text class='list_label'>维修方式：</text>
         <text class='list_value'>{{method==2?'远程协助维修':'上门维修'}}</text>
-      </view>
-    </block>
-    <block wx:if="{{appointment}}" >
-      <view class='list'>
-        <text class='list_label'>预计服务时间：</text>
-        <text class='list_value'>{{appointment}}</text>
       </view>
     </block>
     <block wx:if="{{sign_date}}" >

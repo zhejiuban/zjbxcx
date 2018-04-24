@@ -12,6 +12,10 @@ Page({
     imgs: [],             //上传图片的url路径
     img_ids: [],          //上传图片的id
     img_count: 3,         //目前可以上传图片的数量
+
+    //报修类别  1 场地  2资产报修  3 设备组报修
+    other: 1,
+
     //报修项目
     classify:[],
     index: 0,
@@ -28,8 +32,39 @@ Page({
     area_uuid: '',
     area_name: '',
     room_name:'',
+    org_name: '',
 
-    org_name: ''
+    date: '',
+    time: '10:00',
+  },
+
+  bindDateChange: function (e) {
+    this.setData({
+      date: e.detail.value
+    })
+  },
+
+  bindTimeChange: function (e) {
+    this.setData({
+      time: e.detail.value
+    })
+  },
+
+  //获取当前时间，格式YYYY-MM-DD
+  getNowFormatDate: function () {
+    var date = new Date();
+    var seperator1 = "-";
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+      month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+      strDate = "0" + strDate;
+    }
+    var currentdate = year + seperator1 + month + seperator1 + strDate;
+    return currentdate;
   },
 
   /**
@@ -38,6 +73,9 @@ Page({
   onLoad: function (options) {
     app.network_state();
     let that = this;
+    that.setData({
+      date: that.getNowFormatDate()
+    });
     // 微信扫小程序获取的参数
     if (app.globalData.area_uuid) {
       wx.showLoading({
@@ -220,6 +258,10 @@ Page({
                 that.setData({
                   img_ids: arrs1
                 })
+              },
+              fail: function () {
+                wx.hideLoading();
+                app.requestError();
               }
             })
           }
@@ -284,10 +326,15 @@ Page({
   formSubmit: function (e) {
     let that = this;
     e.detail.value['img'] = that.data.img;
+    let time = that.data.date + " " + that.data.time;
     let remarks = e.detail.value.remarks;
     let user_phone = null;
     if (e.detail.value.user_phone){
       user_phone = e.detail.value.user_phone;
+    }
+    let user_name = null;
+    if (e.detail.value.user_name) {
+      user_name = e.detail.value.user_name;
     }
     let img_id = null;
     if(that.data.img_ids.length>0){
@@ -338,13 +385,16 @@ Page({
         data: {
           role: app.globalData.role,
           token: app.globalData.token,
+          other: that.data.other,
           area_id: that.data.area_id,
           classify_id: that.data.classify_id,
           org_id: that.data.org_id,
           remarks: remarks,
           img_id: img_id,
           openId: app.globalData.openId,
-          user_phone: user_phone
+          user_name: user_name,
+          user_phone: user_phone,
+          appointment: time
         },
         header: {
           'content-type': 'application/json'

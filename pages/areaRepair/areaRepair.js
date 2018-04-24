@@ -21,6 +21,9 @@ Page({
     touchStartTime: 0,    // 触摸开始时间
     touchEndTime: 0,      // 触摸结束时间
 
+    //报修类别  1 场地  2资产报修  3 设备组报修
+    other: 1,
+
     orgs: '',
     orgIndex: 0,
     org_id: '',
@@ -29,7 +32,39 @@ Page({
     room_name: '',
     classify: '',
     classify_id: '',
-    index: 0
+    index: 0,
+
+    date: '',
+    time: '10:00',
+  },
+
+  bindDateChange: function (e) {
+    this.setData({
+      date: e.detail.value
+    })
+  },
+
+  bindTimeChange: function (e) {
+    this.setData({
+      time: e.detail.value
+    })
+  },
+
+  //获取当前时间，格式YYYY-MM-DD
+  getNowFormatDate: function () {
+    var date = new Date();
+    var seperator1 = "-";
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+      month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+      strDate = "0" + strDate;
+    }
+    var currentdate = year + seperator1 + month + seperator1 + strDate;
+    return currentdate;
   },
 
   /**
@@ -37,6 +72,9 @@ Page({
    */
   onLoad: function (options) {
     let that = this;
+    that.setData({
+      date: that.getNowFormatDate()
+    });
     if (JSON.stringify(options) != "{}"){
 
       that.setData({
@@ -333,11 +371,16 @@ Page({
 
   formSubmit: function(e){
     let that = this;
+    let time = that.data.date + " " + that.data.time;
     e.detail.value['img'] = that.data.img;
     let remarks = e.detail.value.remarks;
     let user_phone = null;
     if (e.detail.value.user_phone) {
       user_phone = e.detail.value.user_phone;
+    }
+    let user_name = null;
+    if (e.detail.value.user_name) {
+      user_name = e.detail.value.user_name;
     }
     let img_id = null;
     if (that.data.img_ids.length > 0) {
@@ -389,12 +432,15 @@ Page({
           role: app.globalData.role,
           token: app.globalData.token,
           area_id: that.data.area_id,
+          other: that.data.other,
           classify_id: that.data.classify_id,
           org_id: that.data.org_id,
           remarks: remarks,
           img_id: img_id,
           openId: app.globalData.openId,
-          user_phone: user_phone
+          user_name: user_name,
+          user_phone: user_phone,
+          appointment: time
         },
         header: {
           'content-type': 'application/json'
@@ -449,6 +495,13 @@ Page({
         }
       })
     }
+  },
+
+  to_index: function () {
+    let that = this;
+    app.globalData.area_uuid = null;
+    that.data.area_id = null;
+    app.toIndex();
   }
 
 })

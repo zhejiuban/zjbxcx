@@ -20,6 +20,8 @@ Page({
     asset_uuid: '',
     index: 0,
 
+    //报修类别  1 场地  2资产报修  3 设备组报修
+    other: 3,
 
     imgs: [],             //上传图片的url路径
     img_ids: [],          //上传图片的id
@@ -30,6 +32,37 @@ Page({
 
     uploaderImg: "/images/upload.png",
 
+    date: '',
+    time: '10:00',
+  },
+
+  bindDateChange: function (e) {
+    this.setData({
+      date: e.detail.value
+    })
+  },
+
+  bindTimeChange: function (e) {
+    this.setData({
+      time: e.detail.value
+    })
+  },
+
+  //获取当前时间，格式YYYY-MM-DD
+  getNowFormatDate: function () {
+    var date = new Date();
+    var seperator1 = "-";
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+      month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+      strDate = "0" + strDate;
+    }
+    var currentdate = year + seperator1 + month + seperator1 + strDate;
+    return currentdate;
   },
 
   /**
@@ -38,6 +71,9 @@ Page({
   onLoad: function (options) {
     app.network_state();
     let that = this;
+    that.setData({
+      date: that.getNowFormatDate()
+    });
     // 微信扫小程序获取的参数
     if (app.globalData.equipment_uuid) {
       wx.showLoading({
@@ -239,6 +275,7 @@ Page({
 
   formSubmit: function (e) {
     let that = this;
+    let time = that.data.date + " " + that.data.time;
     e.detail.value['img'] = that.data.img;
     let remarks = e.detail.value.remarks;
     let img_id = that.data.img_ids.join(",");
@@ -272,6 +309,10 @@ Page({
       if (e.detail.value.user_phone) {
         user_phone = e.detail.value.user_phone;
       }
+      let user_name = null;
+      if (e.detail.value.user_name) {
+        user_name = e.detail.value.user_name;
+      }
       app.globalData.uuid = null;
       wx.showLoading({
         mask: true,
@@ -281,6 +322,7 @@ Page({
         url: config.repairAddUrl,
         method: "POST",
         data: {
+          other: that.data.other,
           role: app.globalData.role,
           token: app.globalData.token,
           asset_uuid: that.data.asset_uuid,
@@ -289,7 +331,9 @@ Page({
           img_id: img_id,
           area_id: that.data.area_id,
           openId: app.globalData.openId,
-          user_phone: user_phone
+          user_name: user_name,
+          user_phone: user_phone,
+          appointment: time
         },
         header: {
           'content-type': 'application/json'

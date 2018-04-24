@@ -10,7 +10,10 @@ Page({
     imgs: [],             //上传图片的url路径
     img_ids: [],          //上传图片的id
     img_count: 3,         //目前可以上传图片的数量
-     
+    
+    //报修类别  1 场地  2资产报修  3 设备组报修
+    other: 2,
+
     asset_uuid: '',
     asset_id: '',
     asset_name:'',
@@ -31,13 +34,47 @@ Page({
 
     infoShow: false,
     // infoIcon: '/images/arrow-down.png'
-    infoIcon: '/images/nav.png'
-    
+    infoIcon: '/images/nav.png',
+
+    date: '',
+    time: '10:00',
+  },
+
+  bindDateChange: function (e) {
+    this.setData({
+      date: e.detail.value
+    })
+  },
+
+  bindTimeChange: function (e) {
+    this.setData({
+      time: e.detail.value
+    })
+  },
+
+  //获取当前时间，格式YYYY-MM-DD
+  getNowFormatDate: function () {
+    var date = new Date();
+    var seperator1 = "-";
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+      month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+      strDate = "0" + strDate;
+    }
+    var currentdate = year + seperator1 + month + seperator1 + strDate;
+    return currentdate;
   },
 
   onLoad: function (options) {
     app.network_state();
     let that = this;
+    that.setData({
+      date: that.getNowFormatDate()
+    });
     //微信扫描二维码链接携带的参数
     
     // 微信扫小程序获取的参数
@@ -178,7 +215,6 @@ Page({
         let str = that.data.imgId;
         for (let i = 0; i < tempFilePaths.length; i++) {
           wx.uploadFile({
-            // url: app.globalData.url + 'wx/img_file',
             url: config.imgFileUrl,
             filePath: tempFilePaths[i],
             method: "POST",
@@ -199,6 +235,10 @@ Page({
               that.setData({
                 img_ids: arrs1
               });
+            },
+            fail: function () {
+              wx.hideLoading();
+              app.requestError();
             }
           })
         }
@@ -208,10 +248,6 @@ Page({
           imgs: old_imgs,
           img_count: count
         });
-      },
-      fail: function () {
-        wx.hideLoading();
-        app.requestError();
       }
     })
   },
@@ -265,6 +301,7 @@ Page({
 
   formSubmit: function (e) {
     let that = this;
+    let time = that.data.date + " " + that.data.time;
     e.detail.value['img'] = that.data.img;
     e.detail.value['category_id'] = that.data.category_id;
     let asset_uuid = that.data.asset_uuid;
@@ -300,6 +337,12 @@ Page({
       if (e.detail.value.user_phone) {
         user_phone = e.detail.value.user_phone;
       }
+
+      let user_name = null;
+      if (e.detail.value.user_name) {
+        user_name = e.detail.value.user_name;
+      }
+
       app.globalData.uuid = null;
       wx.showLoading({
         mask: true,
@@ -311,13 +354,16 @@ Page({
         data: {
           role: app.globalData.role,
           token: app.globalData.token,
+          other: that.data.other,
           asset_uuid: asset_uuid,
           asset_id: asset_id,
           remarks: remarks,
           img_id: img_id,
           area_id: that.data.area_id,
           openId: app.globalData.openId,
-          user_phone: user_phone
+          user_name: user_name,
+          user_phone: user_phone,
+          appointment: time
         },
         header: {
           'content-type': 'application/json'

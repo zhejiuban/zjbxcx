@@ -61,7 +61,7 @@ text{
   border: 1rpx solid #ccc;
 }
 
-picker{
+.picker_classify{
   width: 70%;
 }
 
@@ -105,6 +105,23 @@ button::after{
 
 .section .org-name{
   width: 500rpx;
+}
+
+.list {
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 15rpx 40rpx;
+  color: #666;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.list_label {
+  line-height: 70rpx;
+}
+
+.list_value {
+  line-height: 70rpx;
 }
 
 /*底部tabBar  */

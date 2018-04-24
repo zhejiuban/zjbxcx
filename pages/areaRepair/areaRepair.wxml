@@ -29,7 +29,7 @@
 
   <view class="section">
     <view class="section_title">报修项目：</view>
-    <picker bindchange="bindClassifyChange" value="{{index}}" range="{{classify}}" range-key="{{'name'}}"> 
+    <picker class='picker_classify'  bindchange="bindClassifyChange" value="{{index}}" range="{{classify}}" range-key="{{'name'}}"> 
       <view class="picker">
         {{classify[index].name}}
       </view>
@@ -51,7 +51,21 @@
   </view>
 
   <view class="section">
-    <input type="number" name="user_phone"  placeholder="联系方式(选填)" />
+    <input type="text" name="user_name"  placeholder="联系人(选填)" />
+  </view>
+
+  <view class="section">
+    <input type="number" name="user_phone"  placeholder="联系方式(必填)" />
+  </view>
+
+  <view class='list'>
+    <text class='list_label'>预约服务时间：</text> 
+    <picker class='list_value' mode="date" value="{{date}}" start="2018-04-01" end="2050-12-30" bindchange="bindDateChange">
+      <view class="picker">{{date}} </view>
+    </picker>
+    <picker mode="time" class='list_value' style="margin-left:15rpx;" value="{{time}}" start="00:00" end="23:59" bindchange="bindTimeChange">
+      <view class="picker">{{time}}</view>
+    </picker>
   </view>
 
   <view class='tabBar'>
