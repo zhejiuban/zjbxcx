@@ -90,6 +90,10 @@ Page({
     })
   },
 
+  onShow: function () {
+    this.onLoad();
+  },
+
   // 查看详情包括评论
   clickAllDetail: function (e) {
     let repair_id = e.currentTarget.dataset.id;

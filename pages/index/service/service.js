@@ -138,6 +138,10 @@ Page({
     })
   },
 
+  onShow: function () {
+    this.onLoad();
+  },
+
   // 查看工单详情
   clickDetail: function (e) {
     let repair_id = e.currentTarget.dataset.id;

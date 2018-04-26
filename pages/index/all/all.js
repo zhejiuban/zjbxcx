@@ -303,5 +303,10 @@ Page({
       }
     })
   },
+
+  onShow: function () {
+    this.onLoad();
+  },
+  
   footerTap: app.footerTap
 })

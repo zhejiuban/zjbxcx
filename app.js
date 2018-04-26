@@ -102,7 +102,6 @@ App({
                           } else {
                             wx.redirectTo({
                               url: "/pages/index/service/service"
-                              // url: "/pages/areaRepair/areaRepair"
                             });
                           }
                         } else if (res.data.code == 1403) {

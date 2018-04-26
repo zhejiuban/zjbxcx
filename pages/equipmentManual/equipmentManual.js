@@ -34,6 +34,10 @@ Page({
 
     date: '',
     time: '10:00',
+
+    //是否是重复报修
+    repeat_repair: 0,
+
   },
 
   bindDateChange: function (e) {
@@ -341,6 +345,12 @@ Page({
         success: function (res) {
           wx.hideLoading();
           if (res.data.code == 1) {
+
+            //防止重复报修
+            that.setData({
+              repeat_repair: 1
+            });
+
             app.globalData.uuid = null;
             wx.showModal({
               title: '提示',
@@ -383,12 +393,30 @@ Page({
             })
           } else if (res.data.code == 1403) {
             app.errorPrompt(res.data);
+          } else if (res.data.code == 0) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/index/service/service',
+                  });
+                }
+              }
+            })
           } else {
             wx.showModal({
               title: '提示',
               content: res.data.message,
               showCancel: false,
               success: function (res) {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/index/service/service',
+                  });
+                }
               }
             })
           }

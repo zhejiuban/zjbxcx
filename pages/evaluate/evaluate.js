@@ -90,29 +90,6 @@ Page({
         } else {
           that.setData({
             items: res.data
-            // equipment_id: res.data.equipment_id ? res.data.equipment_id : '',
-            // equipment_name: res.data.equipment_name ? res.data.equipment_name : '',
-            // asset_name: res.data.asset_name,
-            // field_path: res.data.field_path,
-            // remarks: res.data.remarks,
-            // img_url: res.data.img_url,
-            // stars_key: res.data.stars_key,
-            // appraisal: res.data.appraisal ? res.data.appraisal : '',
-            // complain: res.data.complain,
-            // service_status: res.data.service_status,
-            // service_worker: res.data.service_worker,
-            // result: res.data.result,
-            // service_img_url: res.data.service_img_url,
-            // repair_status: res.data.repair_status,
-            // create_time: res.data.create_time,
-            // finish_time: res.data.finish_time,
-            // user_name: res.data.user_name,
-            // user_phone: res.data.user_phone,
-            // method: res.data.method,
-            // result_status: res.data.result_status,
-            // sign_date: res.data.sign_date,
-            // org_id: res.data.org_id,
-            // org_name: res.data.org_name
           });
         }
       },
@@ -180,11 +157,31 @@ Page({
             })
           } else if (res.data.code == 1403) {
             app.errorPrompt(res.data);
+          } else if (res.data.code == 0) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/index/service/service',
+                  });
+                }
+              }
+            })
           } else {
             wx.showModal({
               title: '提示',
               content: res.data.message,
               showCancel: false,
+              success: function(res){
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/index/service/service',
+                  });
+                }
+              }
             })
           }
         },
