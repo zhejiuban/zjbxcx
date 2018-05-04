@@ -138,6 +138,7 @@ button::after{
 
 /*底部tabBar  */
 .tabBar{
+  z-index: 1000;
   width:100%;
   position: fixed;
   white-space: nowrap;

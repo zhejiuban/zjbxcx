@@ -71,7 +71,6 @@ App({
                     encryptedData: encryptedData
                   },
                   success: function (res) {
-                    // res.data = that.getResData(res);
                     that.globalData.userInfo = res.data;
                     that.globalData.openId = res.data.openId;
                     that.globalData.unionid = res.data.unionId;
@@ -90,11 +89,11 @@ App({
                       },
                       success: function (res) {
                         wx.hideLoading();
-                        // res.data = that.getResData(res);
                         if(res.data.code==1){
                           //验证过了
                           that.globalData.authorization=1;
                           that.globalData.user_id = res.data.user_id;
+                          that.globalData.g_open_id = res.data.g_open_id;
                           that.globalData.validate = true;
                           
                           if (that.globalData.asset_uuid || that.globalData.area_uuid || that.globalData.equipment_uuid){
@@ -236,42 +235,12 @@ App({
                   that.globalData.firstLogin = 2;
                 }
                 if (that.globalData.firstLogin==1){
-                  
                   wx.redirectTo({
                     url: '/pages/home/home?type=1',
                   });
                 }else{
-                  wx.showModal({
-                    title: '微信授权',
-                    content: '获取你的公开信息（昵称、头像等）',
-                    confirmText: '允许',
-                    cancelText: '拒绝',
-                    success: function (res) {
-                      if (res.confirm) {
-                        wx.openSetting({
-                          success: function (res) {
-                            if (!res.authSetting["scope.userInfo"] || !res.authSetting["scope.userLocation"]) {
-                              wx.showLoading({
-                                mask: true,
-                                title: '加载中',
-                              });
-                            } else {
-                              
-                              // 拒绝授权用户信息，回到home页面进行授权
-                              wx.redirectTo({
-                                url: '/pages/home/home',
-                              })
-                            }
-                          }
-                        })
-                      } else if (res.cancel) {
-                        that.globalData.showLoad = false;
-                        //拒绝授权用户信息，回到home页面进行授权
-                        wx.navigateTo({
-                          url: '/pages/home/home?type=1',
-                        })
-                      }
-                    }
+                  wx.redirectTo({
+                    url: '/pages/home/home?type=1',
                   })
                 }
               }
@@ -328,6 +297,7 @@ App({
     userInfo: null,
     openId: null,
     unionid: null,
+    g_open_id: null,
     user_id: null,
     //二维码资产参数key
     assets: 'assets',
@@ -352,7 +322,7 @@ App({
     token: 'd3hfWmhlSml1QmFuKywuMjA0'
   },
   swichNav: function (url) {
-    wx.redirectTo({
+    wx.reLaunch({
       url: url,
     })
   },
@@ -491,28 +461,6 @@ App({
     })
   },
 
-  // getUrlParam: function (url, ref, type) {
-  //   let str = "";
-  //   // 如果不包括此参数
-  //   if (url.indexOf(ref) == -1) {
-  //     return "";
-  //   } 
-  //   str = url.substr(url.indexOf('?') + 1);
-  //   let arr = str.split("&");
-  //   let site = '';
-  //   for (let i in arr) {
-  //     let paired = arr[i].split('=');
-  //     if (i==0 && paired[1]==type){
-  //       site=type;
-  //     }
-  //     if (i==1 && site==type){
-  //       return paired[1];
-  //     }
-  //   }
-  //   return "";
-  // },
-
-
   getUrlParam: function (url, type) {
     let str = "";
     let arr = url.split("/");
@@ -524,6 +472,14 @@ App({
     return "";
   },
 
+  //验证手机号
+  phoneValidate: function (phone_number) {
+    // var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))|(19[0-9]{1})+\d{8})$/;  //手机正则式
+    // if (!myreg.test(phone_number)) { //验证手机号
+      // return false;
+    // }
+    return true;
+  },
 
   getResData: function (res) {
     let jsonStr = res.data;
@@ -592,7 +548,7 @@ App({
       showCancel: false,
       success: function (res) {
         if (res.confirm) {
-          wx.redirectTo({
+          wx.reLaunch({
             url: '/pages/index/service/service',
           })
         }
@@ -600,9 +556,17 @@ App({
     })
   },
 
+  //引导用户关注公众号
+  guideAttention: function () {
+    let that = this;
+    wx.reLaunch({
+      url: '/pages/index/service/service'
+    });
+  },
+
   //回到首页
   toIndex: function () {
-    wx.redirectTo({
+    wx.reLaunch({
       url: "/pages/index/service/service"
     })
   },
@@ -622,14 +586,40 @@ App({
         showCancel: false,
         success: function (res) {
           if (res.confirm) {
-            wx.redirectTo({
+            wx.reLaunch({
               url: "/pages/index/service/service"
             })
           }
         }
       })
     }
-  }
+  },
+
+  //获取当前时间，格式YYYY-MM-DD
+  getNowFormatDate: function () {
+    var date = new Date();
+    var seperator1 = "-";
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+      month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+      strDate = "0" + strDate;
+    }
+    var currentdate = year + seperator1 + month + seperator1 + strDate;
+    return currentdate;
+  },
+
+  //获取当前时分秒
+  getNowHour: function () {
+    var date = new Date();
+    var hour = (date.getHours() + 1) < 10 ? "0" + (date.getHours() + 1) : (date.getHours() + 1);
+    var minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    var currentdate = hour + ':' + minute;
+    return currentdate;
+  },
 
 
 

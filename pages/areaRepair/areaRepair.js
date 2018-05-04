@@ -34,8 +34,11 @@ Page({
     classify_id: '',
     index: 0,
 
+    user_name: '',
+    user_phone: '',
+
     date: '',
-    time: '10:00',
+    time: '',
 
     //是否是重复报修
     repeat_repair: 0,
@@ -54,30 +57,14 @@ Page({
     })
   },
 
-  //获取当前时间，格式YYYY-MM-DD
-  getNowFormatDate: function () {
-    var date = new Date();
-    var seperator1 = "-";
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    if (month >= 1 && month <= 9) {
-      month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-      strDate = "0" + strDate;
-    }
-    var currentdate = year + seperator1 + month + seperator1 + strDate;
-    return currentdate;
-  },
-
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     let that = this;
     that.setData({
-      date: that.getNowFormatDate()
+      date: app.getNowFormatDate(),
+      time: app.getNowHour()
     });
     if (JSON.stringify(options) != "{}"){
 
@@ -209,6 +196,10 @@ Page({
           
             classify: res.data.classifies,
             classify_id: '',
+
+            user_name: res.data.user_name ? res.data.user_name : '',
+            user_phone: res.data.user_phone ? res.data.user_phone : '',
+
             index: 0
           })
         }
@@ -250,6 +241,7 @@ Page({
     let org_id = that.data.org_id;
     console.log(org_id);
     let orgIndex = that.data.orgIndex;
+    console.log(orgIndex);
     if (org_id){
       that.setData({
         area_id: '',
@@ -261,6 +253,7 @@ Page({
         imgs: [],
         img_ids: []
       });
+      console.log("执行");
       wx.navigateTo({
         url: '/pages/areaList/areaList?org_id=' + org_id + '&pid=' + pid + '&org_index=' + orgIndex,
       })
@@ -423,6 +416,22 @@ Page({
         success: function (res) {
         }
       })
+    } else if (!app.phoneValidate(e.detail.value.user_phone)) {
+      wx.showModal({
+        title: '提示',
+        content: '请填写真实有效联系方式',
+        showCancel: false,
+        success: function (res) {
+        }
+      })
+    } else if (e.detail.value.user_name.length == 0) {
+      wx.showModal({
+        title: '提示',
+        content: '联系人不能为空',
+        showCancel: false,
+        success: function (res) {
+        }
+      })
     } else {
       app.globalData.uuid = null;
       wx.showLoading({
@@ -465,9 +474,10 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: '/pages/index/service/service'
-                  })
+                  });
+                  // app.guideAttention();
                 }
               }
             })
@@ -478,7 +488,7 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: "/pages/index/service/service"
                   })
                 }
@@ -493,7 +503,7 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: '/pages/index/service/service',
                   });
                 }
@@ -506,7 +516,7 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: '/pages/index/service/service',
                   });
                 }

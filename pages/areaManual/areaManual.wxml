@@ -39,14 +39,14 @@
   </view>
 
   <view class="section">
-    <input type="text" name="user_name"  placeholder="联系人(选填)" />
+    <input type="text" name="user_name" value="{{user_name}}" placeholder="联系人" />
   </view>
 
   <view class="section">
-    <input type="number" name="user_phone" placeholder="联系方式(必填)" />
+    <input type="number" name="user_phone" value="{{user_phone}}" placeholder="联系方式" />
   </view>
 
-  <view class='list'>
+  <view class='list list_time'>
     <text class='list_label'>预约服务时间：</text> 
     <picker class='list_value' mode="date" value="{{date}}" start="2018-04-01" end="2050-12-30" bindchange="bindDateChange">
       <view class="picker">{{date}} </view>

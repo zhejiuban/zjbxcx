@@ -91,7 +91,11 @@ Page({
   },
 
   onShow: function () {
-    this.onLoad();
+    let that = this;
+    that.setData({
+      page: 1
+    });
+    that.onLoad();
   },
 
   // 查看详情包括评论

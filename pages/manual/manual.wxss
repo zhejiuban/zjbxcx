@@ -129,8 +129,13 @@ button::after{
   line-height: 70rpx;
 }
 
+.list_time{
+  margin-bottom: 100rpx;
+}
+
 /*底部tabBar  */
 .tabBar{
+  z-index: 1000;
   width:100%;
   position: fixed;
   white-space: nowrap;

@@ -42,6 +42,7 @@ Page({
     evaluation_time: '',
     org_id: '',
     org_name: '',
+    worker_phone: '',
     // appointment: ''
   },
   imgShow: function (e) {
@@ -157,6 +158,7 @@ Page({
             finish_time: data.finish_time,
             user_name: data.user_name,
             user_phone: data.user_phone,
+            worker_phone: data.worker_phone,
             method: data.method,
             appointment: data.appointment,
             result_status: data.result_status,
@@ -246,6 +248,7 @@ Page({
             finish_time: data.finish_time,
             user_name: data.user_name,
             user_phone: data.user_phone,
+            worker_phone: data.worker_phone,
             method: data.method,
             appointment: data.appointment,
             result_status: data.result_status,

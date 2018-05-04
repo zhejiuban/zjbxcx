@@ -36,7 +36,7 @@ Page({
           url: '/pages/equipmentManual/equipmentManual',
         })
       }else{
-        wx.redirectTo({
+        wx.reLaunch({
           url: '/pages/index/service/service',
         })
       }
@@ -55,6 +55,31 @@ Page({
 
   getUserInfo: function (){
     let that = this;
-    app.getUserInfo();
+    wx.showModal({
+      title: '授权提示',
+      content: '获取你的公开信息（昵称、头像等）',
+      confirmText: '允许',
+      cancelText: '拒绝',
+      success: function (res) {
+        if (res.confirm) {
+          wx.openSetting({
+            success: function (res) {
+              if (!res.authSetting["scope.userInfo"] || !res.authSetting["scope.userLocation"]) {
+                wx.showLoading({
+                  mask: true,
+                  title: '加载中',
+                });
+                app.getUserInfo();
+              } else {
+                // 拒绝授权用户信息，回到home页面进行授权
+                wx.reLaunch({
+                  url: '/pages/home/home',
+                })
+              }
+            }
+          })
+        }
+      }
+    })
   }
 })

@@ -67,7 +67,7 @@ Page({
   },
 
   to_areaRepair: function(){
-    wx.redirectTo({
+    wx.reLaunch({
       url: '/pages/areaRepair/areaRepair',
     })
   },
@@ -77,7 +77,7 @@ Page({
     let org_id = that.data.org_id;
     let area_id = that.data.area_id;
     let org_index = that.data.org_index;
-    wx.redirectTo({
+    wx.reLaunch({
       url: '/pages/areaRepair/areaRepair?org_id=' + org_id + '&area_id=' + area_id + '&org_index=' + org_index,
     })
   }

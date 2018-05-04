@@ -34,8 +34,11 @@ Page({
     room_name:'',
     org_name: '',
 
+    user_name: '',
+    user_phone: '',
+
     date: '',
-    time: '10:00',
+    time: '',
 
     //是否是重复报修
     repeat_repair: 0,
@@ -54,23 +57,6 @@ Page({
     })
   },
 
-  //获取当前时间，格式YYYY-MM-DD
-  getNowFormatDate: function () {
-    var date = new Date();
-    var seperator1 = "-";
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    if (month >= 1 && month <= 9) {
-      month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-      strDate = "0" + strDate;
-    }
-    var currentdate = year + seperator1 + month + seperator1 + strDate;
-    return currentdate;
-  },
-
   /**
    * 生命周期函数--监听页面加载
    */
@@ -78,7 +64,8 @@ Page({
     app.network_state();
     let that = this;
     that.setData({
-      date: that.getNowFormatDate()
+      date: app.getNowFormatDate(),
+      time: app.getNowHour()
     });
     // 微信扫小程序获取的参数
     if (app.globalData.area_uuid) {
@@ -178,7 +165,9 @@ Page({
             org_id: res.data.org_id,
             org_name: res.data.org_name,
             room_name: res.data.room_name,
-            classifies: res.data.classifies
+            classifies: res.data.classifies,
+            user_name: res.data.user_name ? res.data.user_name : '',
+            user_phone: res.data.user_phone ? res.data.user_phone : '',
           });
           that.get_classify(res.data.classifies);
         }
@@ -376,6 +365,14 @@ Page({
         success: function (res) {
         }
       })
+    } else if (!app.phoneValidate(e.detail.value.user_phone)) {
+      wx.showModal({
+        title: '提示',
+        content: '请填写真实有效联系方式',
+        showCancel: false,
+        success: function (res) {
+        }
+      })
     } else {
       app.globalData.uuid = null;
       wx.showLoading({
@@ -418,9 +415,10 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: '/pages/index/service/service'
-                  })
+                  });
+                  // app.guideAttention();
                 }
               }
             })
@@ -431,7 +429,7 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: "/pages/index/service/service"
                   })
                 }
@@ -446,7 +444,7 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: '/pages/index/service/service',
                   });
                 }
@@ -459,7 +457,7 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: '/pages/index/service/service',
                   });
                 }

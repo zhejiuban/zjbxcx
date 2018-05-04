@@ -305,7 +305,11 @@ Page({
   },
 
   onShow: function () {
-    this.onLoad();
+    let that = this;
+    that.setData({
+      page: 1
+    });
+    that.onLoad();
   },
   
   footerTap: app.footerTap

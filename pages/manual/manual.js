@@ -25,6 +25,9 @@ Page({
     area: '',
     category: '',
 
+    user_name: '',
+    user_phone: '',
+
     uploaderImg:"/images/upload.png",
     
     isSubmit: true,       // 是否可以点击提交
@@ -37,7 +40,7 @@ Page({
     infoIcon: '/images/nav.png',
 
     date: '',
-    time: '10:00',
+    time: '',
 
     //是否是重复报修
     repeat_repair: 0,
@@ -54,29 +57,13 @@ Page({
       time: e.detail.value
     })
   },
-
-  //获取当前时间，格式YYYY-MM-DD
-  getNowFormatDate: function () {
-    var date = new Date();
-    var seperator1 = "-";
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    if (month >= 1 && month <= 9) {
-      month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-      strDate = "0" + strDate;
-    }
-    var currentdate = year + seperator1 + month + seperator1 + strDate;
-    return currentdate;
-  },
-
+  
   onLoad: function (options) {
     app.network_state();
     let that = this;
     that.setData({
-      date: that.getNowFormatDate()
+      date: app.getNowFormatDate(),
+      time: app.getNowHour()
     });
     //微信扫描二维码链接携带的参数
     
@@ -108,7 +95,6 @@ Page({
       wx.hideLoading();
     } 
   },
-  
 
   //获取资产信息
   getAssetInfo: function(asset_uuid){
@@ -168,6 +154,8 @@ Page({
             org_id: res.data.org_id,
             spec: res.data.spec ? res.data.spec : '暂无',
             area_id: res.data.area_id,
+            user_name: res.data.user_name ? res.data.user_name: '',
+            user_phone: res.data.user_phone ? res.data.user_phone: '',
             isSubmit: false
           });
         }
@@ -335,6 +323,22 @@ Page({
         success: function (res) {
         }
       })
+    } else if (!app.phoneValidate(e.detail.value.user_phone)) {
+      wx.showModal({
+        title: '提示',
+        content: '请填写真实有效联系方式',
+        showCancel: false,
+        success: function (res) {
+        }
+      })
+    } else if (e.detail.value.user_name.length == 0) {
+      wx.showModal({
+        title: '提示',
+        content: '联系人不能为空',
+        showCancel: false,
+        success: function (res) {
+        }
+      })
     } else {
       let user_phone = null;
       if (e.detail.value.user_phone) {
@@ -387,9 +391,10 @@ Page({
               success: function (res) {
                 app.globalData.uuid = null;
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: '/pages/index/service/service'
                   });
+                  // app.guideAttention();
                 }
               }
             })
@@ -413,7 +418,7 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: "/pages/index/service/service"
                   });
                 }
@@ -428,7 +433,7 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.redirectTo({
+                  wx.reLaunch({
                     url: '/pages/index/service/service',
                   });
                 }
