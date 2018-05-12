@@ -102,6 +102,24 @@ Page({
     })
   },
 
+  imgShow: function (e) {
+    var that = this;
+    var current_url = e.currentTarget.dataset.url;
+    wx.previewImage({
+      current: current_url, // 当前显示图片的http链接
+      urls: that.data.items.img_url // 需要预览的图片http链接列表
+    })
+  },
+
+  serviceImgShow: function (e) {
+    var that = this;
+    var current_url = e.currentTarget.dataset.url;
+    wx.previewImage({
+      current: current_url, // 当前显示图片的http链接
+      urls: that.data.items.service_img_url // 需要预览的图片http链接列表
+    })
+  },
+
   // form表单提交
   formSubmit: function (e){
     wx.showLoading({

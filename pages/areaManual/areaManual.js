@@ -394,7 +394,7 @@ Page({
           openId: app.globalData.openId,
           user_name: user_name,
           user_phone: user_phone,
-          appointment: time
+          // appointment: time
         },
         header: {
           'content-type': 'application/json'

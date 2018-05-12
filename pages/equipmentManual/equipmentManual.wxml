@@ -47,7 +47,7 @@
     <input type="number" name="user_phone" value="{{user_phone}}" placeholder="联系方式" />
   </view>
 
-  <view class='list list_time'>
+  <!-- <view class='list list_time'>
     <text class='list_label'>预约服务时间：</text> 
     <picker class='list_value' mode="date" value="{{date}}" start="2018-04-01" end="2050-12-30" bindchange="bindDateChange">
       <view class="picker">{{date}} </view>
@@ -55,7 +55,7 @@
     <picker mode="time" class='list_value' style="margin-left:15rpx;" value="{{time}}" start="00:00" end="23:59" bindchange="bindTimeChange">
       <view class="picker">{{time}}</view>
     </picker>
-  </view>
+  </view> -->
 
   <view class='tabBar'>
     <view class='tabBar_litem tabBar_left' catchtap='to_index' >

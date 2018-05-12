@@ -195,7 +195,7 @@ Page({
             org_id: res.data.org_id,
           
             classify: res.data.classifies,
-            classify_id: '',
+            classify_id: res.data.classifies[0].id,
 
             user_name: res.data.user_name ? res.data.user_name : '',
             user_phone: res.data.user_phone ? res.data.user_phone : '',
@@ -239,9 +239,7 @@ Page({
     let that = this;
     let pid = e.currentTarget.dataset.pid;
     let org_id = that.data.org_id;
-    console.log(org_id);
     let orgIndex = that.data.orgIndex;
-    console.log(orgIndex);
     if (org_id){
       that.setData({
         area_id: '',
@@ -253,7 +251,6 @@ Page({
         imgs: [],
         img_ids: []
       });
-      console.log("执行");
       wx.navigateTo({
         url: '/pages/areaList/areaList?org_id=' + org_id + '&pid=' + pid + '&org_index=' + orgIndex,
       })
@@ -453,7 +450,7 @@ Page({
           openId: app.globalData.openId,
           user_name: user_name,
           user_phone: user_phone,
-          appointment: time
+          // appointment: time
         },
         header: {
           'content-type': 'application/json'
