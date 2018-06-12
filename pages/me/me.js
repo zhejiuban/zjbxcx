@@ -18,8 +18,8 @@ Page({
     app.network_state();
     let info = app.globalData.userInfo;
     this.setData({
-      avatarUrl:info.avatarUrl,
-      nickName:info.nickName
+      avatarUrl: info.avatarUrl ? info.avatarUrl : '/images/avatar.png',
+      nickName: info.nickName ? info.nickName : '暂无昵称'
     });
   },
 

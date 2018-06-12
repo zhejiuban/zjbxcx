@@ -14,6 +14,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    //console.log('h_onload')
     let that = this;
     if(options.type!=1){
       app.globalData.firstLogin=2;
@@ -21,6 +22,7 @@ Page({
   },
 
   onShow: function () {
+    //console.log('h_onshow')
     let that = this;
     if(app.globalData.openId){
       if (app.globalData.asset_uuid){
@@ -47,6 +49,8 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
+    //console.log('h_onready')
+    //console.log(app.globalData);
     let that = this;
     that.setData({
       btnShow: app.globalData.btnShow
@@ -54,6 +58,7 @@ Page({
   },
 
   getUserInfo: function (){
+    console.log('getuserinfo')
     let that = this;
     wx.showModal({
       title: '授权提示',
@@ -81,5 +86,13 @@ Page({
         }
       }
     })
+  },
+
+  onGetUserInfo: function(e){
+    console.log(e.detail.errMsg)
+    console.log(e.detail.rawData)
+    if(e.detail.userInfo != undefined){
+      app.getUserInfo();
+    }
   }
 })

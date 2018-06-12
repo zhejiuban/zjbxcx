@@ -95,7 +95,7 @@ Page({
     that.setData({
       page: 1
     });
-    that.onLoad();
+    //that.onLoad();
   },
 
   // 查看详情包括评论

@@ -143,7 +143,7 @@ Page({
     that.setData({
       page: 1
     });
-    that.onLoad();
+    //that.onLoad();
   },
 
   // 查看工单详情

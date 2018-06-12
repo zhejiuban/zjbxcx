@@ -309,7 +309,7 @@ Page({
     that.setData({
       page: 1
     });
-    that.onLoad();
+    //that.onLoad();
   },
   
   footerTap: app.footerTap

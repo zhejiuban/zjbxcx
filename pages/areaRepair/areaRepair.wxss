@@ -83,7 +83,7 @@ text{
 }
 
 .section input {
-  width: 600rpx;
+  /* width: 600rpx; */
   padding: 10rpx;
 }
 .section .mult {

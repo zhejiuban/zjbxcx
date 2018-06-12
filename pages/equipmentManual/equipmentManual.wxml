@@ -40,10 +40,12 @@
   </view>
 
   <view class="section">
-    <input type="text" name="user_name" value="{{user_name}}" placeholder="联系人" />
+    <text class='section_title'>联系人：</text> 
+    <input type="text" name="user_name" value="{{user_name}}" placeholder="联系人姓名" />
   </view>
 
   <view class="section">
+    <text class='section_title'>手机号：</text> 
     <input type="number" name="user_phone" value="{{user_phone}}" placeholder="联系方式" />
   </view>
 

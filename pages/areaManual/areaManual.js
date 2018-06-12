@@ -357,18 +357,18 @@ Page({
         success: function (res) {
         }
       })
-    } else if (e.detail.value.user_phone.length == 0) {
+    } else if (e.detail.value.user_name.length == 0) {
       wx.showModal({
         title: '提示',
-        content: '联系方式不能为空',
+        content: '请填写联系人姓名',
         showCancel: false,
         success: function (res) {
         }
       })
-    } else if (!app.phoneValidate(e.detail.value.user_phone)) {
+    } else if (e.detail.value.user_phone.length != 11 || !app.phoneValidate(e.detail.value.user_phone)) {
       wx.showModal({
         title: '提示',
-        content: '请填写真实有效联系方式',
+        content: '请填写正确的手机号',
         showCancel: false,
         success: function (res) {
         }
@@ -444,9 +444,9 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.reLaunch({
-                    url: '/pages/index/service/service',
-                  });
+                  // wx.reLaunch({
+                  //   url: '/pages/index/service/service',
+                  // });
                 }
               }
             })
@@ -457,9 +457,9 @@ Page({
               showCancel: false,
               success: function (res) {
                 if (res.confirm) {
-                  wx.reLaunch({
-                    url: '/pages/index/service/service',
-                  });
+                  // wx.reLaunch({
+                  //   url: '/pages/index/service/service',
+                  // });
                 }
               }
             })
