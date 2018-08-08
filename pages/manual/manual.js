@@ -1,6 +1,7 @@
 const config = require('../../config')
 
 let app = getApp();
+let interval = null; //倒计时函数
 Page({
 
   /**
@@ -44,6 +45,97 @@ Page({
 
     //是否是重复报修
     repeat_repair: 0,
+
+    //短信验证
+    is_check: true,
+    disabled: false,
+    telephone: '',
+    times: '获取验证码', //倒计时 
+    currentTime: 60,
+    verify:''
+  },
+  phoneInput(e) {
+    let value = e.detail.value
+    this.setData({
+      telephone: value
+    })
+    if (this.data.user_phone == '' || value != this.data.user_phone){
+      this.setData({
+        is_check: true
+      })
+    }else{
+      this.setData({
+        is_check: false
+      })
+    }
+  },
+  codeInput(e) {
+    let value = e.detail.value
+    this.setData({
+      verify: value
+    })
+  },
+  getCode: function (options) {
+    var that = this;
+    var currentTime = that.data.currentTime
+    interval = setInterval(function () {
+      currentTime--;
+      that.setData({
+        times: currentTime + '秒'
+      })
+      if (currentTime <= 0) {
+        clearInterval(interval)
+        that.setData({
+          times: '重新获取',
+          currentTime: 60,
+          disabled: false
+        })
+      }
+    }, 1000)
+  },
+  getVerificationCode() {
+    var that = this;
+    if (that.data.telephone.length != 11 || !app.phoneValidate(that.data.telephone)) {
+      wx.showModal({
+        title: '提示',
+        content: '请填写正确的手机号',
+        showCancel: false
+      })
+      return ;
+    }
+    that.setData({
+      disabled: true
+    })
+    this.getCode();
+    //获取验证码
+    wx.request({
+      url: config.getSmsVerfiyCode,
+      method: "POST",
+      data: {
+        token: app.globalData.token,
+        openId: app.globalData.openId,
+        phone: this.data.telephone
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function (res) {
+        if(res.data.code != 1){
+          wx.showModal({
+            title: '提示',
+            content: '验证码获取失败',
+            showCancel: false
+          })
+        }
+      },
+      fail: function (e) {
+        wx.showModal({
+          title: '提示',
+          content: '网络错误，请重试',
+          showCancel: false
+        })
+      }
+    })
   },
 
   bindDateChange: function (e) {
@@ -59,6 +151,7 @@ Page({
   },
   
   onLoad: function (options) {
+    console.log('on_load');
     app.network_state();
     let that = this;
     that.setData({
@@ -158,6 +251,11 @@ Page({
             user_phone: res.data.user_phone ? res.data.user_phone: '',
             isSubmit: false
           });
+          if (that.data.user_phone.length == 11){
+            that.setData({
+              is_check:false
+            });
+          }
         }
         wx.hideLoading();
       },
@@ -332,6 +430,14 @@ Page({
         }
       })
     } else {
+      if (that.data.is_check && that.data.verify.length < 4){
+        wx.showModal({
+          title: '提示',
+          content: '请输入验证码',
+          showCancel: false
+        })
+        return ;
+      }
       let user_phone = null;
       if (e.detail.value.user_phone) {
         user_phone = e.detail.value.user_phone;
@@ -363,6 +469,8 @@ Page({
           openId: app.globalData.openId,
           user_name: user_name,
           user_phone: user_phone,
+          is_check: that.data.is_check,
+          verify: that.data.verify
           // appointment: time
         },
         header: {

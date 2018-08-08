@@ -26,17 +26,11 @@ Page({
     let that = this;
     if(app.globalData.openId){
       if (app.globalData.asset_uuid){
-        wx.navigateTo({
-          url: '/pages/manual/manual',
-        })
+        app.needValidation();
       } else if (app.globalData.area_uuid){
-        wx.navigateTo({
-          url: '/pages/areaManual/areaManual',
-        })
+        app.needValidation();
       } else if (app.globalData.equipment_uuid){
-        wx.navigateTo({
-          url: '/pages/equipmentManual/equipmentManual',
-        })
+        app.needValidation();
       }else{
         wx.reLaunch({
           url: '/pages/index/service/service',

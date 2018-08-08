@@ -46,7 +46,15 @@
 
   <view class="section">
     <text class='section_title'>手机号：</text> 
-    <input type="number" name="user_phone" value="{{user_phone}}" placeholder="联系方式" />
+    <input type="number" name="user_phone" value="{{user_phone}}" bindinput="phoneInput" placeholder="联系方式"  minlength="11" maxlength='11'/>
+  </view>
+
+  <view class="section {{is_check? '':'hide'}}">
+    <text class='section_title'>验证码：</text> 
+    <input type="number" name="verify" placeholder="验证码" bindinput="codeInput" maxlength="6" />
+    <button disabled="{{disabled}}" class="verify-button"  bindtap="getVerificationCode">
+    {{times}}
+    </button>
   </view>
 
   <!-- <view class='list list_time'>

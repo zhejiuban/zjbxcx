@@ -160,3 +160,14 @@ button::after{
   background-color: #4898fa;
   line-height: 100rpx;
 }
+.verify-button{
+  font-size: 14px;
+  /* line-height:2.2; */
+  padding-left:10px;
+  padding-right: 10px; 
+  background-color:#4898fa;
+  color:#fff;
+}
+.hide{
+  display:none;
+}

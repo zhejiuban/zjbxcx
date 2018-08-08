@@ -11,7 +11,7 @@ App({
   },
 
   onShow: function (e) {
-    //console.log('app_onshow');
+    console.log('app_onshow');
     let that = this;
    
     
@@ -37,7 +37,7 @@ App({
     } else {
       //console.log(that.globalData.validate);
       if (!that.globalData.validate) {
-        //console.log(that.globalData.validate);
+        console.log(that.globalData.validate);
         that.getUserInfo();
       }
     }
@@ -128,6 +128,7 @@ App({
                       // res.data = that.getResData(res);
                       that.globalData.validate = true;
                       if (res.data.code == 1) {
+                        that.globalData.userInfo.all_info = res.data.all_info;
                         that.globalData.user_id = res.data.user_id;
                         //用户添加成功
                         //判断此单位是如何验证用户的
@@ -626,7 +627,16 @@ App({
                   wx.redirectTo({
                     url: '/pages/index/service/service',
                   });
+                }else{
+                  wx.redirectTo({
+                    url: '/pages/index/service/service',
+                  });
                 }
+              },
+              fail: function (res){
+                wx.redirectTo({
+                  url: '/pages/index/service/service',
+                });
               }
             })
           }

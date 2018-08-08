@@ -4,7 +4,7 @@
 
 // 此处主机域名
 
-var domain = "https://wx.zhejiuban.com";
+var domain = "https://beta.zhejiuban.com";
 
 var prefix = '/api/v1';
 
@@ -126,6 +126,8 @@ var config = {
 
   // 上传图片接口
   imgFileUrl: `${host}/img_file`,
+
+  getSmsVerfiyCode: `${host}/get_sms_verify_code`
 };
 
 module.exports = config

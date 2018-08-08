@@ -23,3 +23,6 @@
 .tabBar_right{
   right:0rpx;
 } 
+.hide{
+    display:none;
+}

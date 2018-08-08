@@ -1,7 +1,7 @@
 <!--pages/home/home.wxml-->
 <view class='btn_view' >
   <image class='logo' src='/images/logo.png' ></image>
-  <text class='title' >这就办智慧后勤</text>
+  <text class='title' >智慧云后勤</text>
   <button class='btn' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGetUserInfo" wx:if="{{btnShow}}" >{{butName}}</button>
   <!-- <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGetUserInfo">授权</button> -->
 </view>
