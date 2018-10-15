@@ -1,7 +1,7 @@
-/* pages/details/details.wxss */
+/* pages/evaluate/evaluate.wxss */
 
 .content{
-  padding-bottom: 100rpx;
+  padding-bottom: 10rpx;
 }
 
 .list {
@@ -66,8 +66,8 @@
   display: flex;
   flex-grow: row no-wrap;
   padding: 15rpx 30rpx;
-  height: 75rpx;
-  line-height: 75rpx;
+  height: 100rpx;
+  line-height: 100rpx;
   font-size: 28rpx;
   position: relative;
   color: #333;
@@ -77,22 +77,20 @@
  .section_title {
   font-size: 28rpx;
   /* width: 25%; */
-  line-height: 75rpx;
-  color: #666;
+  line-height: 100rpx;
 } 
 
 .stars {
   position: relative;
   /* width: 100%; */
-  margin-left:10rpx;
-  height: 75rpx;
+  height: 100rpx;
 }
 
 .star-image {
   position: absolute;
   right: 0;
-  width: 75rpx;
-  height: 75rpx;
+  width: 100rpx;
+  height: 100rpx;
   src: "../../images/normal.png";
 }
 
@@ -100,45 +98,76 @@
   position: absolute;
   top: 50rpx;
   width: 75rpx;
-  height: 75rpx;
+  height: 150rpx;
 }
 
-.btn-area{
+
+.title {
+  width: 100%;
+  text-align: center;
+  padding: 5rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.section_remarks {
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 15rpx 0rpx;
+  font-size: 14px;
+  position: relative;
+  color: #333;
+  border-bottom: 1rpx solid #eee;
+}
+
+.remarks {
+  border: 1rpx solid #eee;
+  padding: 15rpx; 
+  border-radius: 10rpx;
+  height: 140rpx;
+  font-size: 32rpx;
+  width: 90%;
+  margin: 0 5%;
+}
+
+.btn-area {
   position: fixed;
   bottom: 0;
   width: 100%;
 }
+
 .btn-area>button {
   color: #fff;
   background-color: #4898fa;
   height: 100rpx;
   line-height: 100rpx;
-  font-size: 32rpx;
   border: none;
   border-radius: 0;
 }
+
 button::after{
   border: none;
 }
 
-/*底部tabBar  */
-.tabBar{
-  width:100%;
-  position: fixed;
-  white-space: nowrap;
-  justify-content: space-between;
-  bottom:0;
-  height:60rpx;
-  line-height: 60rpx;
-  padding: 20rpx 0;
-  background-color: #4898fa;
-  color: #fff;
+.stars {
+  position: relative;
+  /* width: 60%; */
+  margin-left:10rpx;
+  /* margin: 0 20%; */
+  height: 75rpx;
 }
-.tabBar_litem{
-  width:50%;
-  height: 60rpx;
-  overflow: auto;
-  font-size: 32rpx;
-  display: inline-block; 
-  text-align: center;
+
+.star-image {
+  position: absolute;
+  right: 0; 
+  width: 75rpx;
+  height: 75rpx;
+  src: "../../images/normal.png";
+}
+
+.item {
+  position: absolute;
+  top: 0rpx;
+  width: 75rpx;
+  height: 75rpx;
 }

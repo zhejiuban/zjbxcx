@@ -3,6 +3,9 @@
  */
 
 // 此处主机域名
+var appName = '智慧云后勤';
+
+var appLogo = '/images/logo.png';
 
 var domain = "https://beta.zhejiuban.com";
 
@@ -11,6 +14,8 @@ var prefix = '/api/v1';
 var host = domain+prefix;
 
 var config = {
+  appName,
+  appLogo,
   domain,
 
   // 下面的地址配合云端 Server 工作

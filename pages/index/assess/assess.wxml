@@ -16,7 +16,8 @@
             </view>
             <view class="expertInfo">
               <view class="name wait_name">报修项目：{{item['1']}}</view>
-              <view class="tag wait_tag ">报修场地：{{item['2']}}</view>
+              <view class="tag">所属单位：{{item['5']}}</view>
+              <view class="tag ">报修场地：{{item['2']}}</view>
               <button class='evaluate_btn' catchtap='to_evaluate' data-id="{{item['3']}}">评价</button>
             </view>
           </view>

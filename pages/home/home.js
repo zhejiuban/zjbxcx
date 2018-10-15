@@ -83,8 +83,8 @@ Page({
   },
 
   onGetUserInfo: function(e){
-    console.log(e.detail.errMsg)
-    console.log(e.detail.rawData)
+    // console.log(e.detail.errMsg)
+    // console.log(e.detail.rawData)
     if(e.detail.userInfo != undefined){
       app.getUserInfo();
     }

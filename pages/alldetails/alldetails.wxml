@@ -46,7 +46,7 @@
     </block>
   </view>
   <view class='list'>
-    <text class='list_label'>报修人：</text>
+    <text class='list_label'>报修人员：</text>
     <text class='list_value'>{{user_name}}</text>
   </view>
   <view wx:if="{{user_phone}}" class='list'>
@@ -116,11 +116,11 @@
   <view wx:if="{{stars_key}}" >
     <view class='order_title' >评价详情</view>
     <view class='list-bewrite'>
-      <view>评论时间：</view>
+      <view>评价时间：</view>
       <text class='bewrite' name="evaluation_time" >{{evaluation_time}}</text>
     </view>
     <view class='section'>
-        <view class='section_title'>满意度:</view>
+        <view class='section_title'>评价结果:</view>
         <view class='stars'>
           <block wx:for="{{stars}}" wx:key="property">
             <image class="star-image" mode='aspectFit' style="left: {{item*80}}rpx" src="{{stars_key > item ?(stars_key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
@@ -131,8 +131,20 @@
         </view>
     </view>
     <view class='list-bewrite'>
-      <view >评论内容：</view>
-      <text class='bewrite' name="appraisal">{{appraisal}}</text>
+      <view >评价内容：</view>
+      <text class='bewrite' name="appraisal">{{appraisal?appraisal:'无'}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{item.additional_comments_at}}" >
+   <view class='order_title' >追评详情</view>
+   <view class='list-bewrite'>
+      <view>追评时间：</view>
+      <text class='bewrite' name="additional_comments_at" >{{item.additional_comments_at}}</text>
+    </view>
+   <view class='list-bewrite'>
+      <view >追评内容：</view>
+      <text class='bewrite' name="additional_comments">{{item.additional_comments}}</text>
     </view>
   </view>
 </view>

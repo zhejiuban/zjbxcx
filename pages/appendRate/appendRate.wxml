@@ -47,11 +47,35 @@
       </view>
     </view>
   </view>
+
+  <!--评价详情  -->
+  <view wx:if="{{items.stars_key}}" >
+    <view class='order_title' >评价详情</view>
+    <view class='list-bewrite'>
+      <view>评价时间：</view>
+      <text class='bewrite' name="evaluation_time" >{{items.evaluation_time}}</text>
+    </view>
+    <view class='section'>
+        <view>评价结果:</view>
+        <view class='stars'>
+          <block wx:for="{{stars}}" wx:key="property">
+            <image class="star-image" mode='aspectFit' style="left: {{item*80}}rpx" src="{{items.stars_key > item ?(items.stars_key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
+              <view class="item" data-key="{{item+1}}"></view>
+              <view class="item" data-key="{{item+1}}" ></view>
+            </image>
+          </block>
+        </view>
+    </view>
+    <view class='list-bewrite'>
+      <view >评价内容：</view>
+      <text class='bewrite' name="appraisal">{{items.appraisal!=null?items.appraisal:'无'}}</text>
+    </view>
+  </view>
+
 </view>
-
- <view class='title'>点击星星评分</view> 
-
+<view class='order_title' >追加评价</view>
 <form bindsubmit="formSubmit" bindreset="formReset">
+  <!--  <view class='title'>点击星星评分</view> 
   <view class='section'>
     <view class='stars'>
       <block wx:for="{{stars}}" wx:key="property">
@@ -61,7 +85,7 @@
         </image>
       </block>
     </view>
-  </view>
+  </view> -->
 
   <view class='section_remarks'>
     <textarea class='remarks' name="appraisal" placeholder='留下您宝贵的意见或建议'></textarea>

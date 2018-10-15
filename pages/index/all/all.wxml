@@ -16,7 +16,9 @@
             </view>
             <view class="expertInfo">
               <view class="name">报修项目：{{item['1']}}</view>
+              <view class="tag">所属单位：{{item['5']}}</view>
               <view class="tag">报修场地：{{item['2']}}</view>
+              <button class="evaluate_btn {{ item['4'] == null && item['6'] == 5 ? 'show' : 'hide' }}" catchtap='appendRate' data-id="{{item['3']}}">追评</button>
             </view>
           </view>
         </block>

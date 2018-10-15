@@ -71,8 +71,11 @@ text{
 }
 
 .section input {
-  /* width: 600rpx; */
+  width: 65%;
   padding: 10rpx;
+}
+.section .verify-input{
+  width: auto;
 }
 .section .mult {
   width: 90%;

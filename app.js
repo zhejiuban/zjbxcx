@@ -11,7 +11,7 @@ App({
   },
 
   onShow: function (e) {
-    console.log('app_onshow');
+    // console.log('app_onshow');
     let that = this;
    
     
@@ -37,7 +37,7 @@ App({
     } else {
       //console.log(that.globalData.validate);
       if (!that.globalData.validate) {
-        console.log(that.globalData.validate);
+        // console.log(that.globalData.validate);
         that.getUserInfo();
       }
     }

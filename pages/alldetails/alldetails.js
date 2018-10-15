@@ -13,7 +13,7 @@ Page({
     normalSrc: '../../images/normal.png',
     selectedSrc: '../../images/selected.png',
     halfSrc: '../../images/half.png',
-
+    item:null,
     //工单详情
     repair_id: '',
     repair_no: '',
@@ -139,6 +139,7 @@ Page({
         }else{
           let data = res.data;
           that.setData({
+            item: data,
             equipment_id: data.equipment_id ? data.equipment_id : '',
             equipment_name: data.equipment_name ? data.equipment_name : '',
             repair_no: data.repair_no ? data.repair_no : '',
@@ -229,6 +230,7 @@ Page({
         } else {
           let data = res.data;
           that.setData({
+            item: data,            
             equipment_id: data.equipment_id ? data.equipment_id : '',
             equipment_name: data.equipment_name ? data.equipment_name : '',
             repair_no: data.repair_no ? data.repair_no : '',
@@ -256,6 +258,8 @@ Page({
             org_id: data.org_id,
             org_name: data.org_name
           });
+          console.log(that.data.item);
+          
         }
       },
       fail: function () {

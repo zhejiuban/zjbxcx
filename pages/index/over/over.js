@@ -39,7 +39,7 @@ Page({
         let clientHeight = res.windowHeight,
           clientWidth = res.windowWidth,
           rpxR = 750 / clientWidth;
-        let calc = clientHeight * rpxR - 180;
+        let calc = clientHeight * rpxR - 183;
         that.setData({
           winHeight: calc
         });
@@ -72,12 +72,22 @@ Page({
           let arr = [];
           let data = res.data;
           for (var i = 0; i < data.length; i++) {
-            arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id, data[i].complain];
+            arr[i] = [
+              [data[i].img_url], 
+              data[i].name, 
+              data[i].path, 
+              data[i].repair_id, 
+              data[i].complain,
+              data[i].additional_comments,
+              data[i].org,
+              data[i].status
+            ];
           }
           that.setData({
             items: arr,
             itemsLength: '1'
           })
+          // console.log(arr);
         }
       },
       fail: function () {
@@ -162,6 +172,15 @@ Page({
     })
   },
 
+  appendRate: function (e) {
+    let that = this;
+    let repair_id = e.currentTarget.dataset.id;
+    // console.log(repair_id);
+    wx.navigateTo({
+      url: '/pages/appendRate/appendRate?id=' + repair_id,
+    })
+  },
+
   // 图片预览
   prev_img: function (e) {
     let url = e.currentTarget.dataset.url['0']['0'];
@@ -210,7 +229,15 @@ Page({
           let arr = [];
           let data = res.data;
           for (var i = 0; i < data.length; i++) {
-            arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id, data[i].complain];
+            arr[i] = [
+              [data[i].img_url], 
+              data[i].name, 
+              data[i].path, 
+              data[i].repair_id, 
+              data[i].complain,
+              data[i].additional_comments,
+              data[i].org
+            ];
           }
           that.setData({
             items: arr,
@@ -251,7 +278,15 @@ Page({
             let arr = [];
             let data = res.data;
             for (var i = 0; i < data.length; i++) {
-              arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id];
+              arr[i] = [
+                [data[i].img_url], 
+                data[i].name, 
+                data[i].path, 
+                data[i].repair_id,
+                data[i].complain,
+                data[i].additional_comments,
+                data[i].org
+              ];
             }
             let arr1 = that.data.items;
             let arrs = arr1.concat(arr);

@@ -33,7 +33,7 @@ Page({
     }
     return {
       title: '这就办维修平台',
-      path: '/pages/index/inde',
+      path: '/pages/index/index',
       imageUrl: '/images/1.jpg',
       success: function (res) {
         // 转发成功
@@ -165,7 +165,15 @@ Page({
           let arr = [];
           let data = res.data;
           for (var i = 0; i < data.length; i++) {
-            arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id];
+            arr[i] = [
+              [data[i].img_url], 
+              data[i].name, 
+              data[i].path, 
+              data[i].repair_id,
+              data[i].additional_comments,
+              data[i].org,
+              data[i].status
+            ];
           }
           that.setData({
             items: arr,
@@ -206,7 +214,15 @@ Page({
             let arr = [];
             let data = res.data;
             for (var i = 0; i < data.length; i++) {
-              arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id];
+              arr[i] = [
+                [data[i].img_url], 
+                data[i].name, 
+                data[i].path, 
+                data[i].repair_id,
+                data[i].additional_comments,
+                data[i].org,
+                data[i].status
+              ];
             }
             let arr1 = that.data.items;
             let arrs = arr1.concat(arr);
@@ -252,7 +268,7 @@ Page({
         let clientHeight = res.windowHeight,
           clientWidth = res.windowWidth,
           rpxR = 750 / clientWidth;
-        let calc = clientHeight * rpxR - 180;
+        let calc = clientHeight * rpxR - 183;
         that.setData({
           winHeight: calc
         });
@@ -286,12 +302,21 @@ Page({
           let arr = [];
           let data = res.data;
           for (var i = 0; i < data.length; i++) {
-            arr[i] = [[data[i].img_url], data[i].name, data[i].path, data[i].repair_id];
+            arr[i] = [
+              [data[i].img_url], 
+              data[i].name, 
+              data[i].path, 
+              data[i].repair_id,
+              data[i].additional_comments,
+              data[i].org,
+              data[i].status
+            ];
           }
           that.setData({
             items: arr,
             itemsLength: '1'
           })
+          // console.log(that.data.items);
         }
       },
       fail: function () {
@@ -311,6 +336,13 @@ Page({
     });
     //that.onLoad();
   },
-  
+  appendRate: function (e) {
+    let that = this;
+    let repair_id = e.currentTarget.dataset.id;
+    // console.log(repair_id);
+    wx.navigateTo({
+      url: '/pages/appendRate/appendRate?id=' + repair_id,
+    })
+  },
   footerTap: app.footerTap
 })

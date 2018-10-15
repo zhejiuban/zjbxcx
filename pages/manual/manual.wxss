@@ -79,6 +79,10 @@
 
 .section input {
    padding: 15rpx 10rpx; 
+   width: 65%;
+}
+.section .verify-input{
+  width: auto;
 }
 
 .section .mult {

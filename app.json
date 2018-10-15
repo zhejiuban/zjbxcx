@@ -19,7 +19,8 @@
     "pages/evaluate/evaluate",
     "pages/complain/complain",
     "pages/logs/logs",
-    "pages/index/config/config"
+    "pages/index/config/config",
+    "pages/appendRate/appendRate"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -28,5 +29,4 @@
     "navigationBarTextStyle": "black",
     "backgroundColor": "#fff"
   }
-  
 }

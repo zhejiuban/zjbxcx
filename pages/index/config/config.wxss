@@ -91,7 +91,7 @@
 }
 
 .expertInfo .tag {
-  margin-top: 50rpx;
+  margin-top: 10rpx;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

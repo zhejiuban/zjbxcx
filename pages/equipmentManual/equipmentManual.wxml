@@ -51,7 +51,7 @@
 
   <view class="section {{is_check? '':'hide'}}">
     <text class='section_title'>验证码：</text> 
-    <input type="number" name="verify" placeholder="验证码" bindinput="codeInput" maxlength="6" />
+    <input type="number" name="verify"  class='verify-input'  placeholder="验证码" bindinput="codeInput" maxlength="6" />
     <button disabled="{{disabled}}" class="verify-button"  bindtap="getVerificationCode">
     {{times}}
     </button>
