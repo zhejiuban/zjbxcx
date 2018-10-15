@@ -1,0 +1,38 @@
+<block wx:if="{{logs.length>0}}" >
+  <view class='title' >维修工单日志记录</view>
+  <view class='view-list' >
+    <block wx:for="{{logs}}" wx:key="property">
+      <view class='view-item' >
+        <view class='view-item-dot' >
+          <block wx:if="{{item.op_state==1}}">
+            <image src='/images/infos.png' ></image>
+          </block>
+          <block wx:elif="{{item.op_state==2}}">
+            <image src='/images/right1.png' ></image>
+          </block>
+          <block wx:elif="{{item.op_state==3}}">
+            <image src='/images/right2.png' ></image>
+          </block>
+          <block wx:elif="{{item.op_state==4}}">
+            <image src='/images/refuse.png' ></image>
+          </block>
+          <block wx:elif="{{item.op_state==5}}">
+            <image src='/images/result.png' ></image>
+          </block>
+          <block wx:elif="{{item.op_state==6}}">
+            <image src='/images/result.png' ></image>
+          </block>
+        </view> 
+        <!--文本区域  -->
+        <view class='view-item-info' >
+          <view class='info-status' >状态：{{item.state}}</view>
+          <view class='info-text' >{{item.remarks}}</view>
+          <view class='info-time' >{{item.created_at}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</block>
+<block wx:else >
+  <view class='title' >暂无此维修工单日志记录</view>
+</block>

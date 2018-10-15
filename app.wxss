@@ -8,3 +8,24 @@
   padding: 200rpx 0;
   box-sizing: border-box;
 } 
+
+.list_time{
+  margin-bottom: 100rpx;
+}
+
+ button{
+   border-radius: 0; 
+}
+.tabBar_left{
+  left:0rpx;
+  border-right: 1rpx solid #4D9DFF; 
+}
+.tabBar_right{
+  right:0rpx;
+} 
+.hide{
+    display:none;
+}
+page{
+  padding-bottom:100rpx; 
+}

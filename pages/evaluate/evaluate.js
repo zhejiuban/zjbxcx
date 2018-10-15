@@ -1,4 +1,8 @@
 // pages/evaluate/evaluate.js
+
+const config = require('../../config')
+
+let app = getApp();
 Page({
 
   /**
@@ -10,7 +14,11 @@ Page({
     selectedSrc: '../../images/selected.png',
     halfSrc: '../../images/half.png',
     key: 0,//评分
+
+    repair_id:'',
+    items: ''
   },
+
   //点击右边,半颗星
   selectLeft: function (e) {
     var key = e.currentTarget.dataset.key
@@ -18,108 +26,199 @@ Page({
       //只有一颗星的时候,再次点击,变为0颗
       key = 0;
     }
-    console.log("得" + key + "分")
     this.setData({
       key: key
     })
-
   },
   //点击左边,整颗星
   selectRight: function (e) {
     var key = e.currentTarget.dataset.key
-    console.log("得" + key + "分")
     this.setData({
       key: key
-    })
-  },
-  formSubmit: function (e) {
-    console.log('form发生了submit事件，携带数据为：', e.detail.value);
-    wx.showModal({
-      title: '提示',
-      content: '感谢您的评价！',
-      showCancel: false,
-      success: function (res) {
-        if (res.confirm) {
-          wx.switchTab({
-            url: '/pages/index/index'
-          })
-        }
-      }
     })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let that = this;
+    app.network_state();
+    that.setData({
+      repair_id: options.id
+    });
+    wx.request({
+      url: config.repairAllInfoUrl,
+      method: "POST",
+      data: {
+        role: app.globalData.role,
+        token: app.globalData.token,
+        repair_id: options.id,
+        openId: app.globalData.openId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        if (res.data.code == 403) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.navigateBack({
+                  url: "/pages/home/home"
+                })
+              }
+            }
+          })
+        } else if (res.data.code == 1403) {
+          app.errorPrompt(res.data);
+        } else if (res.data.code == 404) {
+          wx.showModal({
+            title: '提示',
+            content: res.data.message,
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: "/pages/index/service/service"
+                })
+              }
+            }
+          })
+        } else {
+          that.setData({
+            items: res.data
+          });
+        }
+      },
+      fail: function () {
+        app.requestError();
+      },
+      complete: function () {
+        wx.hideLoading();
+      }
+    })
+  },
+
+  imgShow: function (e) {
+    var that = this;
+    var current_url = e.currentTarget.dataset.url;
+    wx.previewImage({
+      current: current_url, // 当前显示图片的http链接
+      urls: that.data.items.img_url // 需要预览的图片http链接列表
+    })
+  },
+
+  serviceImgShow: function (e) {
+    var that = this;
+    var current_url = e.currentTarget.dataset.url;
+    wx.previewImage({
+      current: current_url, // 当前显示图片的http链接
+      urls: that.data.items.service_img_url // 需要预览的图片http链接列表
+    })
+  },
+
+  // form表单提交
+  formSubmit: function (e){
     wx.showLoading({
+      mask: true,
       title: '加载中',
     });
-    // wx.request({
-    //   url: '',
-    //   data: {
-    //     id: options.id
-    //   },
-    //   header: {
-    //     'content-type': 'application/json'
-    //   },
-    //   success: function(res){
-    //     console.log(res.data);
-    //   },
-    //   fail: function(){
-    //     console.log("请求失败");
-    //   },
-    //   complete: function(){
-    //     wx.hideLoading();
-    //   }
-    // })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+    let that = this;
+    let score = that.data.key;
+    if (score){
+      let appraisal = e.detail.value.appraisal;
+      let repair_id = that.data.repair_id;
+      wx.request({
+        url: config.evaluateUrl,
+        method: "POST",
+        data: {
+          role: app.globalData.role,
+          token: app.globalData.token,
+          openId: app.globalData.openId,
+          repair_id: repair_id,
+          score: score,
+          appraisal: appraisal,
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        success: function (res) {
+          wx.hideLoading();
+          if (res.data.code == 1) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.navigateTo({
+                    url: '/pages/index/over/over'
+                  })
+                }
+              }
+            })
+          } else if (res.data.code == 403) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.navigateBack({
+                    url: "/pages/home/home"
+                  })
+                }
+              }
+            })
+          } else if (res.data.code == 1403) {
+            app.errorPrompt(res.data);
+          } else if (res.data.code == 0) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function (res) {
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/index/service/service',
+                  });
+                }
+              }
+            })
+          } else {
+            wx.showModal({
+              title: '提示',
+              content: res.data.message,
+              showCancel: false,
+              success: function(res){
+                if (res.confirm) {
+                  wx.redirectTo({
+                    url: '/pages/index/service/service',
+                  });
+                }
+              }
+            })
+          }
+        },
+        fail: function () {
+          wx.hideLoading();
+          app.requestError();
+        }
+      })
+    }else{
+      wx.hideLoading();
+      wx.showModal({
+        title: '提示',
+        content: '请先选择评分，以便于我们以后更好的服务，谢谢',
+        showCancel: false,
+        success: function (res) {
+          if (res.confirm) {
+          } 
+        }
+      })
+    }
   }
 })

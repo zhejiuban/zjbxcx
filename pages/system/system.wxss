@@ -1,0 +1,64 @@
+/* pages/system/system.wxss */
+
+.content{
+  width: 100vm;
+  height: 100vh;
+  position: relative;
+  text-align: center;
+}
+
+.logo{
+  width: 200rpx;
+  height: 200rpx;
+  margin-top: 100rpx;
+}
+
+.title{
+  display: block;
+  color: #999;
+  font-size: 32rpx;
+}
+
+.form-content{
+  width: 100%;
+  margin-top: 80rpx;
+  font-size: 28rpx;
+}
+
+.section{
+  display: flex;
+  width: 90%;
+  margin: 20rpx 10%;
+  padding: 10rpx 0rpx; 
+}
+.label{
+  display: inline-block;
+  width: 20%;
+  line-height: 70rpx;
+  color: #666;
+  text-align: right;
+}
+.phone{
+  display: inline-block;
+  width: 80%;
+  border: 2rpx solid #cfcfcf;
+  padding: 10rpx 30rpx;
+  text-align: left;
+  color: #666;
+  border-radius: 10rpx;
+}
+
+
+button {
+  color: #fff;
+  background-color: #4898fa;
+  width: 80%;
+  height: 80rpx;
+  line-height: 80rpx;
+  border: none;
+  border-radius: 10rpx;
+}
+
+button::after{
+  border: none;
+}

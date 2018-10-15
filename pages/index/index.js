@@ -1,4 +1,4 @@
-var app = getApp();
+let app = getApp();
 Page({
   data: {
     winHeight: "",//窗口高度
@@ -182,7 +182,6 @@ Page({
 
   // 点击跳转到评价页面
   to_evaluate: function (e) {
-    // console.log(e.currentTarget.dataset.id);
     var that = this;
     var id = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -192,7 +191,6 @@ Page({
 
   // 图片预览
   prev_img: function (e) {
-    console.log(e);
     var url = e.currentTarget.dataset.url['0'];
     var urls = e.currentTarget.dataset.url;
     wx.previewImage({

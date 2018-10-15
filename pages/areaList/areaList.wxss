@@ -1,0 +1,77 @@
+/* pages/areaList/areaList.wxss */
+
+.content{
+  padding-bottom: 100rpx;
+}
+
+.list {
+  position: relative;
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 10rpx 30rpx;
+  color: #666;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.list-bewrite {
+  display: flex;
+  flex-grow: row no-wrap;
+  padding: 15rpx 30rpx;
+  color: #666;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.bewrite {
+  word-wrap:break-word;
+  word-break:break-all;
+  height: auto;
+  width: 500rpx;
+}
+
+.list_label {
+  line-height: 70rpx;
+}
+
+radio{
+  line-height: 70rpx;
+}
+
+.list_value {
+  line-height: 70rpx;
+}
+
+.next_area{
+  position: absolute;
+  right: 20rpx;
+  line-height: 70rpx;
+  color:  #4898fa;
+}
+
+/*底部tabBar  */
+.tabBar{
+  width:100%;
+  position: fixed;
+  white-space: nowrap;
+  justify-content: space-between;
+  bottom:0;
+  height:100rpx;
+  line-height: 100rpx;
+  background-color: #4898fa;
+  color: #fff;
+}
+.tabBar_litem{
+  width:49%;
+  height: 100rpx;
+  display: inline-block;
+  text-align: center;
+  overflow: auto;
+  font-size: 32rpx;
+  color: #fff;
+  background-color: #4898fa;
+  line-height: 100rpx;
+}
+button::after{
+  border: none;
+}

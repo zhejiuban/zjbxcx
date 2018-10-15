@@ -1,0 +1,58 @@
+/* pages/phone/phone.wxss */
+.btn_view{
+  width: 100vm;
+  height: 100vh;
+  position: relative;
+  text-align: center;
+}
+
+.logo{
+  width: 200rpx;
+  height: 200rpx;
+  margin-top: 100rpx;
+}
+
+.title{
+  display: block;
+  color: #333;
+  font-size: 34rpx;
+}
+
+.explain{
+  display: inline-block;
+  font-size: 32rpx;
+  margin-top: 100rpx;
+  padding: 50rpx 30rpx;
+  line-height: 40rpx;
+}
+
+.btn_gorup{
+  display: flex; 
+  flex-grow: row no-wrap;
+  justify-content: space-between;
+  margin-top: 200rpx;
+}
+
+.close_btn{
+  width: 300rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  color: #fff;
+  background-color: #e64340;
+  border: none;
+  border-radius: 0;
+}
+
+
+.btn{
+  width: 300rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  background-color: #4898fa;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+}
+ button::after{
+  border: none;
+} 

@@ -1,0 +1,77 @@
+<form bindsubmit="formSubmit" bindreset="formReset">
+
+  <view class="section">
+    <view class="section_title">选择场地：</view>
+    <block wx:if="{{room_name}}">
+      <text wx:if="{{area_name}}">{{area_name}}({{room_name}})</text>
+    </block>
+    <block wx:else>
+      <text wx:if="{{area_name}}">{{area_name}}</text>
+    </block>
+  </view>
+
+  <view class="section">
+    <view class="section_title">所属单位：</view>
+    <text>{{org_name}}</text>
+  </view>
+
+  <view class="section">
+    <view class="section_title">报修项目：</view>
+    <picker class='picker_classify'  bindchange="bindClassifyChange" value="{{index}}" range="{{classify}}" range-key="{{'name'}}">
+      <view class="picker">
+        {{classify[index].name}}
+      </view>
+    </picker>
+  </view>
+
+  <view class="textarea_view">
+    <textarea name="remarks" placeholder='问题描述'></textarea>
+  </view>
+
+  <view class='section1'>
+    <block wx:for="{{imgs}}" wx:key="property">
+      <image src="{{item}}" class='uploader_imgs' bindtap='imgShow' data-src="{{item}}" data-img-id="{{img_ids[index]}}" bindlongtap="longTap" bindtouchstart="touchStart" bindtouchend="touchEnd" data-index="{{index}}"></image>
+    </block>
+    <view class='uploaderBtn' bindtap='selectImg'>
+      <image wx:if="{{imgs.length<3}}" src='{{uploaderImg}}'></image>
+    </view>
+    <text class='prompt'>上传图片\n最多三张,长按删除</text>
+  </view>
+
+  <view class="section">
+    <text class='section_title'>联系人：</text> 
+    <input type="text" name="user_name" value="{{user_name}}" placeholder="联系人姓名" />
+  </view>
+
+  <view class="section">
+    <text class='section_title'>手机号：</text> 
+    <input type="number" name="user_phone" value="{{user_phone}}" bindinput="phoneInput" placeholder="联系方式" minlength="11" maxlength='11'/>
+  </view>
+  <view class="section {{is_check? '':'hide'}}">
+    <text class='section_title'>验证码：</text> 
+    <input type="number" name="verify" class='verify-input' placeholder="验证码" bindinput="codeInput" maxlength="6" />
+    <button disabled="{{disabled}}" class="verify-button"  bindtap="getVerificationCode">
+    {{times}}
+    </button>
+  </view>
+
+  <!-- <view class='list list_time'>
+    <text class='list_label'>预约服务时间：</text> 
+    <picker class='list_value' mode="date" value="{{date}}" start="2018-04-01" end="2050-12-30" bindchange="bindDateChange">
+      <view class="picker">{{date}} </view>
+    </picker>
+    <picker mode="time" class='list_value' style="margin-left:15rpx;" value="{{time}}" start="00:00" end="23:59" bindchange="bindTimeChange">
+      <view class="picker">{{time}}</view>
+    </picker>
+  </view>  -->
+
+  <view class='tabBar'>
+    <view class='tabBar_litem tabBar_left ' catchtap='to_index'>
+      取 消
+    </view>
+    <button class='tabBar_litem tabBar_right submitBtn' formType="submit">
+      提 交
+    </button>
+  </view>
+
+</form>

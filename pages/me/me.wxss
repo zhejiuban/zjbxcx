@@ -29,11 +29,19 @@ page{
   /* border: 1px solid red; */
   padding: 40rpx 10rpx;
 }
+.contact_btn{
+  border: none;
+  border-radius: 0;
+}
+button::after{
+  border: none;
+}
 .list_item{
   height: 100rpx;
   padding: 0 30rpx;
+  margin: 0;
   line-height: 100rpx;
-  /* border: 1px solid blue; */
+  background-color: #fff;
   position: relative;
   display: flex;
   flex-grow: row no-wrap;
@@ -48,6 +56,9 @@ page{
 }
 .item_title{
   margin-left: 30rpx;
+  position: absolute;
+  top: 0;
+  left: 100rpx;
 }
 .item_more{
   width: 60rpx;

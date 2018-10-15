@@ -1,0 +1,12 @@
+<!--pages/complain/complain.wxml-->
+<!--用户投诉界面  -->
+<view class='title'>用户投诉</view>
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <view class='section_remarks'>
+    <view class='section_title'>投诉内容：</view>
+    <textarea class='remarks' name="complain" placeholder='留下您宝贵的意见或建议'></textarea>
+  </view>
+  <view class="btn-area">
+    <button class='submitBtn' formType="submit">提交</button>
+  </view>
+</form>

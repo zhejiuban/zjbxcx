@@ -1,22 +1,31 @@
 {
   "pages": [
+    "pages/home/home",
+    "pages/areaRepair/areaRepair",
+    "pages/areaList/areaList",
+    "pages/system/system",
+    "pages/equipmentManual/equipmentManual",
+    "pages/time/time",
+    "pages/login/login",
+    "pages/phone/phone",
     "pages/index/service/service",
+    "pages/areaManual/areaManual",
     "pages/index/all/all",
     "pages/index/over/over",
     "pages/index/assess/assess",
     "pages/alldetails/alldetails",
     "pages/me/me",
-    "pages/details/details",
     "pages/manual/manual",
     "pages/evaluate/evaluate",
-    "pages/danger/danger",
+    "pages/complain/complain",
     "pages/logs/logs",
-    "pages/index/config/config"
+    "pages/index/config/config",
+    "pages/appendRate/appendRate"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#eee",
-    "navigationBarTitleText": "这就办维修平台",
+    "navigationBarTitleText": "智慧云后勤",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#fff"
   }

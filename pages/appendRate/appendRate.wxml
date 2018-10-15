@@ -1,0 +1,96 @@
+<!--pages/evaluate/evaluate.wxml-->
+<view class='content' >
+  <view class='order_title' >报修详情</view>
+  <view wx:if="{{equipment_id}}" class='list'>
+    <text class='list_label'>设备组名称：</text>
+    <text class='list_value'>{{items.equipment_name}}</text>
+  </view>
+  <view class='list'>
+    <text class='list_label'>报修资产：</text>
+    <text class='list_value'>{{items.asset_name}}</text>
+  </view>
+  <view class='list'>
+    <text class='list_label'>所属单位：</text>
+    <text class='list_value'>{{items.org_name}}</text>
+  </view>
+  <view class='list'>
+    <text class='list_label'>所在场地：</text>
+    <text class='list_value'>{{items.field_path}}</text>
+  </view>
+
+  <!--维修人员信息  -->
+  <view wx:if="{{items.service_worker}}">
+    <view class='list'>
+      <text class='list_label'>维修人员：</text>
+      <text class='list_value'>{{items.service_worker}}</text>
+    </view>
+  </view>
+
+  <!--维修人员反馈信息  -->
+  <view wx:if="{{items.result}}" >
+    <view class='list'>
+      <text class='list_label'>维修结果：</text>
+      <text class='list_value'>{{items.result_status}}</text>
+    </view>
+    <view class='list'>
+      <text class='list_label'>完成时间：</text>
+      <text class='list_value'>{{items.finish_time}}</text>
+    </view>
+    <view class='list-bewrite'>
+      <text>反馈信息：</text>
+      <text class='bewrite'>{{items.result}}</text>
+    </view>
+    <view class='list' wx:if="{{items.service_img_url.length>0}}">
+      <text class='list_label'>反馈图片：</text>
+      <view wx:for="{{items.service_img_url}}" wx:key="property">
+        <image src='{{item}}' data-url='{{item}}' bindtap='serviceImgShow' mode='aspectFill'></image>
+      </view>
+    </view>
+  </view>
+
+  <!--评价详情  -->
+  <view wx:if="{{items.stars_key}}" >
+    <view class='order_title' >评价详情</view>
+    <view class='list-bewrite'>
+      <view>评价时间：</view>
+      <text class='bewrite' name="evaluation_time" >{{items.evaluation_time}}</text>
+    </view>
+    <view class='section'>
+        <view>评价结果:</view>
+        <view class='stars'>
+          <block wx:for="{{stars}}" wx:key="property">
+            <image class="star-image" mode='aspectFit' style="left: {{item*80}}rpx" src="{{items.stars_key > item ?(items.stars_key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
+              <view class="item" data-key="{{item+1}}"></view>
+              <view class="item" data-key="{{item+1}}" ></view>
+            </image>
+          </block>
+        </view>
+    </view>
+    <view class='list-bewrite'>
+      <view >评价内容：</view>
+      <text class='bewrite' name="appraisal">{{items.appraisal!=null?items.appraisal:'无'}}</text>
+    </view>
+  </view>
+
+</view>
+<view class='order_title' >追加评价</view>
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <!--  <view class='title'>点击星星评分</view> 
+  <view class='section'>
+    <view class='stars'>
+      <block wx:for="{{stars}}" wx:key="property">
+        <image class="star-image" mode='aspectFit' style="left: {{item*93}}rpx" src="{{key > item ?(key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
+           <view class="item" style="" data-key="{{item+1}}" bindtap="selectLeft"></view> 
+           <view class="item" style="" data-key="{{item+1}}" bindtap="selectRight"></view> 
+        </image>
+      </block>
+    </view>
+  </view> -->
+
+  <view class='section_remarks'>
+    <textarea class='remarks' name="appraisal" placeholder='留下您宝贵的意见或建议'></textarea>
+  </view>
+  <view class="btn-area">
+    <button class='submitBtn' formType="submit">提交</button>
+  </view>
+</form>

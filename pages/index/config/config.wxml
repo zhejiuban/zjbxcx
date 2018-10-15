@@ -10,17 +10,12 @@
 
 <template name="tabBar">
   <view class='tabBar'>
-    <view class='tabBar_litem' bindtap='toManual' >
-      <view class='item_icon' >
-        <image src='/images/repair.png' ></image>
-      </view>
-    </view>
-    <view class='tabBar_litem' bindtap='scanCode' >
+    <view class='tabBar_litem tabBar_left' bindtap='scanCode' >
       <view class='item_icon' >
         <image src='/images/scan.png' ></image>
       </view>
     </view>
-    <view class='tabBar_litem' bindtap='toMe'>
+    <view class='tabBar_litem tabBar_right' bindtap='toMe'>
       <view class='item_icon' >
         <image src='/images/me.png' ></image>
       </view>
